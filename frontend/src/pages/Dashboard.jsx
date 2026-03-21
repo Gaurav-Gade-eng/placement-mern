@@ -181,7 +181,7 @@ if (!document.getElementById("dash-v2-styles")) {
   document.head.appendChild(s);
 }
 
-const API = "http://localhost:5000/api";
+const API = process.env.REACT_APP_API_URL + "/api";
 const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const IC  = ["#2563EB","#0891B2","#059669","#7C3AED","#DB2777","#D97706"];
