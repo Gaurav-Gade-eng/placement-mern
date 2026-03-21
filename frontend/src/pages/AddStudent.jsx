@@ -153,7 +153,7 @@ if (!document.getElementById("add-student-styles")) {
 }
 
 /* ── API config ── */
-const API = "http://localhost:5000/api";
+// const API = "http://localhost:5000/api";
 const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const DEPTS     = ["IT", "MECH", "CIVIL", "ENTC", "ELECTRICAL", "CS"];

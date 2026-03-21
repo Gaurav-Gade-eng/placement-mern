@@ -150,11 +150,7 @@ const initColor = n => IC[n.charCodeAt(0)%IC.length];
 const initials  = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
 
 const T = { ff:"'Plus Jakarta Sans',sans-serif", ink:"#0C1A2E", ink2:"#637180", ink3:"#3D4E5C", border:"#E6ECF4", blue:"#2563EB" };
-const API_URL = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL + "/api"
-    : "http://localhost:5000/api",
-});
+
 const tk = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 /* ── Chip SVG icons ── */
@@ -300,12 +296,19 @@ export default function StudentSuggestions() {
   const user  = JSON.parse(localStorage.getItem("user")||"{}");
   const inits = (user.name||"S").split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
-  useEffect(()=>{
-    Promise.all([
-      axios.get(`${API_URL}/company`,tk()),
-      axios.get(`${API_URL}/user/profile`,tk()).catch(()=>({data:user})),
-    ]).then(([c,s])=>{setCompanies(c.data);setStudent(s.data);}).catch(console.error).finally(()=>setLoading(false));
-  },[]);
+
+useEffect(() => {
+  Promise.all([
+    API.get("/company", tk()),
+    API.get("/user/profile", tk()).catch(() => ({ data: user })),
+  ])
+    .then(([c, s]) => {
+      setCompanies(c.data);
+      setStudent(s.data);
+    })
+    .catch(console.error)
+    .finally(() => setLoading(false));
+}, []);
 
   const stu    = student||user;
   const scored = companies.map(c=>({...c,_score:matchScore(c,stu)})).sort((a,b)=>b._score-a._score);

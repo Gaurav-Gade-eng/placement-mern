@@ -3,6 +3,7 @@ import axios from "axios";
 import TpoNavbar from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import AdminCompanyCard from "../components/AdminCompanyCard";
+import API from "../api";
 
 /* ── inject styles once ── */
 if (!document.getElementById("tpoco-styles")) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
+import API from "../api";
 
 if (!document.getElementById("tpostu-styles")) {
   const s = document.createElement("style");
@@ -104,11 +105,11 @@ if (!document.getElementById("tpostu-styles")) {
   document.head.appendChild(s);
 }
 
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL + "/api"
-    : "http://localhost:5000/api",
-});
+// const API = axios.create({
+//   baseURL: process.env.REACT_APP_API_URL
+//     ? process.env.REACT_APP_API_URL + "/api"
+//     : "http://localhost:5000/api",
+// });
 const tk  = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 const cgpaColor = (c) => {
@@ -185,11 +186,14 @@ export default function TpoStudents() {
   const [search,  setSearch]  = useState("");
 
   useEffect(() => {
-    axios.get(`${API}/user/students`, tk())
-      .then(res => { setStudents(res.data); setFiltered(res.data); })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+  API.get("/user/students", tk())
+    .then(res => {
+      setStudents(res.data);
+      setFiltered(res.data);
+    })
+    .catch(console.error)
+    .finally(() => setLoading(false));
+}, []);
 
   const applyFilters = () => {
     let data = [...students];
@@ -222,20 +226,17 @@ export default function TpoStudents() {
   const placed  = students.filter(s=>s.status==="placed"||s.isPlaced).length;
   const highCGPA= students.filter(s=>Number(s.cgpa)>=8).length;
 
-  const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL + "/api"
-    : "http://localhost:5000/api",
-});
+  // const BASE_URL = "http://localhost:5000";
 
   const viewResume = (student) => {
-    if (!student.resume) {
-      alert("No resume uploaded");
-      return;
-    }
-    const url = `${BASE_URL}${student.resume}`;
-    setResumeModal({ name: student.name, url });
-  };
+  if (!student.resume) {
+    alert("No resume uploaded");
+    return;
+  }
+  const base = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const url = `${base}${student.resume}`;
+  setResumeModal({ name: student.name, url });
+};
 
   /* stat card definitions — SVG icons replacing emojis */
   const statCards = [

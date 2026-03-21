@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import API from "../api";
 import axios from "axios";
 
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL + "/api"
-    : "http://localhost:5000/api",
-});
+// const API = axios.create({
+//   baseURL: process.env.REACT_APP_API_URL
+//     ? process.env.REACT_APP_API_URL + "/api"
+//     : "http://localhost:5000/api",
+// });
 
 
 

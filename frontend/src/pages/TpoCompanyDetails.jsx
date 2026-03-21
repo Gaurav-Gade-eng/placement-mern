@@ -210,11 +210,11 @@ const SKILL_COLORS = [
 ];
 
 const tk = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL + "/api"
-    : "http://localhost:5000/api",
-});
+// const API = axios.create({
+//   baseURL: process.env.REACT_APP_API_URL
+//     ? process.env.REACT_APP_API_URL + "/api"
+//     : "http://localhost:5000/api",
+// });
 /* ── Skeleton ── */
 function Skeleton() {
   const sh = { background:"linear-gradient(90deg,#EAECF0 25%,#F4F6F9 50%,#EAECF0 75%)", backgroundSize:"200% 100%", animation:"tcdShimmer 1.5s ease infinite", borderRadius:6 };

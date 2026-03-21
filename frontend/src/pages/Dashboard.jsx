@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar  from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import API from "../api";
 
 /* ── inject styles ── */
 if (!document.getElementById("dash-v2-styles")) {
@@ -181,7 +182,6 @@ if (!document.getElementById("dash-v2-styles")) {
   document.head.appendChild(s);
 }
 
-const API = process.env.REACT_APP_API_URL + "/api";
 const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const IC  = ["#2563EB","#0891B2","#059669","#7C3AED","#DB2777","#D97706"];

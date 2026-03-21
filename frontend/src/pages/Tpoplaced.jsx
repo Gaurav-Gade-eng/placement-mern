@@ -111,11 +111,11 @@ if (!document.getElementById("tpop-styles")) {
   document.head.appendChild(s);
 }
 
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL + "/api"
-    : "http://localhost:5000/api",
-});
+// const API = axios.create({
+//   baseURL: process.env.REACT_APP_API_URL
+//     ? process.env.REACT_APP_API_URL + "/api"
+//     : "http://localhost:5000/api",
+// });
 const tk  = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 const initials = (name="") => name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
