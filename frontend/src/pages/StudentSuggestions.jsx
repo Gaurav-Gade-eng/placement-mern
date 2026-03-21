@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar  from "../components/Navbar";
+import API from "../api";
 import Sidebar from "../components/Sidebar";
 
 if (!document.getElementById("sug-styles")) {

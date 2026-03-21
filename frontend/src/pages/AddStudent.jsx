@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import TpoNavbar from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
+import API from "../api";
 
 /* ── Inject styles once ── */
 if (!document.getElementById("add-student-styles")) {

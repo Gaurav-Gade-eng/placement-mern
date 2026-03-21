@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
+import API from "../api";
 
 /* ── styles ── */
 if (!document.getElementById("tpoa-styles")) {

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar  from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import API from "../api";
 
 if (!document.getElementById("ann-student-styles")) {
   const s = document.createElement("style");
