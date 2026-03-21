@@ -410,10 +410,9 @@ setError("");
 try {
 
 const res = await axios.post(
-  "http://localhost:5000/api/auth/login",
+  "https://placement-backend-4n9z.onrender.com/api/auth/login",
   { email, password }
 );
-
 const user = res.data.user;
 
 // ❌ Block admins
