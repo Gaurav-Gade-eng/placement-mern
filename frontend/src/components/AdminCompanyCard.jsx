@@ -85,56 +85,56 @@ if (!document.getElementById("fcc-styles")) {
  *   onDelete — called with company when trash icon clicked
  */
 /* ── Delete button component (matches View Details style) ── */
-function DeleteBtn({ onDelete }) {
-  const [hover, setHover] = useState(false);
-  return (
-    <button
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={e => { e.stopPropagation(); onDelete(); }}
-      style={{
-        display: "inline-flex", alignItems: "center",
-        gap: hover ? 8 : 5,
-        border: `1px solid ${hover ? "#DC2626" : "#E5E7EB"}`,
-        background: hover ? "linear-gradient(135deg,#DC2626,#EF4444)" : "#fff",
-        borderRadius: 6,
-        padding: "5px 12px",
-        fontFamily: T.ff,
-        fontSize: 12.5, fontWeight: 500,
-        color: hover ? "#fff" : "#9CA3AF",
-        cursor: "pointer",
-        boxShadow: hover
-          ? "0 4px 14px rgba(220,38,38,0.3)"
-          : "0 1px 2px rgba(0,0,0,0.05)",
-        transform: hover ? "translateY(-1px)" : "translateY(0)",
-        transition:
-          "background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, gap 0.15s",
-      }}
-    >
-      <svg
-        width="12" height="12" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" strokeWidth="2.2"
-        style={{
-          transform: hover ? "scale(1.1)" : "scale(1)",
-          transition: "transform 0.2s cubic-bezier(0.34,1.56,0.64,1)",
-          flexShrink: 0,
-        }}
-      >
-        <polyline points="3 6 5 6 21 6"/>
-        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-        <path d="M10 11v6"/><path d="M14 11v6"/>
-      </svg>
-      Delete
-    </button>
-  );
-}
+// function DeleteBtn({ onDelete }) {
+//   const [hover, setHover] = useState(false);
+//   return (
+//     <button
+//       onMouseEnter={() => setHover(true)}
+//       onMouseLeave={() => setHover(false)}
+//       onClick={e => { e.stopPropagation(); onDelete(); }}
+//       style={{
+//         display: "inline-flex", alignItems: "center",
+//         gap: hover ? 8 : 5,
+//         border: `1px solid ${hover ? "#DC2626" : "#E5E7EB"}`,
+//         background: hover ? "linear-gradient(135deg,#DC2626,#EF4444)" : "#fff",
+//         borderRadius: 6,
+//         padding: "5px 12px",
+//         fontFamily: T.ff,
+//         fontSize: 12.5, fontWeight: 500,
+//         color: hover ? "#fff" : "#9CA3AF",
+//         cursor: "pointer",
+//         boxShadow: hover
+//           ? "0 4px 14px rgba(220,38,38,0.3)"
+//           : "0 1px 2px rgba(0,0,0,0.05)",
+//         transform: hover ? "translateY(-1px)" : "translateY(0)",
+//         transition:
+//           "background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, gap 0.15s",
+//       }}
+//     >
+//       <svg
+//         width="12" height="12" viewBox="0 0 24 24"
+//         fill="none" stroke="currentColor" strokeWidth="2.2"
+//         style={{
+//           transform: hover ? "scale(1.1)" : "scale(1)",
+//           transition: "transform 0.2s cubic-bezier(0.34,1.56,0.64,1)",
+//           flexShrink: 0,
+//         }}
+//       >
+//         <polyline points="3 6 5 6 21 6"/>
+//         <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+//         <path d="M10 11v6"/><path d="M14 11v6"/>
+//       </svg>
+//       Delete
+//     </button>
+//   );
+// }
 
 function AdminCompanyCard({ company, onDelete }) {
   const navigate                  = useNavigate();
   const cardRef                   = useRef(null);
   const [hover, setHover]         = useState(false);
   const [btnHover, setBtnHover]   = useState(false);
-  const [delHover, setDelHover]   = useState(false);
+  // const [delHover, setDelHover]   = useState(false);
   const [delBtnHover, setDelBtnHover] = useState(false);
   const [pressed, setPressed]     = useState(false);
   const [imgErr, setImgErr]       = useState(false);
@@ -285,7 +285,7 @@ function AdminCompanyCard({ company, onDelete }) {
           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
           transition: "color 0.2s ease",
           animation: "fcc-slide-right 0.3s ease both",
-          transition: "color 0.2s ease",
+          // transition: "color 0.2s ease",
         }}>
           {company.companyName}
         </div>
