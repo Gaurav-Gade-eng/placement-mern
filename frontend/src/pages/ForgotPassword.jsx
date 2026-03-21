@@ -390,7 +390,7 @@ function ForgotPassword() {
     if (!email) { setError("Please enter your email address."); triggerShake(); return; }
     setLoading(true); setError("");
     try {
-      await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
+      await axios.post("/auth/forgot-password", { email });
       setSuccess("OTP sent! Check your inbox.");
       setTimeout(() => { setSuccess(""); setStep(2); }, 1200);
     } catch {
@@ -420,7 +420,7 @@ function ForgotPassword() {
     if (password.length < 6) { setError("Password must be at least 6 characters."); triggerShake(); return; }
     setLoading(true); setError("");
     try {
-      await axios.post("http://localhost:5000/api/auth/reset-password", { email, otp, password });
+      await axios.post("/auth/reset-password", { email, otp, password });
       setStep(3);
     } catch {
       setError("Invalid or expired OTP. Please try again.");
@@ -605,7 +605,7 @@ function ForgotPassword() {
                 <a onClick={async () => {
                   setOtpArr(Array(OTP_LENGTH).fill(""));
                   setError(""); setLoading(true);
-                  try { await axios.post("http://localhost:5000/api/auth/forgot-password", { email }); setSuccess("OTP resent!"); setTimeout(() => setSuccess(""), 2000); }
+                  try { await axios.post("/auth/forgot-password", { email }); setSuccess("OTP resent!"); setTimeout(() => setSuccess(""), 2000); }
                   catch { setError("Could not resend. Try again."); }
                   finally { setLoading(false); }
                 }}>

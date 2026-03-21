@@ -365,7 +365,7 @@ export default function TpoCompanies() {
   const fetchCompanies = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/company",
+      const res = await axios.get("/company",
         { headers: { Authorization: `Bearer ${token()}` } });
       setCompanies(res.data);
     } catch (e) { console.error(e); }
@@ -392,7 +392,7 @@ export default function TpoCompanies() {
     if (!salary)      { setError("Please enter the salary package."); return; }
     setAddLoading(true); setError("");
     try {
-      await axios.post("http://localhost:5000/api/company/create",
+      await axios.post("/company/create",
         { companyName, salary, offers, minimumCGPA: minCGPA, requiredSkills: skillsList, logo: logoDomain },
         { headers: { Authorization: `Bearer ${token()}` } });
       setCompanyName(""); setSalary(""); setOffers(""); setMinCGPA("");
@@ -408,7 +408,7 @@ export default function TpoCompanies() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await axios.delete(`http://localhost:5000/api/company/${deleteTarget._id}`,
+      await axios.delete(`/company/${deleteTarget._id}`,
         { headers: { Authorization: `Bearer ${token()}` } });
       showToast(`${deleteTarget.companyName} removed.`);
       setDeleteTarget(null);

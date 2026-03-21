@@ -120,7 +120,11 @@ if (!document.getElementById("tpoa-styles")) {
   document.head.appendChild(s);
 }
 
-const API         = "http://localhost:5000/api";
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL + "/api"
+    : "http://localhost:5000/api",
+});
 const tk          = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 const SEMESTERS   = [1, 2, 3, 4, 5, 6, 7, 8];
 const DEPARTMENTS = ["IT", "CIVIL", "ENTC", "MECH", "Electrical"];

@@ -135,8 +135,11 @@ if (!document.getElementById("ann-student-styles")) {
   document.head.appendChild(s);
 }
 
-const API = "http://localhost:5000/api";
-const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL + "/api"
+    : "http://localhost:5000/api",
+});const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const TYPE = {
   drive:   { accent:"linear-gradient(90deg,#6366f1,#818cf8)", iconBg:"rgba(99,102,241,0.1)", iconColor:"#6366f1", badgeBg:"rgba(99,102,241,0.08)", badgeColor:"#6366f1", badgeBorder:"rgba(99,102,241,0.2)", label:"🏢 Placement Drive" },

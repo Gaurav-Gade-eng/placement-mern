@@ -1,5 +1,7 @@
 import {useEffect,useState} from "react";
 import axios from "axios";
+import API from "../api";
+
 
 function AdminDashboard(){
 
@@ -9,7 +11,7 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 useEffect(()=>{
 
-axios.get("http://localhost:5000/api/admin/students",{
+axios.get("/admin/students",{
 
 params:{
 role:user.role,

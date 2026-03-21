@@ -104,7 +104,11 @@ if (!document.getElementById("tpostu-styles")) {
   document.head.appendChild(s);
 }
 
-const API = "http://localhost:5000/api";
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL + "/api"
+    : "http://localhost:5000/api",
+});
 const tk  = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 const cgpaColor = (c) => {
@@ -218,7 +222,11 @@ export default function TpoStudents() {
   const placed  = students.filter(s=>s.status==="placed"||s.isPlaced).length;
   const highCGPA= students.filter(s=>Number(s.cgpa)>=8).length;
 
-  const BASE_URL = "http://localhost:5000";
+  const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL + "/api"
+    : "http://localhost:5000/api",
+});
 
   const viewResume = (student) => {
     if (!student.resume) {

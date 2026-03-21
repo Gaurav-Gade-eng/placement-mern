@@ -327,7 +327,7 @@ function Resume() {
     formData.append("resume", file);
     formData.append("userId", user._id);
     try {
-      await axios.post("http://localhost:5000/api/resume/upload", formData, {
+      await axios.post("/resume/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setStatus("success");

@@ -149,7 +149,11 @@ const initColor = n => IC[n.charCodeAt(0)%IC.length];
 const initials  = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
 
 const T = { ff:"'Plus Jakarta Sans',sans-serif", ink:"#0C1A2E", ink2:"#637180", ink3:"#3D4E5C", border:"#E6ECF4", blue:"#2563EB" };
-const API_URL = "http://localhost:5000/api";
+const API_URL = axios.create({
+  baseURL: process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL + "/api"
+    : "http://localhost:5000/api",
+});
 const tk = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 /* ── Chip SVG icons ── */
