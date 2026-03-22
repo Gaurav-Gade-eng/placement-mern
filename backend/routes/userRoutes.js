@@ -17,8 +17,13 @@ router.put("/mark-unplaced/:id", protect, markUnplaced);
 /* GET STUDENTS */
 router.get("/students", protect, async (req, res) => {
   try {
-    const students = await User.find({ role: "student" });
+
+    const students = await User.find({
+      role: { $regex: "^student$", $options: "i" }
+    }).select("-password");
+
     res.json(students);
+
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
