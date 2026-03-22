@@ -1,8 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const sendEmail = require("../utils/sendEmail");
-
+const { sendOTP } = require("../utils/sendEmail");
 
 // REGISTER
 exports.registerUser = async(req,res)=>{
@@ -79,40 +78,37 @@ res.status(500).json({message:"Server error"});
 
 
 // SEND OTP
-exports.forgotPassword = async(req,res)=>{
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
 
-try{
+    console.log("Incoming email:", email);
 
-const {email} = req.body;
+    const user = await User.findOne({ email });
 
-const user = await User.findOne({email});
+    console.log("User found:", user);
 
-if(!user)
-return res.status(404).json({message:"User not found"});
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-const otp = Math.floor(100000 + Math.random()*900000).toString();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-user.otp = otp;
+    user.otp = otp;
+    user.otpExpire = Date.now() + 5 * 60 * 1000;
 
-user.otpExpire = Date.now() + 5*60*1000;
+    await user.save();
 
-await user.save();
+    // ✅ THIS IS CORRECT
+    await sendOTP(email, otp);
 
-await sendEmail(email,otp);
+    res.json({ message: "OTP sent to email" });
 
-res.json({message:"OTP sent to email"});
-
-}catch(err){
-
-console.log(err);
-
-res.status(500).json({message:"Server error"});
-
-}
-
+  } catch (err) {
+    console.log("FORGOT PASSWORD ERROR:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
-
-
 
 
 // RESET PASSWORD
