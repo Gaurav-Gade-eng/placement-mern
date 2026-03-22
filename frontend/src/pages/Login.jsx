@@ -539,7 +539,7 @@ setLoading(false);
                 <input type="checkbox" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />
                 Remember me
               </label>
-              <a href="/forgot-password" className="lg-forgot">
+              <a href="/#/forgot-password" className="lg-forgot">
                 Forgot password?
               </a>
             </div>
