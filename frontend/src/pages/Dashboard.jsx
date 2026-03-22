@@ -274,8 +274,8 @@ export default function Dashboard() {
     if (!token) { navigate("/login"); return; }
     setLoading(true);
     Promise.all([
-      API.get(`${API}/announcement`,   tk()),
-      API.get(`${API}/application/my`, tk()),
+      API.get(`/announcement`,   tk()),
+      API.get(`/application/my`, tk()),
     ])
       .then(([aR, pR]) => {
         setAnns(Array.isArray(aR.data) ? aR.data : aR.data?.announcements || []);

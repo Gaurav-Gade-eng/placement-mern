@@ -274,9 +274,9 @@ export default function TpoAbout() {
 
   useEffect(() => {
     Promise.all([
-      API.get(`${API}/user/students`, tk()),
-      API.get(`${API}/company`,       tk()),
-      API.get(`${API}/announcement`,  tk()),
+      API.get(`/user/students`, tk()),
+      API.get(`/company`,       tk()),
+      API.get(`/announcement`,  tk()),
     ])
       .then(([s, c, a]) => {
         setStudents(s.data);

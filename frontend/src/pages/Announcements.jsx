@@ -172,7 +172,7 @@ export default function Announcements() {
   const [applied,       setApplied]       = useState(new Set()); // set of applied ann ids
 
   useEffect(() => {
-    API.get(`${API}/announcement`, tk())
+    API.get(`/announcement`, tk())
       .then(res => setAnnouncements(res.data))
       .catch(console.error)
       .finally(() => setLoading(false));

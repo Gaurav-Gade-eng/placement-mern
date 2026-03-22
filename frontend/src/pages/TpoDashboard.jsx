@@ -222,9 +222,9 @@ export default function TpoDashboard() {
     setLoading(true);
     try {
       const [stuRes, annRes, coRes] = await Promise.all([
-        API.get(`${API}/user/students`, tk()),
-        API.get(`${API}/announcement`,  tk()),
-        API.get(`${API}/company`,       tk()),
+        API.get(`/user/students`, tk()),
+        API.get(`/announcement`,  tk()),
+        API.get(`/company`,       tk()),
       ]);
       setStudents(stuRes.data);
       setAnnouncements(annRes.data);

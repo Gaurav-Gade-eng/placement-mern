@@ -180,7 +180,7 @@ export default function TpoStudents() {
   const [search,  setSearch]  = useState("");
 
   useEffect(() => {
-    API.get(`${API}/user/students`, tk())
+    API.get(`/user/students`, tk())
       .then(res => { setStudents(res.data); setFiltered(res.data); })
       .catch(console.error)
       .finally(() => setLoading(false));

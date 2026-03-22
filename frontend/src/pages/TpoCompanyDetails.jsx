@@ -259,7 +259,7 @@ export default function TpoCompanyDetails() {
   const [editSkills, setEditSkills] = useState([]);
 
   useEffect(() => {
-    API.get(`${API}/company/${id}`, tk())
+    API.get(`/company/${id}`, tk())
       .then(res => {
         setCompany(res.data);
         setSkills(res.data.requiredSkills || []);

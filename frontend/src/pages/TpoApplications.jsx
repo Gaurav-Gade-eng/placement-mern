@@ -198,7 +198,7 @@ export default function TpoApplications() {
   const fetchApps = async () => {
     setLoading(true);
     try {
-      const res = await API.get(`${API}/application`, tk());
+      const res = await API.get(`/application`, tk());
       setApps(res.data);
     } catch(e) { console.error(e); }
     finally { setLoading(false); }

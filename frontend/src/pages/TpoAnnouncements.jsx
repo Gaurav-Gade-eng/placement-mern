@@ -481,7 +481,7 @@ export default function TpoAnnouncements() {
 
   const fetchAll = async () => {
     setLoading(true);
-    try { const res = await API.get(`${API}/announcement`, tk()); setAnnouncements(res.data); }
+    try { const res = await API.get(`/announcement`, tk()); setAnnouncements(res.data); }
     catch(e) { console.error(e); }
     finally { setLoading(false); }
   };
