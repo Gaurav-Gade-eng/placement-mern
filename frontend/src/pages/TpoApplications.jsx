@@ -208,7 +208,7 @@ export default function TpoApplications() {
     if (!acceptModal) return;
     setActing(true);
     try {
-      await API.put(`${API}/application/${acceptModal._id}`, { status:"accepted" }, tk());
+      await API.put(`/application/${acceptModal._id}`, { status:"accepted" }, tk());
       setAcceptModal(null);
       showToast("Application accepted.");
       fetchApps();
@@ -220,7 +220,7 @@ export default function TpoApplications() {
     if (!rejectModal) return;
     setActing(true);
     try {
-      await API.put(`${API}/application/${rejectModal._id}`, { status:"rejected", reason }, tk());
+      await API.put(`/application/${rejectModal._id}`, { status:"rejected", reason }, tk());
       setRejectModal(null);
       setReason("");
       showToast("Application rejected.");

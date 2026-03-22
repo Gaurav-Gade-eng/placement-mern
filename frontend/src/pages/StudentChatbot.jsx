@@ -415,7 +415,7 @@ export default function StudentChatbot() {
     setLoading(true);
     try {
       const res = await API.post(
-        `${API}/chat`,
+        `/chat`,
         { message: content },
         { headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } }
       );

@@ -211,9 +211,9 @@ export default function TpoPlaced() {
     const isPlacing = action === "place";
     try {
       if (isPlacing) {
-        await API.put(`${API}/user/mark-placed/${student._id}`, {}, tk());
+        await API.put(`/user/mark-placed/${student._id}`, {}, tk());
       } else {
-        await API.put(`${API}/user/mark-unplaced/${student._id}`, {}, tk());
+        await API.put(`/user/mark-unplaced/${student._id}`, {}, tk());
       }
       const updated = students.map(s =>
         s._id === student._id

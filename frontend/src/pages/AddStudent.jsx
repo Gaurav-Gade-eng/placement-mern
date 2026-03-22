@@ -210,7 +210,7 @@ export default function AddStudent() {
 
     setLoading(true);
     try {
-      await API.post(`${API}/student/add`, form, tk());
+      await API.post(`/student/add`, form, tk());
       showToast(`${form.name} added successfully!`);
       setForm(EMPTY);
       setErrors({});

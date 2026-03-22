@@ -370,7 +370,7 @@ function EditModal({ ann, onClose, onSaved }) {
   const [loading, setLoading] = useState(false);
   const save = async (data) => {
     setLoading(true);
-    try { await API.put(`${API}/announcement/${ann._id}`, data, tk()); onSaved(); }
+    try { await API.put(`/announcement/${ann._id}`, data, tk()); onSaved(); }
     catch { setLoading(false); }
   };
   return (
@@ -405,7 +405,7 @@ function DeleteModal({ ann, onClose, onDeleted }) {
   const [loading, setLoading] = useState(false);
   const del = async () => {
     setLoading(true);
-    try { await API.delete(`${API}/announcement/${ann._id}`, tk()); onDeleted(); }
+    try { await API.delete(`/announcement/${ann._id}`, tk()); onDeleted(); }
     catch { setLoading(false); }
   };
   return (
@@ -489,7 +489,7 @@ export default function TpoAnnouncements() {
   const handleCreate = async (data) => {
     setPostLoading(true);
     try {
-      await API.post(`${API}/announcement/create`, data, tk());
+      await API.post(`/announcement/create`, data, tk());
       showToast("Announcement posted successfully!");
       setShowForm(false);
       fetchAll();

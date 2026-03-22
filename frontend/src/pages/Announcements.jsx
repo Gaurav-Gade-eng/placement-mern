@@ -182,7 +182,7 @@ export default function Announcements() {
     setApplying(id);
     try {
       await API.post(
-        `${API}/application/apply`,
+        `/application/apply`,
         { announcementId: id },
         tk()
       );

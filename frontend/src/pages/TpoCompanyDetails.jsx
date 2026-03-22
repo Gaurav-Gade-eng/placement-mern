@@ -281,7 +281,7 @@ export default function TpoCompanyDetails() {
   const saveEdit = async () => {
     setSaving(true);
     try {
-      const res = await API.put(`${API}/company/${id}`,
+      const res = await API.put(`/company/${id}`,
         { ...form, requiredSkills: editSkills }, tk());
       setCompany(res.data);
       setSkills(res.data.requiredSkills || editSkills);
@@ -299,7 +299,7 @@ export default function TpoCompanyDetails() {
     setSkills(updated);
     setNewSkill("");
     try {
-      await API.put(`${API}/company/${id}`, { requiredSkills: updated }, tk());
+      await API.put(`/company/${id}`, { requiredSkills: updated }, tk());
       showToast(`Added "${val}"`);
     } catch { setSkills(skills); }
   };
@@ -308,7 +308,7 @@ export default function TpoCompanyDetails() {
     const updated = skills.filter(s => s !== skill);
     setSkills(updated);
     try {
-      await API.put(`${API}/company/${id}`, { requiredSkills: updated }, tk());
+      await API.put(`/company/${id}`, { requiredSkills: updated }, tk());
       showToast(`Removed "${skill}"`);
     } catch { setSkills(skills); }
   };
@@ -317,7 +317,7 @@ export default function TpoCompanyDetails() {
   const deleteCompany = async () => {
     setDeleting(true);
     try {
-      await API.delete(`${API}/company/${id}`, tk());
+      await API.delete(`/company/${id}`, tk());
       navigate("/admin/companies");
     } catch { setDeleting(false); }
   };
