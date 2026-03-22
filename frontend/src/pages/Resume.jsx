@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import API from "../api";
 
 /* ── inject styles once ── */
 if (!document.getElementById("resume-styles")) {

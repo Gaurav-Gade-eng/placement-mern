@@ -281,7 +281,7 @@ export default function TpoCompanyDetails() {
   const saveEdit = async () => {
     setSaving(true);
     try {
-      const res = await APi.put(`${API}/company/${id}`,
+      const res = await API.put(`${API}/company/${id}`,
         { ...form, requiredSkills: editSkills }, tk());
       setCompany(res.data);
       setSkills(res.data.requiredSkills || editSkills);
