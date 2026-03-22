@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import API from "../api";
@@ -121,11 +120,7 @@ if (!document.getElementById("tpoa-styles")) {
   document.head.appendChild(s);
 }
 
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
+
 const tk          = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 const SEMESTERS   = [1, 2, 3, 4, 5, 6, 7, 8];
 const DEPARTMENTS = ["IT", "CIVIL", "ENTC", "MECH", "Electrical"];
@@ -375,7 +370,7 @@ function EditModal({ ann, onClose, onSaved }) {
   const [loading, setLoading] = useState(false);
   const save = async (data) => {
     setLoading(true);
-    try { await axios.put(`${API}/announcement/${ann._id}`, data, tk()); onSaved(); }
+    try { await API.put(`${API}/announcement/${ann._id}`, data, tk()); onSaved(); }
     catch { setLoading(false); }
   };
   return (
@@ -410,7 +405,7 @@ function DeleteModal({ ann, onClose, onDeleted }) {
   const [loading, setLoading] = useState(false);
   const del = async () => {
     setLoading(true);
-    try { await axios.delete(`${API}/announcement/${ann._id}`, tk()); onDeleted(); }
+    try { await API.delete(`${API}/announcement/${ann._id}`, tk()); onDeleted(); }
     catch { setLoading(false); }
   };
   return (
@@ -486,7 +481,7 @@ export default function TpoAnnouncements() {
 
   const fetchAll = async () => {
     setLoading(true);
-    try { const res = await axios.get(`${API}/announcement`, tk()); setAnnouncements(res.data); }
+    try { const res = await API.get(`${API}/announcement`, tk()); setAnnouncements(res.data); }
     catch(e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -494,7 +489,7 @@ export default function TpoAnnouncements() {
   const handleCreate = async (data) => {
     setPostLoading(true);
     try {
-      await axios.post(`${API}/announcement/create`, data, tk());
+      await API.post(`${API}/announcement/create`, data, tk());
       showToast("Announcement posted successfully!");
       setShowForm(false);
       fetchAll();

@@ -1,5 +1,4 @@
 import {useEffect,useState} from "react";
-import axios from "axios";
 import API from "../api";
 
 
@@ -11,7 +10,7 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 useEffect(()=>{
 
-axios.get("/admin/students",{
+API.get("/admin/students",{
 
 params:{
 role:user.role,

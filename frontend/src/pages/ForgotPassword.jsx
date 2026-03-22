@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../api";
 
@@ -391,7 +390,7 @@ function ForgotPassword() {
     if (!email) { setError("Please enter your email address."); triggerShake(); return; }
     setLoading(true); setError("");
     try {
-      await axios.post("/auth/forgot-password", { email });
+      await API.post("/auth/forgot-password", { email });
       setSuccess("OTP sent! Check your inbox.");
       setTimeout(() => { setSuccess(""); setStep(2); }, 1200);
     } catch {
@@ -421,7 +420,7 @@ function ForgotPassword() {
     if (password.length < 6) { setError("Password must be at least 6 characters."); triggerShake(); return; }
     setLoading(true); setError("");
     try {
-      await axios.post("/auth/reset-password", { email, otp, password });
+      await API.post("/auth/reset-password", { email, otp, password });
       setStep(3);
     } catch {
       setError("Invalid or expired OTP. Please try again.");
@@ -606,7 +605,7 @@ function ForgotPassword() {
                 <a onClick={async () => {
                   setOtpArr(Array(OTP_LENGTH).fill(""));
                   setError(""); setLoading(true);
-                  try { await axios.post("/auth/forgot-password", { email }); setSuccess("OTP resent!"); setTimeout(() => setSuccess(""), 2000); }
+                  try { await API.post("/auth/forgot-password", { email }); setSuccess("OTP resent!"); setTimeout(() => setSuccess(""), 2000); }
                   catch { setError("Could not resend. Try again."); }
                   finally { setLoading(false); }
                 }}>

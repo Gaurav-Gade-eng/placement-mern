@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Navbar  from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import API from "../api";
@@ -136,7 +135,6 @@ if (!document.getElementById("ann-student-styles")) {
   document.head.appendChild(s);
 }
 
-// 
 const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const TYPE = {
@@ -174,7 +172,7 @@ export default function Announcements() {
   const [applied,       setApplied]       = useState(new Set()); // set of applied ann ids
 
   useEffect(() => {
-    axios.get(`${API}/announcement`, tk())
+    API.get(`${API}/announcement`, tk())
       .then(res => setAnnouncements(res.data))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -183,7 +181,7 @@ export default function Announcements() {
   const applyDrive = async (id) => {
     setApplying(id);
     try {
-      await axios.post(
+      await API.post(
         `${API}/application/apply`,
         { announcementId: id },
         tk()

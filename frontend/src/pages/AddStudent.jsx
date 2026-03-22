@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import TpoNavbar from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import API from "../api";
@@ -153,7 +152,6 @@ if (!document.getElementById("add-student-styles")) {
 }
 
 /* ── API config ── */
-// const API = "http://localhost:5000/api";
 const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const DEPTS     = ["IT", "MECH", "CIVIL", "ENTC", "ELECTRICAL", "CS"];
@@ -212,7 +210,7 @@ export default function AddStudent() {
 
     setLoading(true);
     try {
-      await axios.post(`${API}/student/add`, form, tk());
+      await API.post(`${API}/student/add`, form, tk());
       showToast(`${form.name} added successfully!`);
       setForm(EMPTY);
       setErrors({});

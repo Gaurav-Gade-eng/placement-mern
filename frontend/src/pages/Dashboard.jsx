@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Navbar  from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import API from "../api";
@@ -275,8 +274,8 @@ export default function Dashboard() {
     if (!token) { navigate("/login"); return; }
     setLoading(true);
     Promise.all([
-      axios.get(`${API}/announcement`,   tk()),
-      axios.get(`${API}/application/my`, tk()),
+      API.get(`${API}/announcement`,   tk()),
+      API.get(`${API}/application/my`, tk()),
     ])
       .then(([aR, pR]) => {
         setAnns(Array.isArray(aR.data) ? aR.data : aR.data?.announcements || []);

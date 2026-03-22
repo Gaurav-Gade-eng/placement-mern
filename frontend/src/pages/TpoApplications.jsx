@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import API from "../api";
-
 if (!document.getElementById("tpo-app-styles")) {
   const s = document.createElement("style");
   s.id = "tpo-app-styles";
@@ -124,11 +122,6 @@ if (!document.getElementById("tpo-app-styles")) {
   document.head.appendChild(s);
 }
 
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
 const tk  = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
 
 const STATUS_STYLE = {
@@ -205,7 +198,7 @@ export default function TpoApplications() {
   const fetchApps = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API}/application`, tk());
+      const res = await API.get(`${API}/application`, tk());
       setApps(res.data);
     } catch(e) { console.error(e); }
     finally { setLoading(false); }
@@ -215,7 +208,7 @@ export default function TpoApplications() {
     if (!acceptModal) return;
     setActing(true);
     try {
-      await axios.put(`${API}/application/${acceptModal._id}`, { status:"accepted" }, tk());
+      await API.put(`${API}/application/${acceptModal._id}`, { status:"accepted" }, tk());
       setAcceptModal(null);
       showToast("Application accepted.");
       fetchApps();
@@ -227,7 +220,7 @@ export default function TpoApplications() {
     if (!rejectModal) return;
     setActing(true);
     try {
-      await axios.put(`${API}/application/${rejectModal._id}`, { status:"rejected", reason }, tk());
+      await API.put(`${API}/application/${rejectModal._id}`, { status:"rejected", reason }, tk());
       setRejectModal(null);
       setReason("");
       showToast("Application rejected.");

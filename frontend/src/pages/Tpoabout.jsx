@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import API from "../api";
@@ -101,11 +100,6 @@ if (!document.getElementById("tpo-about-styles")) {
   document.head.appendChild(s);
 }
 
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
 const tk  = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 const TEAM = [
@@ -280,9 +274,9 @@ export default function TpoAbout() {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`${API}/user/students`, tk()),
-      axios.get(`${API}/company`,       tk()),
-      axios.get(`${API}/announcement`,  tk()),
+      API.get(`${API}/user/students`, tk()),
+      API.get(`${API}/company`,       tk()),
+      API.get(`${API}/announcement`,  tk()),
     ])
       .then(([s, c, a]) => {
         setStudents(s.data);

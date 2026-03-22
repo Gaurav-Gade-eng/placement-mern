@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import API from "../api";
 import { useState, useEffect, useRef } from "react";
 
 /* ── inject styles once ── */

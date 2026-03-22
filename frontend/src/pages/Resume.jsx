@@ -1,9 +1,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import API from "../api";
 
 /* ── inject styles once ── */
 if (!document.getElementById("resume-styles")) {
@@ -328,7 +326,7 @@ function Resume() {
     formData.append("resume", file);
     formData.append("userId", user._id);
     try {
-      await axios.post("/resume/upload", formData, {
+      await API.post("/resume/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setStatus("success");

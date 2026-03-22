@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import API from "../api";
+
 /* ── inject styles once ── */
 if (!document.getElementById("tcd-styles")) {
   const s = document.createElement("style");
@@ -210,11 +210,7 @@ const SKILL_COLORS = [
 ];
 
 const tk = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
+
 /* ── Skeleton ── */
 function Skeleton() {
   const sh = { background:"linear-gradient(90deg,#EAECF0 25%,#F4F6F9 50%,#EAECF0 75%)", backgroundSize:"200% 100%", animation:"tcdShimmer 1.5s ease infinite", borderRadius:6 };
@@ -263,7 +259,7 @@ export default function TpoCompanyDetails() {
   const [editSkills, setEditSkills] = useState([]);
 
   useEffect(() => {
-    axios.get(`${API}/company/${id}`, tk())
+    API.get(`${API}/company/${id}`, tk())
       .then(res => {
         setCompany(res.data);
         setSkills(res.data.requiredSkills || []);
@@ -285,7 +281,7 @@ export default function TpoCompanyDetails() {
   const saveEdit = async () => {
     setSaving(true);
     try {
-      const res = await axios.put(`${API}/company/${id}`,
+      const res = await APi.put(`${API}/company/${id}`,
         { ...form, requiredSkills: editSkills }, tk());
       setCompany(res.data);
       setSkills(res.data.requiredSkills || editSkills);
@@ -303,7 +299,7 @@ export default function TpoCompanyDetails() {
     setSkills(updated);
     setNewSkill("");
     try {
-      await axios.put(`${API}/company/${id}`, { requiredSkills: updated }, tk());
+      await API.put(`${API}/company/${id}`, { requiredSkills: updated }, tk());
       showToast(`Added "${val}"`);
     } catch { setSkills(skills); }
   };
@@ -312,7 +308,7 @@ export default function TpoCompanyDetails() {
     const updated = skills.filter(s => s !== skill);
     setSkills(updated);
     try {
-      await axios.put(`${API}/company/${id}`, { requiredSkills: updated }, tk());
+      await API.put(`${API}/company/${id}`, { requiredSkills: updated }, tk());
       showToast(`Removed "${skill}"`);
     } catch { setSkills(skills); }
   };
@@ -321,7 +317,7 @@ export default function TpoCompanyDetails() {
   const deleteCompany = async () => {
     setDeleting(true);
     try {
-      await axios.delete(`${API}/company/${id}`, tk());
+      await API.delete(`${API}/company/${id}`, tk());
       navigate("/admin/companies");
     } catch { setDeleting(false); }
   };

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import TpoNavbar from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import AdminCompanyCard from "../components/AdminCompanyCard";
@@ -366,7 +365,7 @@ export default function TpoCompanies() {
   const fetchCompanies = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("/company",
+      const res = await API.get("/company",
         { headers: { Authorization: `Bearer ${token()}` } });
       setCompanies(res.data);
     } catch (e) { console.error(e); }
@@ -393,7 +392,7 @@ export default function TpoCompanies() {
     if (!salary)      { setError("Please enter the salary package."); return; }
     setAddLoading(true); setError("");
     try {
-      await axios.post("/company/create",
+      await API.post("/company/create",
         { companyName, salary, offers, minimumCGPA: minCGPA, requiredSkills: skillsList, logo: logoDomain },
         { headers: { Authorization: `Bearer ${token()}` } });
       setCompanyName(""); setSalary(""); setOffers(""); setMinCGPA("");
@@ -409,7 +408,7 @@ export default function TpoCompanies() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await axios.delete(`/company/${deleteTarget._id}`,
+      await API.delete(`/company/${deleteTarget._id}`,
         { headers: { Authorization: `Bearer ${token()}` } });
       showToast(`${deleteTarget.companyName} removed.`);
       setDeleteTarget(null);

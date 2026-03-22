@@ -1,15 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
-import axios from "axios";
-
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
-
-
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap');
@@ -423,7 +414,7 @@ export default function StudentChatbot() {
     setChat(prev => [...prev, { sender:"user", text:content }]);
     setLoading(true);
     try {
-      const res = await axios.post(
+      const res = await API.post(
         `${API}/chat`,
         { message: content },
         { headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } }

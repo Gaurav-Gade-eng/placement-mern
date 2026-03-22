@@ -1,8 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
-
 
 /* ── inject styles once ── */
 if (!document.getElementById("al-styles")) {
@@ -114,7 +112,10 @@ function AdminLogin() {
 
   try {
 
-    const res = await API.post("/auth/login", { email, password });
+    const res = await API.post(
+      "/auth/login",
+      { email, password }
+    );
 
     const user = res.data.user;
 

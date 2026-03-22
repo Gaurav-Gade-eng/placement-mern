@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
 import API from "../api";
@@ -111,11 +110,6 @@ if (!document.getElementById("tpop-styles")) {
   document.head.appendChild(s);
 }
 
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
 const tk  = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 const initials = (name="") => name.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
@@ -183,7 +177,7 @@ export default function TpoPlaced() {
   const [fStatus, setFStatus] = useState("");
 
   useEffect(() => {
-    axios.get(`${API}/user/students`, tk())
+    API.get(`${API}/user/students`, tk())
       .then(res => { setStudents(res.data); setFiltered(res.data); })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -217,9 +211,9 @@ export default function TpoPlaced() {
     const isPlacing = action === "place";
     try {
       if (isPlacing) {
-        await axios.put(`${API}/user/mark-placed/${student._id}`, {}, tk());
+        await API.put(`${API}/user/mark-placed/${student._id}`, {}, tk());
       } else {
-        await axios.put(`${API}/user/mark-unplaced/${student._id}`, {}, tk());
+        await API.put(`${API}/user/mark-unplaced/${student._id}`, {}, tk());
       }
       const updated = students.map(s =>
         s._id === student._id

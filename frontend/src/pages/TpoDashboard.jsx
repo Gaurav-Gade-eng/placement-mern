@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TpoNavbar  from "../components/TpoNavbar";
 import TpoSidebar from "../components/TpoSidebar";
@@ -160,11 +159,6 @@ if (!document.getElementById("tpod-pro-styles")) {
 }
 
 /* ── Constants ── */
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL
-//     ? process.env.REACT_APP_API_URL + "/api"
-//     : "http://localhost:5000/api",
-// });
 const tk  = () => ({ headers:{ Authorization:`Bearer ${localStorage.getItem("token")}` } });
 
 const DEPT_COLORS = {
@@ -228,9 +222,9 @@ export default function TpoDashboard() {
     setLoading(true);
     try {
       const [stuRes, annRes, coRes] = await Promise.all([
-        axios.get(`${API}/user/students`, tk()),
-        axios.get(`${API}/announcement`,  tk()),
-        axios.get(`${API}/company`,       tk()),
+        API.get(`${API}/user/students`, tk()),
+        API.get(`${API}/announcement`,  tk()),
+        API.get(`${API}/company`,       tk()),
       ]);
       setStudents(stuRes.data);
       setAnnouncements(annRes.data);

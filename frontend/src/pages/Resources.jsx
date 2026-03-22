@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import API from "../api";
+
 /* ── inject styles once ── */
 if (!document.getElementById("res-styles")) {
   const s = document.createElement("style");
