@@ -82,11 +82,11 @@ exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    console.log("Incoming email:", email);
+    console.log("👉 EMAIL RECEIVED:", email);
 
     const user = await User.findOne({ email });
 
-    console.log("User found:", user);
+    console.log("👉 USER FOUND:", user);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -99,13 +99,16 @@ exports.forgotPassword = async (req, res) => {
 
     await user.save();
 
-    // ✅ THIS IS CORRECT
+    console.log("👉 OTP GENERATED:", otp);
+
     await sendOTP(email, otp);
+
+    console.log("✅ EMAIL SENT SUCCESS");
 
     res.json({ message: "OTP sent to email" });
 
   } catch (err) {
-    console.log("FORGOT PASSWORD ERROR:", err);
+    console.log("❌ ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
