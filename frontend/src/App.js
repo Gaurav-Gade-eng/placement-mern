@@ -172,7 +172,6 @@ element={<AdminRoute><TpoApplications/></AdminRoute>}
 
         {/* ───────── Fallback ───────── */}
 
-        <Route path="*" element={<Navigate to="/" replace />} />
 
         <Route
 path="/announcements"
@@ -183,8 +182,11 @@ element={<ProtectedRoute><Announcements/></ProtectedRoute>}
 path="/admin/announcements"
 element={<AdminRoute><TpoAnnouncements/></AdminRoute>}
 />
+              <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
+
+
 
     </Router>
 
