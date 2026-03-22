@@ -428,7 +428,7 @@ localStorage.setItem("token", res.data.token);
 localStorage.setItem("user", JSON.stringify(user));
 
 // ✅ Only students reach here
-window.location.href = "/dashboard";
+window.location.href = "/#/dashboard";
 
 }
 catch (err) {
