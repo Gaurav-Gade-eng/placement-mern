@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
@@ -61,7 +60,7 @@ function App() {
 
   return (
 
-    <BrowserRouter>
+    <Router>
 
       <Routes>
 
@@ -187,7 +186,7 @@ element={<AdminRoute><TpoAnnouncements/></AdminRoute>}
 
       </Routes>
 
-    </BrowserRouter>
+    </Router>
 
   );
 }
