@@ -380,6 +380,101 @@ const css = `
     animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ══════════════════════════════════════
+     MOBILE RESPONSIVE — Android screens
+     Target: 360px–430px wide
+  ══════════════════════════════════════ */
+
+  @media (max-width: 768px) {
+
+    .lg-root {
+      padding: 16px;
+      align-items: flex-start;
+      padding-top: 24px;
+    }
+
+    /* Stack card vertically: left panel on top, form below */
+    .lg-card {
+      width: 100%;
+      min-height: unset;
+      flex-direction: column;
+      border-radius: 16px;
+    }
+
+    /* Left panel — compact horizontal banner */
+    .lg-left {
+      width: 100%;
+      padding: 28px 24px;
+      min-height: unset;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    /* Hide decorative floating shapes on mobile */
+    .ls-s1, .ls-s2, .ls-s3, .ls-s4 { display: none; }
+
+    .lg-left-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    /* Hide the long body text on mobile — too cramped */
+    .lg-left-body { display: none; }
+    .lg-left-line { display: none; }
+
+    .lg-left-title {
+      font-size: 24px;
+      margin-bottom: 2px;
+    }
+
+    .lg-left-sub {
+      font-size: 9px;
+      letter-spacing: 1.8px;
+      margin-bottom: 0;
+    }
+
+    .lg-badge {
+      margin-bottom: 0;
+      flex-shrink: 0;
+      align-self: flex-start;
+    }
+
+    /* Right panel */
+    .lg-right {
+      padding: 28px 24px 32px;
+      justify-content: flex-start;
+    }
+
+    .lg-right-head { margin-bottom: 20px; }
+
+    .lg-right-title { font-size: 22px; }
+
+    /* Slightly taller touch targets */
+    .lg-input-wrap { height: 50px; }
+
+    .lg-input { font-size: 14px; }
+
+    .lg-submit { height: 52px; font-size: 14px; }
+
+    .lg-row { margin-bottom: 18px; }
+
+    .lg-check-label { font-size: 13px; }
+    .lg-forgot { font-size: 13px; }
+  }
+
+  /* Extra-small: 360px */
+  @media (max-width: 400px) {
+    .lg-root { padding: 12px; padding-top: 16px; }
+    .lg-left { padding: 22px 18px; }
+    .lg-right { padding: 22px 18px 28px; }
+    .lg-left-title { font-size: 21px; }
+    .lg-right-title { font-size: 20px; }
+    .lg-badge { font-size: 9px; padding: 3px 10px 3px 7px; }
+  }
 `;
 
 function Login() {
@@ -397,50 +492,37 @@ function Login() {
   };
 
   const login = async () => {
+    if (!email || !password) {
+      setError("Please enter your username and password.");
+      triggerShake();
+      return;
+    }
 
-if (!email || !password) {
-  setError("Please enter your username and password.");
-  triggerShake();
-  return;
-}
+    setLoading(true);
+    setError("");
 
-setLoading(true);
-setError("");
+    try {
+      const res = await API.post("/auth/login", { email, password });
+      const user = res.data.user;
 
-try {
+      if (user.role !== "student") {
+        setError("This login is only for students.");
+        triggerShake();
+        setLoading(false);
+        return;
+      }
 
-const res = await API.post(
-  "/auth/login",
-  { email, password }
-);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(user));
+      window.location.href = "/#/dashboard";
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
+      triggerShake();
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const user = res.data.user;
-
-// ❌ Block admins
-if(user.role !== "student"){
-  setError("This login is only for students.");
-  triggerShake();
-  setLoading(false);
-  return;
-}
-
-localStorage.setItem("token", res.data.token);
-localStorage.setItem("user", JSON.stringify(user));
-
-// ✅ Only students reach here
-window.location.href = "/#/dashboard";
-
-}
-catch (err) {
-setError("Invalid credentials. Please try again.");
-triggerShake();
-}
-
-finally {
-setLoading(false);
-}
-
-};
   const handleKey = (e) => { if (e.key === "Enter") login(); };
 
   return (
@@ -464,8 +546,10 @@ setLoading(false);
                 <span className="lg-badge-dot" />
                 Placement Portal
               </div>
-              <h1 className="lg-left-title">Welcome<br />Back</h1>
-              <p className="lg-left-sub">Placement Gateway</p>
+              <div>
+                <h1 className="lg-left-title">Welcome<br />Back</h1>
+                <p className="lg-left-sub">Placement Gateway</p>
+              </div>
               <div className="lg-left-line" />
               <p className="lg-left-body">
                 Your gateway to successful career opportunities. Access resources, track applications, and connect with top companies.

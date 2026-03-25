@@ -277,7 +277,7 @@ export default function TpoDashboard() {
             <div className="d-banner-left">
               <div className="d-banner-tag">
                 <span className="d-banner-dot"/>
-                TPO Office · GCEK
+                TPO Office ·
               </div>
               <h1 className="d-banner-title">{greeting}, {user.name?.split(" ")[0] || "Admin"}</h1>
               <p className="d-banner-sub">

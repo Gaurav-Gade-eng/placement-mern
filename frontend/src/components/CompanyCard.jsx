@@ -66,6 +66,12 @@ if (!document.getElementById("fcc-styles")) {
       from { transform: translateX(-6px); opacity: 0; }
       to   { transform: translateX(0);    opacity: 1; }
     }
+
+    /* Mobile: disable 3D tilt (can feel janky on touch) */
+    @media (max-width: 600px) {
+      .fcc-card { transform: none !important; }
+      .fcc-card:active { transform: scale(0.98) !important; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -83,9 +89,9 @@ function CompanyCard({ company }) {
   const color    = getInitColor(company.companyName);
   const initials = getInitials(company.companyName);
 
-  /* subtle tilt on mouse move */
+  /* subtle tilt on mouse move — skip on touch devices */
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || window.matchMedia("(max-width: 600px)").matches) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 4;
     const y = ((e.clientY - rect.top)  / rect.height - 0.5) * -4;
@@ -101,6 +107,7 @@ function CompanyCard({ company }) {
   return (
     <div
       ref={cardRef}
+      className="fcc-card"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
@@ -126,6 +133,8 @@ function CompanyCard({ company }) {
         cursor: "pointer",
         transformStyle: "preserve-3d",
         willChange: "transform",
+        /* Ensure min height looks good on narrow screens */
+        minHeight: 90,
       }}
     >
       {/* top accent line — slides in on hover */}
@@ -144,7 +153,7 @@ function CompanyCard({ company }) {
 
       {/* ── LEFT: logo panel ── */}
       <div style={{
-        width: 110,
+        width: 90,
         flexShrink: 0,
         background: hover ? "#F0F7FF" : "#F9FAFB",
         borderRight: `1px solid ${hover ? "#DBEAFE" : "#F1F3F6"}`,
@@ -176,7 +185,7 @@ function CompanyCard({ company }) {
               height: "100%",
               objectFit: "contain",
               objectPosition: "center",
-              padding: "16px",
+              padding: "14px",
               borderRadius: 10,
               opacity: imgLoaded ? 1 : 0,
               transform: hover
@@ -197,7 +206,7 @@ function CompanyCard({ company }) {
           }}>
             <span style={{
               fontFamily: T.ff,
-              fontSize: 28, fontWeight: 800,
+              fontSize: 24, fontWeight: 800,
               color, letterSpacing: -1, lineHeight: 1,
               transform: hover ? "scale(1.1)" : "scale(1)",
               transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1)",
@@ -212,16 +221,16 @@ function CompanyCard({ company }) {
       {/* ── RIGHT: info ── */}
       <div style={{
         flex: 1,
-        padding: "16px 14px",
+        padding: "14px 12px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        gap: 7,
+        gap: 6,
         minWidth: 0,
       }}>
-        {/* company name — slides slightly on mount */}
+        {/* company name */}
         <div style={{
-          fontSize: 15, fontWeight: 700, color: hover ? "#1D4ED8" : T.ink,
+          fontSize: 14, fontWeight: 700, color: hover ? "#1D4ED8" : T.ink,
           lineHeight: 1.3,
           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
           transition: "color 0.2s ease",
@@ -231,7 +240,7 @@ function CompanyCard({ company }) {
         </div>
 
         <div style={{
-          fontSize: 13, fontWeight: 400, color: T.ink2,
+          fontSize: 12.5, fontWeight: 400, color: T.ink2,
           animation: "fcc-slide-right 0.3s 0.05s ease both",
         }}>
           Package per LPA:{" "}
@@ -256,9 +265,9 @@ function CompanyCard({ company }) {
               ? "linear-gradient(135deg, #2563EB, #3B82F6)"
               : "#fff",
             borderRadius: 6,
-            padding: "5px 12px",
+            padding: "5px 10px",
             fontFamily: T.ff,
-            fontSize: 12.5, fontWeight: 500,
+            fontSize: 12, fontWeight: 500,
             color: btnHover ? "#fff" : T.ink3,
             cursor: "pointer",
             boxShadow: btnHover
@@ -272,7 +281,7 @@ function CompanyCard({ company }) {
         >
           Explore More
           <svg
-            width="12" height="12" viewBox="0 0 24 24"
+            width="11" height="11" viewBox="0 0 24 24"
             fill="none" stroke="currentColor" strokeWidth="2.2"
             style={{
               transform: btnHover ? "translateX(2px) scale(1.1)" : "translateX(0) scale(1)",

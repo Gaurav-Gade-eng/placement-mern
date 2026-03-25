@@ -316,7 +316,7 @@ export default function TpoAbout() {
                   <span className="ab-hero-dot"/>
                   Training & Placement Cell
                 </div>
-                <h1 className="ab-hero-title">PlacementHub — GCEK</h1>
+                <h1 className="ab-hero-title">PlacementHub</h1>
                 <p className="ab-hero-sub">
                   Government College of Engineering, Karad's centralized placement management portal.
                   Connecting students with opportunities, one drive at a time.

@@ -53,7 +53,7 @@ if (!document.getElementById("ph-home-styles")) {
       min-height: 100vh;
     }
 
-    /* NAV */
+    /* ══ NAV ══ */
     .ph-nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       height: 62px;
@@ -113,7 +113,7 @@ if (!document.getElementById("ph-home-styles")) {
       animation: ph-pulse 2s ease infinite; flex-shrink: 0;
     }
 
-    /* HERO */
+    /* ══ HERO ══ */
     .ph-hero {
       min-height: 100vh;
       background: var(--navy);
@@ -233,7 +233,7 @@ if (!document.getElementById("ph-home-styles")) {
       margin-bottom: 12px; font-family: var(--ff-body);
     }
 
-    /* STATS BAND */
+    /* ══ STATS BAND ══ */
     .ph-stats {
       background: var(--white);
       border-top: 3px solid var(--navy);
@@ -264,7 +264,7 @@ if (!document.getElementById("ph-home-styles")) {
       transition: background 0.2s;
     }
 
-    /* PORTALS */
+    /* ══ PORTALS ══ */
     .ph-portals {
       max-width: 1100px; margin: 0 auto;
       padding: 80px 48px 100px;
@@ -351,7 +351,7 @@ if (!document.getElementById("ph-home-styles")) {
     }
     .ph-portal-card:hover .ph-card-glow { opacity: 1; }
 
-    /* HIGHLIGHTS */
+    /* ══ HIGHLIGHTS ══ */
     .ph-hi {
       background: var(--navy); padding: 72px 0;
       position: relative; overflow: hidden;
@@ -396,7 +396,7 @@ if (!document.getElementById("ph-home-styles")) {
       line-height: 1.6; font-family: var(--ff-body);
     }
 
-    /* FOOTER */
+    /* ══ FOOTER ══ */
     .ph-footer {
       background: var(--white); border-top: 1px solid var(--border);
       padding: 26px 48px;
@@ -416,6 +416,141 @@ if (!document.getElementById("ph-home-styles")) {
     }
     .ph-footer-link:hover { color: var(--ink); }
     .ph-footer-copy { font-size: 12px; color: var(--ink4); font-family: var(--ff-body); }
+
+    /* ══════════════════════════════════════
+       MOBILE RESPONSIVE — Android screens
+       Target: 360px–430px wide
+    ══════════════════════════════════════ */
+
+    @media (max-width: 768px) {
+
+      /* NAV */
+      .ph-nav {
+        height: 56px;
+        padding: 0 16px;
+      }
+      .ph-nav-logo { width: 30px; height: 30px; border-radius: 8px; }
+      .ph-nav-name { font-size: 13px; }
+      .ph-nav-sub { font-size: 7.5px; letter-spacing: 1.5px; }
+      .ph-nav-links { display: none; }
+      .ph-nav-badge {
+        padding: 4px 10px 4px 8px;
+        font-size: 9.5px; gap: 5px;
+      }
+      .ph-nav-dot { width: 5px; height: 5px; }
+
+      /* HERO */
+      .ph-hero { padding-top: 56px; min-height: auto; }
+      .ph-hero-content {
+        grid-template-columns: 1fr;
+        padding: 36px 20px 0;
+        gap: 0;
+      }
+      .ph-hero-left { padding-bottom: 32px; }
+      .ph-hero-eyebrow {
+        font-size: 8.5px; letter-spacing: 2.5px; margin-bottom: 16px;
+      }
+      .ph-hero-h1 {
+        font-size: 44px; letter-spacing: -1.5px; margin-bottom: 18px;
+        line-height: 1.0;
+      }
+      .ph-hero-sub {
+        font-size: 13px; margin-bottom: 28px; max-width: 100%;
+        line-height: 1.7;
+      }
+      .ph-hero-btns { gap: 10px; }
+      .ph-btn-primary {
+        font-size: 12px; padding: 11px 20px;
+        flex: 1; justify-content: center;
+      }
+      .ph-btn-ghost {
+        font-size: 12px; padding: 11px 18px;
+        flex: 1; justify-content: center;
+      }
+
+      /* Hero right — stack cards vertically, full width */
+      .ph-hero-right {
+        padding-bottom: 0; gap: 12px;
+        animation: ph-scaleIn 0.85s 0.35s ease both;
+      }
+      .ph-float-card {
+        padding: 14px 16px; border-radius: 12px;
+        margin-left: 0 !important; max-width: 100% !important;
+      }
+      .ph-float-label { font-size: 8px; margin-bottom: 10px; }
+
+      /* Hero bottom fade */
+      .ph-hero-fade { height: 60px !important; }
+
+      /* STATS — 2×2 grid */
+      .ph-stats-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .ph-stat-cell {
+        padding: 22px 18px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .ph-stat-cell:nth-child(2n) { border-right: none; }
+      .ph-stat-cell:nth-child(3),
+      .ph-stat-cell:nth-child(4) { border-bottom: none; }
+      .ph-stat-num { font-size: 32px; }
+      .ph-stat-sfx { font-size: 18px; }
+      .ph-stat-label { font-size: 8.5px; letter-spacing: 1.2px; }
+
+      /* PORTALS */
+      .ph-portals { padding: 48px 20px 60px; }
+      .ph-section-h2 { font-size: 34px; }
+      .ph-section-sub { font-size: 13px; max-width: 100%; }
+      .ph-portal-grid {
+        grid-template-columns: 1fr;
+        gap: 16px; margin-top: 28px;
+      }
+      .ph-portal-card-top { padding: 22px 22px 0; }
+      .ph-portal-icon { width: 44px; height: 44px; border-radius: 11px; }
+      .ph-portal-num { font-size: 52px; }
+      .ph-portal-body { padding: 16px 22px 22px; }
+      .ph-portal-title { font-size: 22px; }
+      .ph-portal-desc { font-size: 12.5px; margin-bottom: 16px; }
+      .ph-portal-feat { font-size: 11.5px; }
+      .ph-portal-cta { font-size: 12px; }
+
+      /* HIGHLIGHTS — single column */
+      .ph-hi { padding: 48px 0; }
+      .ph-hi-inner {
+        grid-template-columns: 1fr;
+        gap: 28px; padding: 0 20px;
+      }
+      .ph-hi-head {
+        font-size: 32px; position: static;
+        letter-spacing: -0.8px;
+      }
+      .ph-hi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .ph-hi-item { padding: 16px 14px; border-radius: 10px; }
+      .ph-hi-icon { width: 30px; height: 30px; border-radius: 7px; margin-bottom: 10px; }
+      .ph-hi-title { font-size: 11.5px; }
+      .ph-hi-sub { font-size: 10.5px; }
+
+      /* FOOTER */
+      .ph-footer {
+        flex-direction: column; gap: 12px; text-align: center;
+        padding: 20px 20px;
+      }
+      .ph-footer-name { font-size: 14px; }
+      .ph-footer-copy { font-size: 11px; }
+    }
+
+    /* Extra-small: 360px */
+    @media (max-width: 400px) {
+      .ph-hero-h1 { font-size: 38px; }
+      .ph-nav-badge { display: none; }
+      .ph-hi-grid { grid-template-columns: 1fr; }
+      .ph-stat-num { font-size: 28px; }
+      .ph-stat-sfx { font-size: 16px; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -598,7 +733,7 @@ export default function Home() {
             </h1>
             <p className="ph-hero-sub">
               Access resources, track applications and connect with top
-              companies — all from one centralised platform built for GCEK students.
+              companies — all from one centralised platform built for College students.
             </p>
             <div className="ph-hero-btns">
               <Link to="/login" className="ph-btn-primary">
@@ -687,7 +822,7 @@ export default function Home() {
         </div>
 
         {/* hero bottom fade */}
-        <div style={{
+        <div className="ph-hero-fade" style={{
           height: 100, flexShrink: 0,
           background: "linear-gradient(to bottom, transparent, #F7F8FA)",
           position: "relative", zIndex: 4,
@@ -779,11 +914,7 @@ export default function Home() {
           </div>
           <span className="ph-footer-name">PlacementHub</span>
         </div>
-        {/* <div className="ph-footer-links">
-          <Link to="/login"       className="ph-footer-link">Student Login</Link>
-          <Link to="/admin-login" className="ph-footer-link">Admin Login</Link>
-        </div> */}
-        <div className="ph-footer-copy">© {new Date().getFullYear()} PlacementHub · GCEK Campus Portal</div>
+        <div className="ph-footer-copy">© {new Date().getFullYear()} PlacementHub ·  Campus Placement Portal</div>
       </footer>
 
     </div>

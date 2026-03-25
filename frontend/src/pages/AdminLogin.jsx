@@ -70,6 +70,92 @@ if (!document.getElementById("al-styles")) {
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .al-shake { animation: shake 0.4s ease both; }
+
+    /* ══════════════════════════════════════
+       MOBILE RESPONSIVE — Android screens
+       Target: 360px–430px wide
+    ══════════════════════════════════════ */
+
+    @media (max-width: 768px) {
+
+      .al-root {
+        padding: 16px !important;
+        align-items: flex-start !important;
+        padding-top: 24px !important;
+      }
+
+      /* Stack card vertically */
+      .al-card {
+        width: 100% !important;
+        min-height: unset !important;
+        flex-direction: column !important;
+        border-radius: 16px !important;
+      }
+
+      /* Left panel — compact top banner */
+      .al-left {
+        width: 100% !important;
+        padding: 28px 24px !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+      }
+
+      /* Left content — horizontal layout */
+      .al-left-content {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 16px !important;
+        width: 100% !important;
+        animation: leftIn 0.8s 0.2s cubic-bezier(0.22,1,0.36,1) both !important;
+      }
+
+      /* Hide decorative elements on mobile */
+      .al-shape,
+      .al-body-text,
+      .al-left-line { display: none !important; }
+
+      .al-left-title {
+        font-size: 24px !important;
+        margin-bottom: 2px !important;
+      }
+
+      .al-left-sub {
+        font-size: 9px !important;
+        letter-spacing: 1.8px !important;
+        margin-bottom: 0 !important;
+      }
+
+      .al-badge { margin-bottom: 0 !important; align-self: flex-start !important; flex-shrink: 0 !important; }
+
+      /* Right panel */
+      .al-right {
+        flex: 1 !important;
+        padding: 28px 24px 32px !important;
+        justify-content: flex-start !important;
+      }
+
+      .al-right-head { margin-bottom: 20px !important; }
+
+      .al-right-title { font-size: 22px !important; }
+
+      /* Taller touch targets */
+      .al-input-wrap { height: 50px !important; }
+
+      .al-input { font-size: 14px !important; }
+
+      .al-submit { height: 52px !important; font-size: 14px !important; }
+    }
+
+    /* Extra-small: 360px */
+    @media (max-width: 400px) {
+      .al-root  { padding: 12px !important; padding-top: 16px !important; }
+      .al-left  { padding: 22px 18px !important; }
+      .al-right { padding: 22px 18px 28px !important; }
+      .al-left-title  { font-size: 21px !important; }
+      .al-right-title { font-size: 20px !important; }
+      .al-badge { font-size: 9px !important; padding: 3px 10px 3px 7px !important; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -100,55 +186,51 @@ function AdminLogin() {
   };
 
   const login = async () => {
-
-  if (!email || !password) {
-    setError("Please enter your email and password.");
-    triggerShake();
-    return;
-  }
-
-  setLoading(true);
-  setError("");
-
-  try {
-
-    const res = await API.post(
-      "/auth/login",
-      { email, password }
-    );
-
-    const user = res.data.user;
-
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("user", JSON.stringify(user));
-
-    if (user.role === "tpo") {
-      navigate("/tpo-dashboard");
-    } else {
-      setError("Access denied. Only TPO can login here.");
+    if (!email || !password) {
+      setError("Please enter your email and password.");
       triggerShake();
+      return;
     }
 
-  } catch (err) {
-    setError("Invalid credentials. Please try again.");
-    triggerShake();
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await API.post("/auth/login", { email, password });
+      const user = res.data.user;
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      if (user.role === "tpo") {
+        navigate("/tpo-dashboard");
+      } else {
+        setError("Access denied. Only TPO can login here.");
+        triggerShake();
+      }
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
+      triggerShake();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleKey = (e) => { if (e.key === "Enter") login(); };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: T.bg,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      fontFamily: T.ff,
-      padding: 24,
-      position: "relative",
-      overflow: "hidden",
-    }}>
+    <div
+      className="al-root"
+      style={{
+        minHeight: "100vh",
+        background: T.bg,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontFamily: T.ff,
+        padding: 24,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
       {/* blobs */}
       <div style={{
         position: "absolute", borderRadius: "50%", pointerEvents: "none",
@@ -172,25 +254,31 @@ function AdminLogin() {
       }} />
 
       {/* ── CARD ── */}
-      <div style={{
-        position: "relative", zIndex: 10,
-        display: "flex",
-        width: 820, minHeight: 500,
-        borderRadius: 20,
-        overflow: "hidden",
-        border: `1px solid ${T.border}`,
-        boxShadow: "0 8px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
-        animation: "cardIn 0.65s cubic-bezier(0.22,1,0.36,1) both",
-      }}>
+      <div
+        className="al-card"
+        style={{
+          position: "relative", zIndex: 10,
+          display: "flex",
+          width: 820, minHeight: 500,
+          borderRadius: 20,
+          overflow: "hidden",
+          border: `1px solid ${T.border}`,
+          boxShadow: "0 8px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
+          animation: "cardIn 0.65s cubic-bezier(0.22,1,0.36,1) both",
+        }}
+      >
 
         {/* ── LEFT PANEL ── */}
-        <div style={{
-          width: "42%",
-          background: "linear-gradient(160deg, #1B3A6B 0%, #163264 50%, #0F2347 100%)",
-          position: "relative", overflow: "hidden",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          padding: "48px 36px",
-        }}>
+        <div
+          className="al-left"
+          style={{
+            width: "42%",
+            background: "linear-gradient(160deg, #1B3A6B 0%, #163264 50%, #0F2347 100%)",
+            position: "relative", overflow: "hidden",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "48px 36px",
+          }}
+        >
           {/* mesh grid */}
           <div style={{
             position: "absolute", inset: 0,
@@ -212,12 +300,12 @@ function AdminLogin() {
           }} />
           {/* floating shapes */}
           {[
-            { w:72,  h:72,  br:18, top:"12%",  left:"8%",   anim:"floatA 6s ease-in-out infinite",   rot:"rotate(18deg)" },
-            { w:120, h:120, br:60, bottom:"10%",left:"12%",  anim:"floatB 8s ease-in-out infinite",   rot:"" },
-            { w:60,  h:60,  br:30, bottom:"28%",left:"58%",  anim:"floatC 5s ease-in-out infinite",   rot:"" },
-            { w:44,  h:44,  br:12, top:"38%",  left:"72%",  anim:"floatA 7s 1s ease-in-out infinite", rot:"rotate(-12deg)" },
+            { w:72,  h:72,  br:18, top:"12%",   left:"8%",  anim:"floatA 6s ease-in-out infinite",    rot:"rotate(18deg)" },
+            { w:120, h:120, br:60, bottom:"10%", left:"12%", anim:"floatB 8s ease-in-out infinite",    rot:"" },
+            { w:60,  h:60,  br:30, bottom:"28%", left:"58%", anim:"floatC 5s ease-in-out infinite",    rot:"" },
+            { w:44,  h:44,  br:12, top:"38%",   left:"72%", anim:"floatA 7s 1s ease-in-out infinite",  rot:"rotate(-12deg)" },
           ].map((sh, i) => (
-            <div key={i} style={{
+            <div key={i} className="al-shape" style={{
               position: "absolute", pointerEvents: "none",
               width: sh.w, height: sh.h, borderRadius: sh.br,
               background: "rgba(255,255,255,0.05)",
@@ -229,20 +317,26 @@ function AdminLogin() {
           ))}
 
           {/* left content */}
-          <div style={{
-            position: "relative", zIndex: 2, color: "#fff",
-            animation: "leftIn 0.8s 0.2s cubic-bezier(0.22,1,0.36,1) both",
-          }}>
+          <div
+            className="al-left-content"
+            style={{
+              position: "relative", zIndex: 2, color: "#fff",
+              animation: "leftIn 0.8s 0.2s cubic-bezier(0.22,1,0.36,1) both",
+            }}
+          >
             {/* badge */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(255,255,255,0.18)",
-              borderRadius: 20, padding: "4px 12px 4px 8px",
-              fontSize: 10, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.75)", marginBottom: 20,
-              fontFamily: T.ff,
-            }}>
+            <div
+              className="al-badge"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.18)",
+                borderRadius: 20, padding: "4px 12px 4px 8px",
+                fontSize: 10, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase",
+                color: "rgba(255,255,255,0.75)", marginBottom: 20,
+                fontFamily: T.ff,
+              }}
+            >
               <span style={{
                 width: 5, height: 5, borderRadius: "50%", background: "#F59E0B",
                 boxShadow: "0 0 0 3px rgba(245,158,11,0.25)",
@@ -251,45 +345,66 @@ function AdminLogin() {
               Admin Access
             </div>
 
-            <h1 style={{
-              fontFamily: T.ff,
-              fontSize: 34, fontWeight: 700, lineHeight: 1.15,
-              letterSpacing: "-0.5px", color: "#fff", marginBottom: 6,
-            }}>
-              Admin<br />Portal
-            </h1>
-            <p style={{
-              fontSize: 10.5, fontWeight: 700, letterSpacing: "2.5px",
-              textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
-              marginBottom: 18, fontFamily: T.ff,
-            }}>
-              Restricted Access
-            </p>
-            <div style={{
-              width: 32, height: 2, marginBottom: 18,
-              background: "linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1))",
-              borderRadius: 2,
-            }} />
-            <p style={{
-              fontSize: 12.5, lineHeight: 1.8, color: "rgba(255,255,255,0.5)",
-              maxWidth: 220, fontWeight: 400, fontFamily: T.ff,
-            }}>
+            <div>
+              <h1
+                className="al-left-title"
+                style={{
+                  fontFamily: T.ff,
+                  fontSize: 34, fontWeight: 700, lineHeight: 1.15,
+                  letterSpacing: "-0.5px", color: "#fff", marginBottom: 6,
+                }}
+              >
+                Admin<br />Portal
+              </h1>
+              <p
+                className="al-left-sub"
+                style={{
+                  fontSize: 10.5, fontWeight: 700, letterSpacing: "2.5px",
+                  textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+                  marginBottom: 18, fontFamily: T.ff,
+                }}
+              >
+                Restricted Access
+              </p>
+            </div>
+
+            <div
+              className="al-left-line"
+              style={{
+                width: 32, height: 2, marginBottom: 18,
+                background: "linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1))",
+                borderRadius: 2,
+              }}
+            />
+            <p
+              className="al-body-text"
+              style={{
+                fontSize: 12.5, lineHeight: 1.8, color: "rgba(255,255,255,0.5)",
+                maxWidth: 220, fontWeight: 400, fontFamily: T.ff,
+              }}
+            >
               Authorised personnel only. Manage students, companies, placements, and announcements.
             </p>
           </div>
         </div>
 
         {/* ── RIGHT PANEL ── */}
-        <div style={{
-          flex: 1, background: "#FFFFFF",
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "48px 44px", position: "relative",
-        }}>
+        <div
+          className="al-right"
+          style={{
+            flex: 1, background: "#FFFFFF",
+            display: "flex", flexDirection: "column", justifyContent: "center",
+            padding: "48px 44px", position: "relative",
+          }}
+        >
           {/* head */}
-          <div style={{
-            marginBottom: 28,
-            animation: "rightIn 0.8s 0.3s cubic-bezier(0.22,1,0.36,1) both",
-          }}>
+          <div
+            className="al-right-head"
+            style={{
+              marginBottom: 28,
+              animation: "rightIn 0.8s 0.3s cubic-bezier(0.22,1,0.36,1) both",
+            }}
+          >
             <div style={{
               fontSize: 9.5, fontWeight: 700, letterSpacing: "2.5px",
               textTransform: "uppercase", color: T.ink4, marginBottom: 8,
@@ -298,10 +413,13 @@ function AdminLogin() {
               <span style={{ width: 16, height: 1, background: "#D1D9E0", display: "inline-block" }} />
               Administrator Access
             </div>
-            <h2 style={{
-              fontSize: 26, fontWeight: 700, color: T.ink,
-              letterSpacing: "-0.5px", lineHeight: 1.1, fontFamily: T.ff,
-            }}>
+            <h2
+              className="al-right-title"
+              style={{
+                fontSize: 26, fontWeight: 700, color: T.ink,
+                letterSpacing: "-0.5px", lineHeight: 1.1, fontFamily: T.ff,
+              }}
+            >
               Sign in to continue
             </h2>
           </div>
@@ -335,6 +453,7 @@ function AdminLogin() {
                 </svg>
               </InputIcon>
               <input
+                className="al-input"
                 style={inputStyle}
                 placeholder="Enter your email"
                 value={email}
@@ -356,6 +475,7 @@ function AdminLogin() {
               </InputIcon>
               <input
                 type={showPassword ? "text" : "password"}
+                className="al-input"
                 style={inputStyle}
                 placeholder="Enter your password"
                 value={password}
@@ -416,6 +536,7 @@ function InputWrap({ children }) {
   const [focused, setFocused] = useState(false);
   return (
     <div
+      className="al-input-wrap"
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       style={{
@@ -453,6 +574,7 @@ function SubmitButton({ loading, onClick }) {
   const [hover, setHover] = useState(false);
   return (
     <button
+      className="al-submit"
       onClick={onClick}
       disabled={loading}
       onMouseEnter={() => setHover(true)}

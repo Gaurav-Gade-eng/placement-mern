@@ -152,6 +152,7 @@ const css = `
   .fp-left-title {
     font-size: 34px; font-weight: 700; line-height: 1.15;
     letter-spacing: -0.5px; color: #fff; margin-bottom: 6px;
+    white-space: pre-line;
   }
   .fp-left-sub {
     font-size: 10.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
@@ -366,6 +367,57 @@ const css = `
     from { transform: scale(0.5); opacity: 0; }
     to   { transform: scale(1);   opacity: 1; }
   }
+
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .fp-root { padding: 0; align-items: stretch; }
+
+    .fp-card {
+      flex-direction: column !important;
+      width: 100% !important;
+      min-height: 100vh !important;
+      border-radius: 0 !important;
+      border: none !important;
+    }
+
+    .fp-left {
+      width: 100% !important;
+      min-height: auto !important;
+      padding: 28px 24px 24px !important;
+      flex-shrink: 0;
+    }
+
+    .fp-left::after { display: none; }
+
+    .fp-left-content { text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .fp-left-title { font-size: 26px !important; white-space: normal !important; }
+    .fp-left-body { max-width: 100% !important; font-size: 12px !important; text-align: center; }
+    .fp-s1, .fp-s2, .fp-s3 { display: none; }
+    .fp-badge { margin-bottom: 12px !important; }
+
+    .fp-right {
+      flex: 1;
+      padding: 24px 20px 32px !important;
+      justify-content: flex-start !important;
+      overflow-y: auto;
+    }
+
+    .fp-right-title { font-size: 19px !important; }
+
+    .fp-otp-wrap { gap: 5px !important; }
+    .fp-otp-box { height: 44px !important; font-size: 16px !important; border-radius: 8px !important; }
+
+    .fp-blob-1, .fp-blob-2, .fp-grid { display: none; }
+  }
+
+  @media (min-width: 601px) and (max-width: 900px) {
+    .fp-root { padding: 16px; }
+    .fp-card { width: 100% !important; max-width: 640px; }
+    .fp-left { width: 38% !important; padding: 32px 24px !important; }
+    .fp-left-title { font-size: 26px !important; }
+    .fp-left-body { max-width: 180px !important; }
+    .fp-right { padding: 24px 28px !important; }
+  }
 `;
 
 const OTP_LENGTH = 6;
@@ -373,7 +425,7 @@ const OTP_LENGTH = 6;
 function ForgotPassword() {
   const navigate = useNavigate();
 
-  const [step, setStep]             = useState(1); // 1=email, 2=otp+pass, 3=done
+  const [step, setStep]             = useState(1);
   const [email, setEmail]           = useState("");
   const [otpArr, setOtpArr]         = useState(Array(OTP_LENGTH).fill(""));
   const [password, setPassword]     = useState("");

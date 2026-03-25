@@ -16,6 +16,27 @@ if (!document.getElementById("cd-styles")) {
     @keyframes cd-shimmer   { from{background-position:200% 0} to{background-position:-200% 0} }
     @keyframes cd-skill-in  { from{opacity:0;transform:translateX(-8px)}  to{opacity:1;transform:translateX(0)} }
     @keyframes cd-bar-fill  { from{width:0%} to{width:var(--w)} }
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .cd-page { padding: 16px 16px 48px !important; }
+      .cd-hero-inner { padding: 20px 16px !important; flex-direction: column !important; gap: 16px !important; align-items: flex-start !important; }
+      .cd-logo-box { width: 72px !important; height: 72px !important; }
+      .cd-company-name { font-size: 22px !important; }
+      .cd-stat-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+      .cd-stat-grid > *:last-child { grid-column: 1 / -1; }
+      .cd-bottom-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .cd-stat-card { padding: 16px 16px !important; }
+      .cd-desc-card { padding: 18px 16px !important; }
+      .cd-skills-card { padding: 18px 16px !important; }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      .cd-page { padding: 20px 24px 48px !important; }
+      .cd-stat-grid { grid-template-columns: 1fr 1fr !important; }
+      .cd-stat-grid > *:last-child { grid-column: 1 / -1; }
+      .cd-bottom-grid { grid-template-columns: 1fr !important; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -73,23 +94,22 @@ function Skeleton() {
     borderRadius: 6,
   };
   return (
-    <div style={{ fontFamily: T.ff, background: T.bg, minHeight: "100vh", padding: "32px 48px" }}>
-      {/* hero skeleton */}
-      <div style={{ background: T.white, borderRadius: 14, padding: "36px 40px", marginBottom: 24,
-        border: `1px solid ${T.border}`, display: "flex", gap: 32, alignItems: "center" }}>
-        <div style={{ width: 96, height: 96, borderRadius: 16, ...sh, flexShrink: 0 }} />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ height: 18, width: "20%", ...sh }} />
-          <div style={{ height: 32, width: "45%", ...sh }} />
+    <div style={{ fontFamily: T.ff, background: T.bg, minHeight: "100vh", padding: "32px 16px" }}>
+      <div style={{ background: T.white, borderRadius: 14, padding: "24px 16px", marginBottom: 24,
+        border: `1px solid ${T.border}`, display: "flex", gap: 20, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ width: 72, height: 72, borderRadius: 14, ...sh, flexShrink: 0 }} />
+        <div style={{ flex: 1, minWidth: 160, display: "flex", flexDirection: "column", gap: 12 }}>
           <div style={{ height: 14, width: "30%", ...sh }} />
+          <div style={{ height: 24, width: "55%", ...sh }} />
+          <div style={{ height: 12, width: "40%", ...sh }} />
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         {[1,2,3,4].map(i => (
-          <div key={i} style={{ background: T.white, borderRadius: 12, padding: "24px",
+          <div key={i} style={{ background: T.white, borderRadius: 12, padding: "18px",
             border: `1px solid ${T.border}`, display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ height: 10, width: "35%", ...sh }} />
-            <div style={{ height: 22, width: "60%", ...sh }} />
+            <div style={{ height: 20, width: "60%", ...sh }} />
           </div>
         ))}
       </div>
@@ -102,6 +122,7 @@ function StatCard({ label, value, icon, color, delay = 0 }) {
   const [hover, setHover] = useState(false);
   return (
     <div
+      className="cd-stat-card"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -199,7 +220,7 @@ function CompanyDetails() {
 
   return (
     <Layout>
-      <div style={{ fontFamily: T.ff, background: T.bg, minHeight: "100vh", padding: "32px 48px 64px" }}>
+      <div className="cd-page" style={{ fontFamily: T.ff, background: T.bg, minHeight: "100vh", padding: "32px 48px 64px" }}>
 
         {/* ── BACK BUTTON ── */}
         <button
@@ -235,16 +256,15 @@ function CompanyDetails() {
           animation: "cd-fade-down 0.45s ease both",
           position: "relative",
         }}>
-          {/* top gradient bar */}
           <div style={{
             height: 4,
             background: `linear-gradient(90deg, ${T.blue}, ${T.blue2}, #60A5FA)`,
           }} />
 
-          <div style={{ padding: "32px 40px", display: "flex", alignItems: "center", gap: 32 }}>
+          <div className="cd-hero-inner" style={{ padding: "32px 40px", display: "flex", alignItems: "center", gap: 32 }}>
 
             {/* logo */}
-            <div style={{
+            <div className="cd-logo-box" style={{
               width: 100, height: 100, borderRadius: 16, flexShrink: 0,
               background: "#F9FAFB", border: `1px solid ${T.border}`,
               display: "flex", alignItems: "center", justifyContent: "center",
@@ -286,7 +306,7 @@ function CompanyDetails() {
               }}>
                 Campus Recruitment · 2025
               </div>
-              <h1 style={{
+              <h1 className="cd-company-name" style={{
                 fontSize: 30, fontWeight: 800, color: T.ink,
                 letterSpacing: "-0.8px", lineHeight: 1.15, margin: "0 0 10px",
                 fontFamily: T.ff,
@@ -294,19 +314,12 @@ function CompanyDetails() {
               }}>
                 {company.companyName}
               </h1>
-              <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                animation: "cd-fade-up 0.4s 0.2s ease both",
-              }}>
-                
-                  
-              </div>
             </div>
           </div>
         </div>
 
         {/* ── STAT CARDS ── */}
-        <div style={{
+        <div className="cd-stat-grid" style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: 14, marginBottom: 20,
@@ -335,10 +348,10 @@ function CompanyDetails() {
         </div>
 
         {/* ── BOTTOM ROW: description + skills ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div className="cd-bottom-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
 
           {/* Description */}
-          <div style={{
+          <div className="cd-desc-card" style={{
             background: T.white,
             border: `1px solid ${T.border}`,
             borderRadius: 12,
@@ -346,9 +359,7 @@ function CompanyDetails() {
             boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
             animation: "cd-fade-up 0.45s 0.28s ease both",
           }}>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8, marginBottom: 14,
-            }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: 7,
                 background: T.blueLt, color: T.blue2,
@@ -374,7 +385,7 @@ function CompanyDetails() {
           </div>
 
           {/* Required Skills */}
-          <div style={{
+          <div className="cd-skills-card" style={{
             background: T.white,
             border: `1px solid ${T.border}`,
             borderRadius: 12,
@@ -382,9 +393,7 @@ function CompanyDetails() {
             boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
             animation: "cd-fade-up 0.45s 0.34s ease both",
           }}>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8, marginBottom: 16,
-            }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: 7,
                 background: "#F3E8FF", color: "#7C3AED",

@@ -17,7 +17,7 @@ if (!document.getElementById("ann-student-styles")) {
     @keyframes annSpin  { to{transform:rotate(360deg)} }
 
     .ann-root { display:flex; min-height:100vh; background:#f8fafc; font-family:'Sora',sans-serif; }
-    .ann-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .ann-main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
     .ann-body { flex:1; padding:28px 32px 60px; overflow-y:auto; }
 
     /* page header */
@@ -131,6 +131,35 @@ if (!document.getElementById("ann-student-styles")) {
     /* empty */
     .ann-empty { display:flex; flex-direction:column; align-items:center; padding:72px 24px; text-align:center; }
     .ann-empty-ico { width:56px; height:56px; border-radius:14px; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.18); display:flex; align-items:center; justify-content:center; margin-bottom:16px; color:#6366f1; }
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .ann-root { flex-direction: column; }
+      .ann-body { padding: 16px 16px 48px !important; }
+
+      .ann-hd-row { flex-direction: column; gap: 10px; }
+      .ann-title  { font-size: 20px !important; }
+      .ann-sub    { font-size: 12px !important; }
+
+      .ann-tabs { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .ann-tabs::-webkit-scrollbar { display: none; }
+      .ann-tab { flex-shrink: 0; }
+
+      .ann-card-body { padding: 14px 14px !important; }
+      .ann-card-top  { flex-wrap: wrap; gap: 10px !important; }
+      .ann-card-right { flex-direction: row !important; align-items: center !important; flex-wrap: wrap; width: 100%; justify-content: flex-start; margin-top: 6px; }
+      .ann-card-title { font-size: 13.5px !important; }
+      .ann-card-desc  { font-size: 12px !important; }
+      .ann-card-icon  { width: 36px !important; height: 36px !important; }
+
+      .ann-apply-footer { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+      .ann-apply-btn { width: 100%; justify-content: center; }
+      .ann-applied-badge { width: 100%; justify-content: center; }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      .ann-body { padding: 20px 20px 48px !important; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -143,7 +172,7 @@ const TYPE = {
 };
 
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }) : null;
-const isNew   = (d) => d && (Date.now() - new Date(d).getTime()) < 3 * 24 * 60 * 60 * 1000; // within 3 days
+const isNew   = (d) => d && (Date.now() - new Date(d).getTime()) < 3 * 24 * 60 * 60 * 1000;
 
 function SkeletonCard() {
   return (
@@ -168,8 +197,8 @@ export default function Announcements() {
   const [announcements, setAnnouncements] = useState([]);
   const [loading,       setLoading]       = useState(true);
   const [tab,           setTab]           = useState("all");
-  const [applying,      setApplying]      = useState(null);   // id being applied
-  const [applied,       setApplied]       = useState(new Set()); // set of applied ann ids
+  const [applying,      setApplying]      = useState(null);
+  const [applied,       setApplied]       = useState(new Set());
 
   useEffect(() => {
     API.get(`/announcement`, tk())
@@ -181,11 +210,7 @@ export default function Announcements() {
   const applyDrive = async (id) => {
     setApplying(id);
     try {
-      await API.post(
-        `/application/apply`,
-        { announcementId: id },
-        tk()
-      );
+      await API.post(`/application/apply`, { announcementId: id }, tk());
       setApplied(prev => new Set([...prev, id]));
     } catch (err) {
       alert(err.response?.data?.message || "Failed to apply. Please try again.");
@@ -236,9 +261,9 @@ export default function Announcements() {
           {/* ── Tabs ── */}
           <div className="ann-tabs">
             {[
-              { id:"all",     label:`All`,           count:announcements.length },
-              { id:"drive",   label:`Placement Drives`, count:drives.length   },
-              { id:"general", label:`General`,        count:generals.length  },
+              { id:"all",     label:`All`,              count:announcements.length },
+              { id:"drive",   label:`Placement Drives`, count:drives.length        },
+              { id:"general", label:`General`,          count:generals.length      },
             ].map(t => (
               <button key={t.id} className={`ann-tab${tab===t.id?" active":""}`} onClick={() => setTab(t.id)}>
                 <div className="ann-tab-dot"/>
@@ -270,7 +295,7 @@ export default function Announcements() {
             </div>
           ) : (
             filtered.map((ann, i) => {
-              const ts  = TYPE[ann.type] || TYPE.general;
+              const ts    = TYPE[ann.type] || TYPE.general;
               const fresh = isNew(ann.createdAt);
               return (
                 <div
@@ -327,27 +352,22 @@ export default function Announcements() {
                         <span style={{ fontSize:11, color:"#cbd5e1", fontWeight:500 }}>
                           {fmtDate(ann.createdAt)}
                         </span>
-
                       </div>
                     </div>
 
                     {/* bottom tags */}
                     <div className="ann-tags">
-                      {/* all students */}
                       {ann.allStudents && (
                         <span className="ann-tag" style={{ background:"#f0fdf4", color:"#16a34a", border:"1px solid #bbf7d0" }}>👥 All Students</span>
                       )}
-                      {/* departments */}
                       {!ann.allStudents && ann.departments?.map(d => (
                         <span key={d} className="ann-tag" style={{ background:"#f1f5f9", color:"#475569", border:"1px solid #e2e8f0" }}>{d}</span>
                       ))}
-                      {/* semesters */}
                       {!ann.allStudents && ann.semesters?.length > 0 && (
                         <span className="ann-tag" style={{ background:"#f5f3ff", color:"#7c3aed", border:"1px solid #ddd6fe" }}>
                           Sem {ann.semesters.join(", ")}
                         </span>
                       )}
-                      {/* drive date */}
                       {ann.driveDate && (
                         <span className="ann-tag" style={{ background:"#fefce8", color:"#92400e", border:"1px solid #fde68a" }}>
                           📅 Drive: {fmtDate(ann.driveDate)}
@@ -355,9 +375,9 @@ export default function Announcements() {
                       )}
                     </div>
 
-                    {/* Apply button — bottom left, drives only */}
+                    {/* Apply button */}
                     {ann.type === "drive" && (
-                      <div style={{ marginTop:14, paddingTop:14, borderTop:"1px solid #f1f5f9", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                      <div className="ann-apply-footer" style={{ marginTop:14, paddingTop:14, borderTop:"1px solid #f1f5f9", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
                         <span style={{ fontSize:11.5, color:"#94a3b8", fontWeight:500 }}>
                           {applied.has(ann._id) ? "You have applied for this drive." : "Interested? Submit your application below."}
                         </span>

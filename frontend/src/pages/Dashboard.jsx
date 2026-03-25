@@ -177,6 +177,127 @@ if (!document.getElementById("dash-v2-styles")) {
     /* ══ SKELETON ══ */
     .dv2-sk { background:linear-gradient(90deg,#ECF0F4 25%,#F4F7F9 50%,#ECF0F4 75%); background-size:200% 100%; animation:dv2-shim 1.4s ease infinite; border-radius:6px; }
     .dv2-empty { padding:28px 16px; text-align:center; color:#9CAAB8; font-size:13px; line-height:1.75; }
+
+    /* ══════════════════════════════════════════
+       MOBILE RESPONSIVE — Android phone sizes
+       360px–430px (standard Android range)
+    ══════════════════════════════════════════ */
+
+    /* Tablet — reduce padding */
+    @media (max-width: 768px) {
+      .dv2-body { padding:16px 20px 80px; }
+
+      /* Banner: drop to 3-col (remove ring col on tablet) */
+      .dv2-banner-inner {
+        grid-template-columns: auto 1fr auto;
+        padding:22px 22px;
+        gap:14px;
+      }
+
+      /* Actions: 2x2 grid */
+      .dv2-actions { grid-template-columns:repeat(2,1fr); }
+
+      /* Main grid: stack */
+      .dv2-grid { grid-template-columns:1fr; }
+    }
+
+    /* Mobile — ≤480px */
+    @media (max-width: 480px) {
+      .dv2-body { padding:12px 12px 100px; }
+
+      /* ── Banner ── */
+      .dv2-banner { border-radius:16px; margin-bottom:14px; }
+      .dv2-banner-inner {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
+        padding:18px 16px;
+        gap:12px;
+      }
+      /* Hide ring/stats columns on phone — keep avatar + text */
+      .dv2-bn-stats  { display:none; }
+      .dv2-ring-wrap { display:none; }
+
+      .dv2-av {
+        width:52px; height:52px; border-radius:14px;
+        font-size:18px;
+      }
+      .dv2-bn-greet { font-size:10px; letter-spacing:1px; margin-bottom:3px; }
+      .dv2-bn-name  { font-size:20px; margin-bottom:8px; }
+      .dv2-chip     { font-size:10px; padding:3px 8px; gap:4px; }
+
+      /* ── Quick Actions: 2x2 ── */
+      .dv2-actions {
+        grid-template-columns: repeat(2,1fr);
+        gap:10px;
+        margin-bottom:14px;
+      }
+      .dv2-act { padding:16px 12px; gap:8px; border-radius:12px; }
+      .dv2-act-ico { width:40px; height:40px; border-radius:11px; }
+      .dv2-act-lbl { font-size:12px; }
+      .dv2-act-sub { font-size:10px; }
+
+      /* ── Main grid: single column ── */
+      .dv2-grid {
+        grid-template-columns:1fr;
+        gap:12px;
+        margin-bottom:14px;
+      }
+
+      /* Card internals */
+      .dv2-chd   { padding:12px 16px; }
+      .dv2-cbody { padding:4px 16px 12px; }
+      .dv2-ctitle { font-size:13px; gap:7px; }
+      .dv2-cico   { width:24px; height:24px; border-radius:6px; }
+
+      /* Score row: stack ring on top of bars */
+      .dv2-score-row {
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+        padding:12px 0 8px;
+      }
+      .dv2-score-ring { width:70px; height:70px; align-self:center; }
+      .dv2-score-pct  { font-size:18px; }
+      .dv2-score-items { width:100%; }
+      .dv2-score-label { font-size:12px; }
+
+      /* Skills */
+      .dv2-skills { padding:10px 0 6px; gap:6px; }
+      .dv2-skill  { font-size:11px; padding:4px 10px; }
+
+      /* Activity feed (inside right column card) */
+      .dv2-feed-ttl { font-size:12px; }
+      .dv2-feed-sub { font-size:10.5px; }
+      .dv2-feed-ico { width:30px; height:30px; border-radius:8px; }
+
+      /* ── Nudge: stack vertically ── */
+      .dv2-nudge {
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+        padding:14px 16px;
+        border-radius:12px;
+        margin-bottom:14px;
+      }
+      .dv2-nudge-ico { width:38px; height:38px; border-radius:9px; }
+      .dv2-nudge-btn {
+        width:100%;
+        height:44px;
+        font-size:13px;
+      }
+    }
+
+    /* Very small phones — ≤360px */
+    @media (max-width: 360px) {
+      .dv2-body { padding:10px 10px 100px; }
+      .dv2-banner-inner { padding:14px 12px; gap:10px; }
+      .dv2-av   { width:44px; height:44px; font-size:15px; border-radius:11px; }
+      .dv2-bn-name { font-size:18px; }
+      .dv2-actions { gap:8px; }
+      .dv2-act  { padding:14px 10px; }
+      .dv2-act-ico { width:36px; height:36px; }
+      .dv2-act-lbl { font-size:11px; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -288,7 +409,6 @@ export default function Dashboard() {
           localStorage.removeItem("user");
           navigate("/login");
         }
-        // silently ignore other errors — no error banner shown
       })
       .finally(() => setLoading(false));
   }, []);
@@ -301,12 +421,12 @@ export default function Dashboard() {
 
   /* Activity feed */
   const activityFeed = [
-    apps.length > 0       && { ico:"#3B7DED", icoBg:"#EBF2FD", icon:<Ic.File/>,     title:`${apps.length} Application${apps.length>1?"s":""} Sent`,        sub:"Track status in My Applications" },
-    acceptedApps.length > 0 && { ico:"#059669", icoBg:"#F0FDF4", icon:<Ic.Check/>,  title:`${acceptedApps.length} Offer${acceptedApps.length>1?"s":""} Accepted`, sub:"Congratulations on your progress!" },
-    drives.length > 0     && { ico:"#7C3AED", icoBg:"#F5F3FF", icon:<Ic.Building/>, title:`${drives.length} Active Drive${drives.length>1?"s":""} Running`,   sub:"Check eligibility & apply now" },
+    apps.length > 0         && { ico:"#3B7DED", icoBg:"#EBF2FD", icon:<Ic.File/>,     title:`${apps.length} Application${apps.length>1?"s":""} Sent`,           sub:"Track status in My Applications" },
+    acceptedApps.length > 0 && { ico:"#059669", icoBg:"#F0FDF4", icon:<Ic.Check/>,    title:`${acceptedApps.length} Offer${acceptedApps.length>1?"s":""} Accepted`, sub:"Congratulations on your progress!" },
+    drives.length > 0       && { ico:"#7C3AED", icoBg:"#F5F3FF", icon:<Ic.Building/>, title:`${drives.length} Active Drive${drives.length>1?"s":""} Running`,      sub:"Check eligibility & apply now" },
     { ico:"#D97706", icoBg:"#FEF3C7", icon:<Ic.Target/>, title:"Profile Match Score", sub:`You match ${matchPct}% of drive criteria` },
-    skills.length > 0     && { ico:"#0891B2", icoBg:"#E0F7FA", icon:<Ic.Star/>,     title:`${skills.length} Skill${skills.length>1?"s":""} on Profile`,       sub:"Skills boost your visibility to recruiters" },
-    !user.resume          && { ico:"#DC2626", icoBg:"#FEF2F2", icon:<Ic.Warn/>,     title:"Resume Missing",                                                    sub:"Upload your resume to apply to drives" },
+    skills.length > 0       && { ico:"#0891B2", icoBg:"#E0F7FA", icon:<Ic.Star/>,     title:`${skills.length} Skill${skills.length>1?"s":""} on Profile`,          sub:"Skills boost your visibility to recruiters" },
+    !user.resume            && { ico:"#DC2626", icoBg:"#FEF2F2", icon:<Ic.Warn/>,     title:"Resume Missing",                                                       sub:"Upload your resume to apply to drives" },
   ].filter(Boolean).slice(0, 3);
 
   /* Placement readiness */
@@ -350,10 +470,10 @@ export default function Dashboard() {
           {/* ════ QUICK ACTIONS ════ */}
           <div className="dv2-actions">
             {[
-              { icon:<Ic.Bell/>,     color:"#2563EB", bg:"#EBF2FD", bc:"#C2D6FA", bar:"#2563EB", label:"Browse Announcements",  sub:"View open positions",     to:"/announcements" },
-              { icon:<Ic.Plus/>,     color:"#7C3AED", bg:"#F5F3FF", bc:"#DDD6FE", bar:"#7C3AED", label:"Job Suggestions", sub:"Matched to your profile", to:"/suggestions"   },
-              { icon:<Ic.Building/>, color:"#059669", bg:"#F0FDF4", bc:"#BBF7D0", bar:"#059669", label:"Companies",       sub:"Explore all recruiters",  to:"/companies"     },
-              { icon:<Ic.User/>,     color:"#D97706", bg:"#FEF3C7", bc:"#FDE68A", bar:"#D97706", label:"My Profile",      sub:"Boost match score",       to:"/profile"       },
+              { icon:<Ic.Bell/>,     color:"#2563EB", bg:"#EBF2FD", bc:"#C2D6FA", bar:"#2563EB", label:"Browse Announcements", sub:"View open positions",     to:"/announcements" },
+              { icon:<Ic.Plus/>,     color:"#7C3AED", bg:"#F5F3FF", bc:"#DDD6FE", bar:"#7C3AED", label:"Job Suggestions",      sub:"Matched to your profile", to:"/suggestions"   },
+              { icon:<Ic.Building/>, color:"#059669", bg:"#F0FDF4", bc:"#BBF7D0", bar:"#059669", label:"Companies",            sub:"Explore all recruiters",  to:"/companies"     },
+              { icon:<Ic.User/>,     color:"#D97706", bg:"#FEF3C7", bc:"#FDE68A", bar:"#D97706", label:"My Profile",           sub:"Boost match score",       to:"/profile"       },
             ].map((a, i) => (
               <div key={i} className="dv2-act" onClick={() => navigate(a.to)}>
                 <style>{`.dv2-act:nth-child(${i+1})::after { background:${a.bar}; }`}</style>
@@ -371,7 +491,7 @@ export default function Dashboard() {
           {/* ════ MAIN GRID — Placement Readiness + Skills ════ */}
           <div className="dv2-grid">
 
-            {/* LEFT: Placement Readiness (full width feel on left) */}
+            {/* LEFT: Placement Readiness */}
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
               <div className="dv2-card">
                 <div className="dv2-chd">
@@ -486,11 +606,11 @@ export default function Dashboard() {
                   Your profile is {pct}% complete — boost your placement match score
                 </div>
                 <div style={{ fontSize:12, color:"#B45309", display:"flex", gap:10, flexWrap:"wrap" }}>
-                  {!user.cgpa           && <span>· Add CGPA</span>}
-                  {!skills.length       && <span>· Add skills</span>}
-                  {!user.resume         && <span>· Upload resume</span>}
-                  {!user.department     && <span>· Add department</span>}
-                  {!user.phone          && <span>· Add phone number</span>}
+                  {!user.cgpa       && <span>· Add CGPA</span>}
+                  {!skills.length   && <span>· Add skills</span>}
+                  {!user.resume     && <span>· Upload resume</span>}
+                  {!user.department && <span>· Add department</span>}
+                  {!user.phone      && <span>· Add phone number</span>}
                 </div>
               </div>
               <button className="dv2-nudge-btn" onClick={() => navigate("/profile")}>

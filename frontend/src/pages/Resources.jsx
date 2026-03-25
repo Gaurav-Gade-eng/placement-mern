@@ -29,14 +29,36 @@ if (!document.getElementById("res-styles")) {
       background: #F4F6F9;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .res-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-    .res-body  { flex: 1; padding: 36px 40px; overflow-y: auto; }
+
+    /* ── Sidebar: hidden on mobile, visible on desktop ── */
+    .res-sidebar-wrap {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .res-sidebar-wrap {
+        display: block;
+      }
+    }
+
+    .res-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    .res-body  { flex: 1; padding: 20px 16px; overflow-y: auto; }
+
+    @media (min-width: 480px) {
+      .res-body { padding: 28px 24px; }
+    }
+    @media (min-width: 768px) {
+      .res-body { padding: 36px 40px; }
+    }
 
     /* ── Page header ── */
     .res-header {
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       animation: resSlideUp 0.5s ease both;
     }
+    @media (min-width: 768px) {
+      .res-header { margin-bottom: 32px; }
+    }
+
     .res-eyebrow {
       font-size: 10px; font-weight: 700; letter-spacing: 3.5px;
       text-transform: uppercase; color: #3B7DED; margin-bottom: 8px;
@@ -47,19 +69,40 @@ if (!document.getElementById("res-styles")) {
       background: #3B7DED; border-radius: 2px;
     }
     .res-title {
-      font-size: 28px; font-weight: 800; color: #0D1C33;
-      letter-spacing: -0.6px; line-height: 1.1; margin-bottom: 8px;
+      font-size: 22px; font-weight: 800; color: #0D1C33;
+      letter-spacing: -0.6px; line-height: 1.15; margin-bottom: 8px;
     }
+    @media (min-width: 480px) {
+      .res-title { font-size: 26px; }
+    }
+    @media (min-width: 768px) {
+      .res-title { font-size: 28px; line-height: 1.1; }
+    }
+
     .res-subtitle {
-      font-size: 13.5px; color: #7A8599; line-height: 1.6; max-width: 480px;
+      font-size: 13px; color: #7A8599; line-height: 1.6;
+    }
+    @media (min-width: 768px) {
+      .res-subtitle { font-size: 13.5px; max-width: 480px; }
     }
 
     /* ── Filter chips ── */
     .res-filters {
-      display: flex; gap: 8px; flex-wrap: wrap;
-      margin-bottom: 28px;
+      display: flex; gap: 8px; flex-wrap: nowrap;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin-bottom: 22px;
+      padding-bottom: 4px;
       animation: resSlideUp 0.5s 0.08s ease both;
+      /* hide scrollbar */
+      -ms-overflow-style: none;
     }
+    .res-filters::-webkit-scrollbar { display: none; }
+
+    @media (min-width: 600px) {
+      .res-filters { flex-wrap: wrap; overflow-x: visible; margin-bottom: 28px; }
+    }
+
     .res-chip {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 6px 14px; border-radius: 20px;
@@ -68,6 +111,9 @@ if (!document.getElementById("res-styles")) {
       background: #fff; color: #7A8599;
       transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1);
       white-space: nowrap;
+      /* tap highlight */
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
     .res-chip:hover { border-color: #3B7DED; color: #3B7DED; transform: translateY(-1px); }
     .res-chip.active {
@@ -81,8 +127,17 @@ if (!document.getElementById("res-styles")) {
     /* ── Grid ── */
     .res-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 20px;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 540px) {
+      .res-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    }
+    @media (min-width: 768px) {
+      .res-grid {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 20px;
+      }
     }
 
     /* ── Card ── */
@@ -93,29 +148,50 @@ if (!document.getElementById("res-styles")) {
       overflow: hidden;
       transition: box-shadow 0.25s, transform 0.25s, border-color 0.2s;
       position: relative;
+      -webkit-tap-highlight-color: transparent;
     }
     .res-card:hover {
       box-shadow: 0 10px 36px rgba(0,0,0,0.09);
       transform: translateY(-3px);
       border-color: #C7D9F5;
     }
+    /* On touch devices, avoid the hover lift sticking */
+    @media (hover: none) {
+      .res-card:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: #E2E4E9;
+      }
+    }
 
     .res-card-bar { height: 3px; width: 100%; }
 
     .res-card-head {
-      padding: 18px 20px 14px;
+      padding: 14px 16px 12px;
       border-bottom: 1px solid #F0F2F6;
-      display: flex; align-items: flex-start; gap: 12px;
+      display: flex; align-items: flex-start; gap: 10px;
     }
+    @media (min-width: 768px) {
+      .res-card-head { padding: 18px 20px 14px; gap: 12px; }
+    }
+
     .res-card-badge {
-      width: 38px; height: 38px; border-radius: 10px;
+      width: 36px; height: 36px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
+    @media (min-width: 768px) {
+      .res-card-badge { width: 38px; height: 38px; }
+    }
+
     .res-card-title {
-      font-size: 14px; font-weight: 700; color: #0D1C33;
+      font-size: 13px; font-weight: 700; color: #0D1C33;
       letter-spacing: -0.2px; line-height: 1.3;
     }
+    @media (min-width: 768px) {
+      .res-card-title { font-size: 14px; }
+    }
+
     .res-card-tag {
       display: inline-flex; align-items: center;
       font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
@@ -127,33 +203,49 @@ if (!document.getElementById("res-styles")) {
       display: flex; border-bottom: 1px solid #F0F2F6;
     }
     .res-tab {
-      flex: 1; padding: 10px 0; text-align: center;
-      font-size: 11.5px; font-weight: 700; cursor: pointer;
+      flex: 1; padding: 9px 0; text-align: center;
+      font-size: 11px; font-weight: 700; cursor: pointer;
       color: #B0BAC8; border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s;
       letter-spacing: 0.3px;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    @media (min-width: 768px) {
+      .res-tab { font-size: 11.5px; padding: 10px 0; gap: 6px; }
     }
     .res-tab.active { color: #3B7DED; border-bottom-color: #3B7DED; }
     .res-tab:hover:not(.active) { color: #7A8599; }
 
     /* ── Links panel ── */
     .res-links {
-      padding: 14px 20px;
-      display: flex; flex-direction: column; gap: 8px;
+      padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 7px;
     }
+    @media (min-width: 768px) {
+      .res-links { padding: 14px 20px; gap: 8px; }
+    }
+
     .res-link-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: 8px;
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 8px;
       border: 1px solid #F0F2F6; background: #FAFBFC;
       text-decoration: none; color: #0D1C33;
-      font-size: 12.5px; font-weight: 600;
+      font-size: 12px; font-weight: 600;
       transition: border-color 0.15s, background 0.15s, transform 0.18s;
       position: relative; overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @media (min-width: 768px) {
+      .res-link-row { gap: 10px; padding: 9px 12px; font-size: 12.5px; }
     }
     .res-link-row:hover {
       border-color: #C7D9F5; background: #F4F8FF;
       transform: translateX(3px);
+    }
+    @media (hover: none) {
+      .res-link-row:hover { transform: none; }
     }
     .res-link-row::after {
       content: '';
@@ -167,9 +259,12 @@ if (!document.getElementById("res-styles")) {
       transition: transform 0.6s;
     }
     .res-link-icon {
-      width: 26px; height: 26px; border-radius: 7px;
+      width: 24px; height: 24px; border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
+    }
+    @media (min-width: 768px) {
+      .res-link-icon { width: 26px; height: 26px; }
     }
     .res-link-arrow {
       margin-left: auto; color: #C0C8D5; flex-shrink: 0;
@@ -179,19 +274,26 @@ if (!document.getElementById("res-styles")) {
 
     /* ── Videos panel ── */
     .res-videos {
-      padding: 14px 20px;
-      display: flex; flex-direction: column; gap: 12px;
+      padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 10px;
     }
+    @media (min-width: 768px) {
+      .res-videos { padding: 14px 20px; gap: 12px; }
+    }
+
     .res-video-wrap {
       position: relative; border-radius: 10px; overflow: hidden;
       border: 1px solid #E8EDF3;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .res-video-wrap iframe {
-      display: block; width: 100%; height: 178px; border: none;
+      display: block; width: 100%; height: 160px; border: none;
+    }
+    @media (min-width: 480px) {
+      .res-video-wrap iframe { height: 178px; }
     }
     .res-video-label {
-      padding: 8px 12px;
+      padding: 7px 10px;
       font-size: 11px; font-weight: 600; color: #7A8599;
       background: #FAFBFC; border-top: 1px solid #F0F2F6;
       display: flex; align-items: center; gap: 6px;
@@ -201,8 +303,11 @@ if (!document.getElementById("res-styles")) {
     .res-empty {
       grid-column: 1/-1;
       display: flex; flex-direction: column; align-items: center;
-      padding: 64px 32px; text-align: center;
+      padding: 48px 24px; text-align: center;
       animation: resFadeIn 0.4s ease both;
+    }
+    @media (min-width: 768px) {
+      .res-empty { padding: 64px 32px; }
     }
     .res-empty-icon {
       width: 56px; height: 56px; border-radius: 14px;
@@ -213,25 +318,57 @@ if (!document.getElementById("res-styles")) {
 
     /* ── Stats bar ── */
     .res-stats {
-      display: flex; gap: 20px; flex-wrap: wrap;
-      margin-bottom: 28px;
+      display: flex; gap: 10px; flex-wrap: nowrap;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; -ms-overflow-style: none;
+      margin-bottom: 22px;
+      padding-bottom: 4px;
       animation: resSlideUp 0.5s 0.05s ease both;
     }
+    .res-stats::-webkit-scrollbar { display: none; }
+
+    @media (min-width: 600px) {
+      .res-stats { flex-wrap: wrap; overflow-x: visible; gap: 14px; margin-bottom: 28px; }
+    }
+    @media (min-width: 768px) {
+      .res-stats { gap: 20px; }
+    }
+
     .res-stat {
       background: #fff; border: 1px solid #E2E4E9;
-      border-radius: 12px; padding: 14px 20px;
-      display: flex; align-items: center; gap: 12px;
+      border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+      min-width: 130px;
     }
+    @media (min-width: 600px) {
+      .res-stat { flex-shrink: 1; min-width: unset; }
+    }
+    @media (min-width: 768px) {
+      .res-stat { padding: 14px 20px; gap: 12px; }
+    }
+
     .res-stat-icon {
-      width: 36px; height: 36px; border-radius: 9px;
+      width: 32px; height: 32px; border-radius: 9px;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
+    @media (min-width: 768px) {
+      .res-stat-icon { width: 36px; height: 36px; }
+    }
+
     .res-stat-val {
-      font-size: 20px; font-weight: 800; color: #0D1C33;
+      font-size: 18px; font-weight: 800; color: #0D1C33;
       letter-spacing: -0.5px; line-height: 1;
     }
+    @media (min-width: 768px) {
+      .res-stat-val { font-size: 20px; }
+    }
+
     .res-stat-lbl {
-      font-size: 11px; color: #7A8599; font-weight: 500; margin-top: 2px;
+      font-size: 10.5px; color: #7A8599; font-weight: 500; margin-top: 2px;
+    }
+    @media (min-width: 768px) {
+      .res-stat-lbl { font-size: 11px; }
     }
   `;
   document.head.appendChild(s);
@@ -241,7 +378,6 @@ if (!document.getElementById("res-styles")) {
    Professional SVG Icon Library
 ───────────────────────────── */
 
-// Calculator — Aptitude
 const IcoCalculator = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="4" y="2" width="16" height="20" rx="2"/>
@@ -252,7 +388,6 @@ const IcoCalculator = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Code / Terminal — DSA & Programming
 const IcoCode = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <polyline points="16 18 22 12 16 6"/>
@@ -260,7 +395,6 @@ const IcoCode = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Settings/Gear — Mechanical
 const IcoGear = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="3"/>
@@ -268,7 +402,6 @@ const IcoGear = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Building/Structure — Civil
 const IcoConstruct = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="2" y="3" width="20" height="18" rx="2"/>
@@ -279,14 +412,12 @@ const IcoConstruct = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Zap — Electrical
 const IcoZap = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
   </svg>
 );
 
-// Radio/Signal — ENTC
 const IcoSignal = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <line x1="1" y1="6" x2="1" y2="18"/>
@@ -297,7 +428,6 @@ const IcoSignal = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// File text — Resume & Interview
 const IcoFileText = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -308,7 +438,6 @@ const IcoFileText = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Layers — Departments stat
 const IcoLayers = ({ size = 18, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <polygon points="12 2 2 7 12 12 22 7 12 2"/>
@@ -317,7 +446,6 @@ const IcoLayers = ({ size = 18, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Link — Study Links stat
 const IcoLink = ({ size = 18, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
@@ -325,7 +453,6 @@ const IcoLink = ({ size = 18, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Play circle — Video Lectures stat
 const IcoPlayCircle = ({ size = 18, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
@@ -333,7 +460,6 @@ const IcoPlayCircle = ({ size = 18, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Book open — Study Links tab
 const IcoBook = ({ size = 13, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -341,7 +467,6 @@ const IcoBook = ({ size = 13, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Play — Video tab
 const IcoPlay = ({ size = 13, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <polygon points="5 3 19 12 5 21 5 3"/>
@@ -510,7 +635,7 @@ function ResourceCard({ section, delay }) {
       {/* accent bar */}
       <div className="res-card-bar" style={{ background: section.bar }} />
 
-      {/* header — SVG icon replacing emoji */}
+      {/* header */}
       <div className="res-card-head">
         <div
           className="res-card-badge"
@@ -524,7 +649,7 @@ function ResourceCard({ section, delay }) {
         </div>
       </div>
 
-      {/* tabs — SVG icons replacing 📚 and 🎬 */}
+      {/* tabs */}
       <div className="res-tabs">
         <div
           className={`res-tab${tab === "links" ? " active" : ""}`}
@@ -565,7 +690,7 @@ function ResourceCard({ section, delay }) {
                 className="res-link-icon"
                 style={{ background: section.bg, border: `1px solid ${section.border}` }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                   stroke={section.color} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                   <polyline points="15 3 21 3 21 9"/>
@@ -594,7 +719,6 @@ function ResourceCard({ section, delay }) {
                 loading="lazy"
               />
               <div className="res-video-label">
-                {/* Play triangle — replaces the inline SVG that was already professional */}
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                   stroke="#7A8599" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="5 3 19 12 5 21 5 3"/>
@@ -620,7 +744,6 @@ function Resources() {
   const totalLinks  = SECTIONS.reduce((a, s) => a + s.links.length, 0);
   const totalVideos = SECTIONS.reduce((a, s) => a + s.videos.length, 0);
 
-  /* Stat card definitions — SVG icons replacing emojis */
   const statCards = [
     { Icon: IcoLayers,     val: SECTIONS.length, lbl: "Departments",    bg:"#EBF2FD", bc:"#C2D6FA", ic:"#3B7DED" },
     { Icon: IcoLink,       val: totalLinks,       lbl: "Study Links",   bg:"#F0FDF4", bc:"#BBF7D0", ic:"#16A34A" },
@@ -629,7 +752,11 @@ function Resources() {
 
   return (
     <div className="res-root">
-      <Sidebar />
+      {/* Sidebar hidden on mobile via CSS */}
+      <div className="res-sidebar-wrap">
+        <Sidebar />
+      </div>
+
       <div className="res-main">
         <Navbar />
         <div className="res-body">
@@ -643,7 +770,7 @@ function Resources() {
             </p>
           </div>
 
-          {/* ── Stats — SVG icons replacing emojis ── */}
+          {/* ── Stats ── */}
           <div className="res-stats">
             {statCards.map((st, i) => (
               <div className="res-stat" key={i}>

@@ -27,10 +27,14 @@ if (!document.getElementById("pf-styles")) {
       from { opacity:0; transform:translateX(-50%) translateY(12px); }
       to   { opacity:1; transform:translateX(-50%) translateY(0); }
     }
+    @keyframes spin {
+      from { transform:rotate(0deg); }
+      to   { transform:rotate(360deg); }
+    }
 
     /* ── Shell ── */
     .pf-root { display:flex; min-height:100vh; background:#FAFAF8; font-family:'Bricolage Grotesque',sans-serif; }
-    .pf-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .pf-main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
     .pf-body { flex:1; overflow-y:auto; padding:40px 0 80px; background:#FAFAF8; }
 
     /* ── Centre column ── */
@@ -41,6 +45,7 @@ if (!document.getElementById("pf-styles")) {
       display:flex; align-items:center; gap:10px;
       margin-bottom:28px;
       opacity:0; animation:pf-up 0.5s 0.05s ease forwards;
+      flex-wrap:wrap;
     }
     .pf-eyebrow-tag {
       font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
@@ -49,7 +54,7 @@ if (!document.getElementById("pf-styles")) {
     .pf-eyebrow-slash { font-size:13px; color:#C0BDB7; }
     .pf-eyebrow-page  { font-size:13px; color:#6B6864; font-weight:500; }
     .pf-eyebrow-right { margin-left:auto; display:flex; align-items:center; gap:6px; font-size:12px; color:#9A9590; }
-    .pf-pulse { width:7px; height:7px; border-radius:50%; background:#2A9D8F; box-shadow:0 0 0 2px rgba(42,157,143,0.2); animation:pf-pulse 2s ease infinite; }
+    .pf-pulse { width:7px; height:7px; border-radius:50%; background:#2A9D8F; box-shadow:0 0 0 2px rgba(42,157,143,0.2); animation:pf-pulse 2s ease infinite; flex-shrink:0; }
 
     /* ── Title ── */
     .pf-title-block {
@@ -86,9 +91,9 @@ if (!document.getElementById("pf-styles")) {
       box-shadow:0 4px 16px rgba(0,0,0,0.2);
     }
     .pf-id-info { flex:1; min-width:0; position:relative; z-index:1; }
-    .pf-id-name  { font-size:17px; font-weight:700; color:#fff; margin-bottom:3px; letter-spacing:-0.2px; }
-    .pf-id-email { font-size:12px; color:rgba(168,218,220,0.8); margin-bottom:10px; }
-    .pf-id-chips { display:flex; gap:6px; }
+    .pf-id-name  { font-size:17px; font-weight:700; color:#fff; margin-bottom:3px; letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pf-id-email { font-size:12px; color:rgba(168,218,220,0.8); margin-bottom:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pf-id-chips { display:flex; gap:6px; flex-wrap:wrap; }
     .pf-chip {
       font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
       padding:3px 9px; border-radius:4px; border:1px solid;
@@ -133,6 +138,7 @@ if (!document.getElementById("pf-styles")) {
       font-family:'Bricolage Grotesque',sans-serif; font-size:14px; font-weight:500; color:#1A1714;
       outline:none; transition:border-color 0.18s, background 0.18s, box-shadow 0.18s;
       -webkit-appearance:none;
+      box-sizing:border-box;
     }
     .pf-input::placeholder { color:#B8B4B0; font-weight:400; }
     .pf-input:focus { border-color:#457B9D; background:#fff; box-shadow:0 0 0 3px rgba(69,123,157,0.1); }
@@ -146,6 +152,7 @@ if (!document.getElementById("pf-styles")) {
       background:#FAFAF8; border:1.5px solid #E0DDD8; border-radius:10px;
       font-family:'Bricolage Grotesque',sans-serif; font-size:14px; font-weight:500; color:#1A1714;
       outline:none; transition:border-color 0.18s, background 0.18s, box-shadow 0.18s;
+      box-sizing:border-box;
     }
     .pf-skills-input::placeholder { color:#B8B4B0; font-weight:400; }
     .pf-skills-input:focus { border-color:#457B9D; background:#fff; box-shadow:0 0 0 3px rgba(69,123,157,0.1); }
@@ -166,8 +173,9 @@ if (!document.getElementById("pf-styles")) {
       background:#F5F3EF; border-top:1px solid #E8E6E1;
       padding:20px 32px; display:flex; align-items:center; justify-content:space-between;
       opacity:0; animation:pf-up 0.5s 0.3s ease forwards;
+      gap:12px;
     }
-    .pf-footer-note { font-size:12px; color:#A8A4A0; display:flex; align-items:center; gap:6px; }
+    .pf-footer-note { font-size:12px; color:#A8A4A0; display:flex; align-items:center; gap:6px; flex-shrink:0; }
     .pf-save-btn {
       display:flex; align-items:center; gap:8px;
       height:44px; padding:0 28px;
@@ -175,7 +183,7 @@ if (!document.getElementById("pf-styles")) {
       border:none; border-radius:10px;
       font-family:'Bricolage Grotesque',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.2px;
       cursor:pointer; transition:background 0.18s, transform 0.15s, box-shadow 0.18s;
-      position:relative; overflow:hidden;
+      position:relative; overflow:hidden; flex-shrink:0;
     }
     .pf-save-btn::after {
       content:''; position:absolute; inset:0;
@@ -197,6 +205,104 @@ if (!document.getElementById("pf-styles")) {
     .pf-toast-icon { width:24px; height:24px; border-radius:50%; background:rgba(42,157,143,0.15); border:1px solid rgba(42,157,143,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .pf-toast-msg { font-size:13px; font-weight:600; color:#fff; }
     .pf-toast-sub { font-size:12px; color:rgba(168,218,220,0.7); margin-left:2px; }
+
+    /* ─────────────────────────────────────────
+       MOBILE RESPONSIVE — Android phone sizes
+       Covers 360px–430px (standard Android range)
+    ───────────────────────────────────────── */
+
+    /* Tablet — hide sidebar, compact padding */
+    @media (max-width: 768px) {
+      .pf-body { padding:24px 0 100px; }
+      .pf-center { padding:0 20px; }
+
+      .pf-title { font-size:30px; }
+
+      .pf-section { padding:22px 20px; }
+      .pf-footer  { padding:16px 20px; }
+    }
+
+    /* Mobile — ≤480px (all Android phones) */
+    @media (max-width: 480px) {
+      .pf-body { padding:20px 0 120px; }
+      .pf-center { padding:0 16px; }
+
+      /* Eyebrow */
+      .pf-eyebrow { margin-bottom:18px; gap:7px; }
+      .pf-eyebrow-right { font-size:11px; }
+
+      /* Title */
+      .pf-title-block { margin-bottom:20px; }
+      .pf-title { font-size:24px; letter-spacing:-0.5px; }
+      .pf-subtitle { font-size:13px; }
+
+      /* Identity panel — stack avatar + info, keep ring to the right */
+      .pf-identity {
+        padding:18px 18px;
+        gap:14px;
+        flex-wrap:nowrap;
+      }
+      .pf-avatar {
+        width:48px; height:48px; border-radius:12px;
+        font-size:17px;
+      }
+      .pf-id-name  { font-size:15px; }
+      .pf-id-email { font-size:11px; margin-bottom:8px; }
+      .pf-chip     { font-size:9px; padding:2px 7px; letter-spacing:0.6px; }
+
+      /* Shrink ring on tiny screens */
+      .pf-meter-circle { width:48px; height:48px; }
+      .pf-meter-svg    { width:48px; height:48px; }
+      .pf-meter-num    { font-size:12px; }
+      .pf-meter-label  { font-size:9px; }
+
+      /* Card sections */
+      .pf-section { padding:18px 16px; }
+      .pf-sec-head { gap:10px; margin-bottom:18px; }
+      .pf-sec-title { font-size:13px; }
+      .pf-sec-desc  { font-size:11px; }
+      .pf-sec-num   { width:24px; height:24px; font-size:10px; border-radius:6px; }
+
+      /* 3-col grid → 1-col stacked */
+      .pf-grid-3 { grid-template-columns:1fr; gap:14px; }
+
+      /* Inputs */
+      .pf-input         { height:44px; font-size:16px; /* prevents iOS/Android zoom */ }
+      .pf-skills-input  { height:44px; font-size:16px; }
+      .pf-label         { font-size:10px; letter-spacing:1px; }
+
+      /* Footer — stack note + button */
+      .pf-footer {
+        padding:14px 16px;
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+      }
+      .pf-footer-note { justify-content:center; font-size:11px; }
+      .pf-save-btn {
+        width:100%; justify-content:center;
+        height:48px; font-size:14px;
+      }
+
+      /* Toast */
+      .pf-toast {
+        bottom:20px;
+        width:calc(100% - 32px);
+        max-width:360px;
+        white-space:normal;
+        padding:12px 16px;
+      }
+    }
+
+    /* Very small phones — 360px and below */
+    @media (max-width: 360px) {
+      .pf-center { padding:0 12px; }
+      .pf-title  { font-size:21px; }
+      .pf-identity { padding:14px 14px; gap:10px; }
+      .pf-avatar { width:42px; height:42px; font-size:15px; }
+      .pf-meter-circle { width:42px; height:42px; }
+      .pf-meter-svg    { width:42px; height:42px; }
+    }
   `;
   document.head.appendChild(s);
 }

@@ -176,7 +176,6 @@ const styles = `
     letter-spacing: 0.1px;
   }
 
-  /* hover glow layer */
   .ai-btn::after {
     content: '';
     position: absolute;
@@ -196,14 +195,12 @@ const styles = `
   .ai-btn:hover::after { opacity: 1; }
   .ai-btn:active       { transform: none; }
 
-  /* pressed / current page state */
   .ai-btn.ai-active {
     background: linear-gradient(135deg, #4338ca, #3730a3);
     box-shadow: 0 2px 10px rgba(67,56,202,0.45),
                 inset 0 1px 0 rgba(255,255,255,0.08);
   }
 
-  /* shimmer sweep */
   .ai-shimmer {
     position: absolute;
     top: 0; left: -100%;
@@ -220,7 +217,6 @@ const styles = `
     100% { left: 160%;  }
   }
 
-  /* icon wobble */
   .ai-icon {
     display: flex;
     align-items: center;
@@ -233,6 +229,64 @@ const styles = `
     40%     { transform: rotate(-8deg); }
     60%     { transform: rotate(5deg);  }
     80%     { transform: rotate(0deg);  }
+  }
+
+  /* ─────────────────────────────────────────────
+     MOBILE RESPONSIVE  (≤ 768px)
+  ───────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .navbar {
+      height: 56px;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    /* Hide center nav links on mobile — navigation is in bottom tab bar */
+    .navbar-links { display: none; }
+
+    .navbar-left { min-width: 0; }
+
+    .navbar-greeting { font-size: 10px; }
+    .navbar-name     { font-size: 14px; }
+
+    /* Right side: show only AI btn + bell + avatar; hide dividers */
+    .nav-vdivider { display: none; }
+
+    .navbar-right { gap: 8px; }
+
+    .ai-btn {
+      height: 34px;
+      padding: 0 12px;
+      font-size: 11.5px;
+      gap: 5px;
+    }
+
+    /* Hide text label on very small screens, keep icon */
+    .ai-btn-label { display: none; }
+
+    .ai-btn {
+      padding: 0 10px;
+      width: 34px;
+      justify-content: center;
+    }
+
+    .icon-btn {
+      width: 34px; height: 34px;
+    }
+
+    .navbar-avatar {
+      width: 34px; height: 34px;
+      font-size: 12px;
+    }
+  }
+
+  /* ── Slightly larger phones (411px+): show AI label again ── */
+  @media (min-width: 411px) and (max-width: 768px) {
+    .ai-btn {
+      width: auto;
+      padding: 0 12px;
+    }
+    .ai-btn-label { display: inline; }
   }
 `;
 
@@ -297,7 +351,7 @@ export default function Navbar() {
           </span>
         </div>
 
-        {/* Centre */}
+        {/* Centre — hidden on mobile */}
         <nav className="navbar-links">
           {navLinks.map(link => (
             <Link
@@ -315,13 +369,12 @@ export default function Navbar() {
         {/* Right */}
         <div className="navbar-right">
 
-          {/* ── AI Assistant button ── */}
+          {/* AI Assistant button */}
           <Link
             to="/chatbot"
             className={`ai-btn${onAiPage ? " ai-active" : ""}`}
           >
             <span className="ai-shimmer" />
-
             <span className="ai-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                 <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/>
@@ -330,8 +383,7 @@ export default function Navbar() {
                 <line x1="15" y1="9"  x2="15.01" y2="9"/>
               </svg>
             </span>
-
-            AI Assistant
+            <span className="ai-btn-label">AI Assistant</span>
           </Link>
 
           <div className="nav-vdivider" />

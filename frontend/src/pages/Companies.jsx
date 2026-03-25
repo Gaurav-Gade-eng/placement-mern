@@ -49,6 +49,29 @@ if (!document.getElementById("co-styles")) {
       from { box-shadow: 0 0 0 0 rgba(27,58,107,0); }
       to   { box-shadow: 0 0 0 3px rgba(27,58,107,0.1); }
     }
+
+    /* ── Mobile responsive overrides ── */
+    @media (max-width: 600px) {
+      .co-header { padding: 20px 16px 0 !important; }
+      .co-eyebrow { font-size: 8.5px !important; letter-spacing: 2px !important; }
+      .co-title { font-size: 24px !important; letter-spacing: -0.4px !important; margin-bottom: 4px !important; }
+      .co-meta { font-size: 12px !important; margin-bottom: 16px !important; }
+      .co-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; padding-bottom: 12px !important; padding-top: 12px !important; }
+      .co-search-wrap { max-width: 100% !important; }
+      .co-filter-row { overflow-x: auto !important; flex-wrap: nowrap !important; padding-bottom: 4px !important; -webkit-overflow-scrolling: touch !important; }
+      .co-filter-row::-webkit-scrollbar { display: none; }
+      .co-count-badge { margin-left: 0 !important; align-self: flex-start !important; }
+      .co-body { padding: 16px 16px 48px !important; }
+      .co-card-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .co-skeleton-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      .co-header { padding: 24px 24px 0 !important; }
+      .co-body { padding: 20px 24px 48px !important; }
+      .co-card-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .co-skeleton-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -92,15 +115,13 @@ function Skeleton({ delay = 0 }) {
       opacity: 0,
       animation: `co-fade-up 0.4s ease ${delay}s both`,
     }}>
-      {/* logo placeholder */}
       <div style={{
-        width: 110, flexShrink: 0,
+        width: 90, flexShrink: 0,
         background: "linear-gradient(90deg, #EAECF0 25%, #F4F6F9 50%, #EAECF0 75%)",
         backgroundSize: "200% 100%",
         animation: "co-shimmer 1.5s ease infinite",
       }} />
-      {/* body placeholder */}
-      <div style={{ flex: 1, padding: "22px 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{ flex: 1, padding: "18px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
         <div style={{
           height: 14, width: "60%", borderRadius: 4,
           background: "linear-gradient(90deg, #EAECF0 25%, #F4F6F9 50%, #EAECF0 75%)",
@@ -154,6 +175,7 @@ function FilterChip({ label, active, onClick }) {
         transform: clicked ? "scale(0.93)" : hover && !active ? "translateY(-1px)" : "scale(1)",
         transition: "all 0.18s cubic-bezier(0.34,1.56,0.64,1)",
         whiteSpace: "nowrap",
+        flexShrink: 0,
       }}
     >
       {label}
@@ -165,7 +187,7 @@ function FilterChip({ label, active, onClick }) {
 function SearchInput({ value, onChange }) {
   const [focused, setFocused] = useState(false);
   return (
-    <div style={{ position: "relative", flex: 1, maxWidth: 320 }}>
+    <div className="co-search-wrap" style={{ position: "relative", flex: 1, maxWidth: 320 }}>
       <span style={{
         position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)",
         color: focused ? T.blue : T.ink4, pointerEvents: "none",
@@ -214,7 +236,7 @@ function CountBadge({ count }) {
   }, [count]);
 
   return (
-    <span style={{
+    <span className="co-count-badge" style={{
       marginLeft: "auto",
       fontSize: 11.5, fontWeight: 600, color: T.ink3,
       background: T.bg, border: `1px solid ${T.border}`,
@@ -231,7 +253,7 @@ function CountBadge({ count }) {
 }
 
 /* ── Grid label ── */
-function GridLabel({ label, key }) {
+function GridLabel({ label }) {
   return (
     <div style={{
       fontSize: 10, fontWeight: 700, letterSpacing: "2.2px", textTransform: "uppercase",
@@ -249,7 +271,7 @@ function GridLabel({ label, key }) {
 /* ── Animated grid ── */
 function CardGrid({ companies, user, gridKey }) {
   return (
-    <div style={{
+    <div className="co-card-grid" style={{
       display: "grid",
       gridTemplateColumns: "repeat(3, 1fr)",
       gap: 14,
@@ -290,7 +312,6 @@ function Companies() {
       .finally(() => setLoading(false));
   }, []);
 
-  /* bump key so grid re-animates on filter change */
   const handleFilter = (f) => {
     setFilter(f);
     setGridKey(k => k + 1);
@@ -314,7 +335,7 @@ function Companies() {
       }}>
 
         {/* ── HEADER ── */}
-        <div style={{
+        <div className="co-header" style={{
           position: "relative", zIndex: 1,
           background: T.white,
           borderBottom: `1px solid ${T.border}`,
@@ -323,7 +344,7 @@ function Companies() {
           animation: "co-fade-down 0.45s ease both",
         }}>
           {/* eyebrow */}
-          <div style={{
+          <div className="co-eyebrow" style={{
             display: "flex", alignItems: "center", gap: 10,
             fontSize: 9.5, fontWeight: 700, letterSpacing: "2.8px", textTransform: "uppercase",
             color: T.ink3, marginBottom: 10,
@@ -334,7 +355,7 @@ function Companies() {
           </div>
 
           {/* title */}
-          <h1 style={{
+          <h1 className="co-title" style={{
             fontFamily: T.ff,
             fontSize: 36, fontWeight: 700, color: T.ink,
             letterSpacing: "-0.8px", lineHeight: 1.1, marginBottom: 6,
@@ -344,7 +365,7 @@ function Companies() {
           </h1>
 
           {/* meta */}
-          <p style={{
+          <p className="co-meta" style={{
             fontSize: 13, fontWeight: 400, color: T.ink3,
             marginBottom: 24, lineHeight: 1.5,
             animation: "co-fade-down 0.45s 0.15s ease both",
@@ -354,7 +375,7 @@ function Companies() {
           </p>
 
           {/* toolbar */}
-          <div style={{
+          <div className="co-toolbar" style={{
             display: "flex", alignItems: "center", gap: 10,
             paddingBottom: 18, flexWrap: "wrap",
             borderTop: `1px solid #EEF0F4`,
@@ -363,7 +384,7 @@ function Companies() {
           }}>
             <SearchInput value={search} onChange={handleSearch} />
 
-            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+            <div className="co-filter-row" style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
               {FILTERS.map(f => (
                 <FilterChip
                   key={f}
@@ -379,7 +400,7 @@ function Companies() {
         </div>
 
         {/* ── BODY ── */}
-        <div style={{
+        <div className="co-body" style={{
           position: "relative", zIndex: 1,
           padding: "28px 48px 64px",
           animation: "co-fade-up 0.5s 0.25s ease both",
@@ -389,7 +410,7 @@ function Companies() {
           )}
 
           {loading ? (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+            <div className="co-skeleton-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
               {Array.from({ length: 9 }).map((_, i) => <Skeleton key={i} delay={i * 0.05} />)}
             </div>
           ) : filtered.length > 0 ? (
