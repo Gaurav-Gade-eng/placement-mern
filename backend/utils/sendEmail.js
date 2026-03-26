@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 
-var transport = nodemailer.createTransport({
+/* ✅ TRANSPORTER */
+const transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
   auth: {
@@ -9,15 +10,11 @@ var transport = nodemailer.createTransport({
   }
 });
 
-
-/* UNIVERSAL EMAIL FUNCTION */
-
+/* ✅ UNIVERSAL EMAIL FUNCTION */
 const sendEmail = async ({ to, subject, text }) => {
-
   try {
-
     await transporter.sendMail({
-      from: `"Placement Portal" <${process.env.EMAIL}>`,
+      from: `"Placement Portal" <no-reply@placement.com>`,
       to,
       subject,
       text
@@ -26,30 +23,21 @@ const sendEmail = async ({ to, subject, text }) => {
     console.log("✅ Email sent to:", to);
 
   } catch (err) {
-  console.log("❌ FULL EMAIL ERROR:", err);
-  throw err;
-}
-
+    console.log("❌ FULL EMAIL ERROR:", err);
+    throw err;
+  }
 };
 
-
-/* OTP FUNCTION (for forgot password) */
-
+/* ✅ OTP FUNCTION */
 const sendOTP = async (email, otp) => {
-
-  const message = `Your OTP for password reset is: ${otp}`;
-
   await sendEmail({
     to: email,
     subject: "Password Reset OTP",
-    text: message
+    text: `Your OTP for password reset is: ${otp}`
   });
-
 };
 
-
-/* APPLICATION EMAIL */
-
+/* ✅ APPLICATION EMAIL */
 const sendApplicationEmail = async ({
   studentName,
   email,
@@ -62,13 +50,12 @@ const sendApplicationEmail = async ({
   let message = "";
 
   if (status === "accepted") {
-
     message = `
 Dear ${studentName},
 
 🎉 Congratulations!
 
-You're Application is Accepted For:
+Your Application is Accepted For:
 
 Company: ${company}
 Drive: ${drive}
@@ -76,15 +63,11 @@ Drive: ${drive}
 Best Regards,
 TPO
 `;
-
-  }
-
-  else {
-
+  } else {
     message = `
 Dear ${studentName},
 
-We regret to inform you're Application is not accepted.
+We regret to inform your Application is not accepted.
 
 Company: ${company}
 Drive: ${drive}
@@ -94,7 +77,6 @@ Reason: ${reason || "Not specified"}
 Best Regards,
 TPO
 `;
-
   }
 
   await sendEmail({
@@ -102,14 +84,10 @@ TPO
     subject: "Placement Drive Update",
     text: message
   });
-
 };
 
-console.log("EMAIL ENV:", process.env.EMAIL);
-console.log("PASS ENV:", process.env.EMAIL_PASSWORD);
 module.exports = {
   sendEmail,
   sendOTP,
   sendApplicationEmail
 };
-
