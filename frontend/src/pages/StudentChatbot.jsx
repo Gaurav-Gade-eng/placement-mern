@@ -338,11 +338,93 @@ const css = `
     font-family:'DM Mono',monospace; letter-spacing:.3px;
   }
 
-  @media (max-width:768px) {
+  /* ── Mobile drawer overlay ── */
+  .sc-drawer-overlay {
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(0,0,0,0.55); backdrop-filter:blur(2px);
+    animation:scFadeIn .2s ease both;
+  }
+  @keyframes scFadeIn { from{opacity:0} to{opacity:1} }
+  .sc-drawer-overlay.open { display:block; }
+
+  /* mobile sidebar drawer */
+  .sc-sidebar-drawer {
+    position:fixed; top:0; left:0; z-index:210;
+    width:280px; height:100vh;
+    background:linear-gradient(180deg,#0C1A2E 0%,#0F2040 100%);
+    display:flex; flex-direction:column;
+    transform:translateX(-100%);
+    transition:transform .28s cubic-bezier(0.23,1,0.32,1);
+    overflow:hidden;
+    border-right:1px solid rgba(255,255,255,0.06);
+  }
+  .sc-sidebar-drawer.open { transform:translateX(0); }
+  .sc-sidebar-drawer::before {
+    content:''; position:absolute; bottom:-100px; right:-100px;
+    width:280px; height:280px; border-radius:50%;
+    border:50px solid rgba(59,125,237,0.07); pointer-events:none;
+  }
+
+  /* hamburger button */
+  .sc-menu-btn {
+    display:none; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:9px;
+    border:1px solid var(--border); background:var(--white);
+    cursor:pointer; color:var(--slate); transition:all .15s; flex-shrink:0;
+  }
+  .sc-menu-btn:hover { border-color:var(--blue); color:var(--blue); background:#EBF2FD; }
+
+  /* ── Mobile Responsive ── */
+  @media (max-width: 768px) {
+    /* hide desktop sidebar, show hamburger */
     .sc-sidebar { display:none; }
-    .sc-messages { padding:20px; }
-    .sc-input-area { padding:14px 20px 18px; }
-    .sc-topbar { padding:0 20px; }
+    .sc-menu-btn { display:flex; }
+
+    /* topbar: tighten padding, compress info text */
+    .sc-topbar { padding:0 14px; height:56px; gap:8px; }
+    .sc-topbar-sep { display:none; }
+    .sc-topbar-info { display:none; }
+    .sc-topbar-badge { font-size:10px; padding:4px 10px; gap:5px; }
+
+    /* home + clear buttons: icon-only on very small, label on 480+ */
+    .sc-home-btn .sc-home-label { display:none; }
+    .sc-home-btn { padding:0 9px; gap:4px; }
+    .sc-clear-btn .sc-clear-label { display:none; }
+    .sc-clear-btn { padding:0 9px; }
+
+    /* messages */
+    .sc-messages { padding:16px 14px; gap:14px; }
+
+    /* bubbles: wider on mobile */
+    .sc-msg-body { max-width:84%; }
+    .sc-bubble { font-size:13px; padding:11px 14px; }
+
+    /* welcome screen */
+    .sc-welcome { min-height:45vh; gap:14px; }
+    .sc-welcome-crest { width:60px; height:60px; border-radius:17px; }
+    .sc-welcome-h { font-size:21px; }
+    .sc-welcome-p { font-size:12.5px; max-width:100%; }
+    .sc-chips { gap:6px; }
+    .sc-chip { font-size:11.5px; padding:7px 13px; gap:6px; }
+
+    /* input area */
+    .sc-input-area { padding:12px 14px 16px; }
+    .sc-hint { display:none; }
+    .sc-textarea { font-size:13px; }
+    .sc-send { width:38px; height:38px; border-radius:10px; }
+    .sc-foot-note { font-size:10px; }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .sc-home-btn .sc-home-label { display:inline; }
+    .sc-clear-btn .sc-clear-label { display:inline; }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .sc-sidebar { width:240px; }
+    .sc-messages { padding:22px 24px; }
+    .sc-input-area { padding:16px 24px 20px; }
+    .sc-topbar { padding:0 24px; }
   }
 `;
 
@@ -364,6 +446,8 @@ const I = {
   Interview:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
   ChevLeft: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>,
   Home:     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+  Menu:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
+  Close:    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
 };
 
 const SUGGESTIONS = [
@@ -383,15 +467,75 @@ const SIDEBAR_TOPICS = [
   { icon: I.Globe,     text:"Off-Campus Opportunities" },
 ];
 
+/* ── Reusable sidebar content ── */
+function SidebarContent({ initials, user, onTopicClick, onGoHome }) {
+  return (
+    <>
+      {/* Brand */}
+      <div className="sc-brand">
+        <div className="sc-brand-ey">Placement Portal</div>
+        <div className="sc-brand-logo">{I.Chat}</div>
+        <div className="sc-brand-name">AI <span>Advisor</span></div>
+        <div className="sc-brand-sub">Intelligent guidance for your career journey</div>
+        <div className="sc-online">
+          <span className="sc-online-dot"/>
+          ONLINE
+        </div>
+      </div>
+
+      {/* Back to Home */}
+      <button className="sc-back-btn" onClick={onGoHome}>
+        <span className="sc-back-btn-ico">{I.ChevLeft}</span>
+        Back to Home
+      </button>
+
+      {/* Topics */}
+      <div className="sc-topics">
+        <div className="sc-topics-lbl">Browse Topics</div>
+        {SIDEBAR_TOPICS.map((t, i) => (
+          <button key={i} className="sc-topic-btn" onClick={() => onTopicClick(t.text)}>
+            <span className="sc-topic-ico">{t.icon}</span>
+            <span className="sc-topic-text">{t.text}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Stats */}
+      <div className="sc-stats">
+        <div className="sc-stat">
+          <div className="sc-stat-num">500+</div>
+          <div className="sc-stat-lbl">Companies in database</div>
+        </div>
+        <div className="sc-stat">
+          <div className="sc-stat-num">24 / 7</div>
+          <div className="sc-stat-lbl">Always available</div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="sc-sb-foot">
+        <div className="sc-user-row">
+          <div className="sc-user-av">{initials}</div>
+          <div>
+            <div className="sc-user-name">{user.name || "Student"}</div>
+            <div className="sc-user-role">Student · Placement Portal</div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function StudentChatbot() {
   const navigate  = useNavigate();
   const user      = JSON.parse(localStorage.getItem("user") || '{"name":"Student"}');
   const secondName = user?.name?.split(" ")[1] || "Student";
   const initials  = (user?.name || "S").split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
-  const [msg,     setMsg]     = useState("");
-  const [chat,    setChat]    = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [msg,        setMsg]        = useState("");
+  const [chat,       setChat]       = useState([]);
+  const [loading,    setLoading]    = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const endRef      = useRef(null);
   const textareaRef = useRef(null);
@@ -399,6 +543,13 @@ export default function StudentChatbot() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior:"smooth" });
   }, [chat, loading]);
+
+  // close drawer on resize to desktop
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth > 768) setDrawerOpen(false); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const handleInput = (e) => {
     setMsg(e.target.value);
@@ -410,6 +561,7 @@ export default function StudentChatbot() {
     const content = (text || msg).trim();
     if (!content || loading) return;
     setMsg("");
+    setDrawerOpen(false);
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     setChat(prev => [...prev, { sender:"user", text:content }]);
     setLoading(true);
@@ -439,61 +591,31 @@ export default function StudentChatbot() {
       <style>{css}</style>
       <div className="sc-page">
 
-        {/* ── Sidebar ── */}
+        {/* ── Desktop Sidebar ── */}
         <aside className="sc-sidebar">
-
-          {/* Brand */}
-          <div className="sc-brand">
-            <div className="sc-brand-ey">Placement Portal</div>
-            <div className="sc-brand-logo">{I.Chat}</div>
-            <div className="sc-brand-name">AI <span>Advisor</span></div>
-            <div className="sc-brand-sub">Intelligent guidance for your career journey</div>
-            <div className="sc-online">
-              <span className="sc-online-dot"/>
-              ONLINE
-            </div>
-          </div>
-
-          {/* ── Back to Home (sidebar) ── */}
-          <button className="sc-back-btn" onClick={goHome}>
-            <span className="sc-back-btn-ico">{I.ChevLeft}</span>
-            Back to Home
-          </button>
-
-          {/* Topics */}
-          <div className="sc-topics">
-            <div className="sc-topics-lbl">Browse Topics</div>
-            {SIDEBAR_TOPICS.map((t, i) => (
-              <button key={i} className="sc-topic-btn" onClick={() => sendMessage(t.text)}>
-                <span className="sc-topic-ico">{t.icon}</span>
-                <span className="sc-topic-text">{t.text}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Stats */}
-          <div className="sc-stats">
-            <div className="sc-stat">
-              <div className="sc-stat-num">500+</div>
-              <div className="sc-stat-lbl">Companies in database</div>
-            </div>
-            <div className="sc-stat">
-              <div className="sc-stat-num">24 / 7</div>
-              <div className="sc-stat-lbl">Always available</div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="sc-sb-foot">
-            <div className="sc-user-row">
-              <div className="sc-user-av">{initials}</div>
-              <div>
-                <div className="sc-user-name">{user.name || "Student"}</div>
-                <div className="sc-user-role">Student · Placement Portal</div>
-              </div>
-            </div>
-          </div>
+          <SidebarContent
+            initials={initials}
+            user={user}
+            onTopicClick={sendMessage}
+            onGoHome={goHome}
+          />
         </aside>
+
+        {/* ── Mobile Drawer Overlay ── */}
+        <div
+          className={`sc-drawer-overlay${drawerOpen ? " open" : ""}`}
+          onClick={() => setDrawerOpen(false)}
+        />
+
+        {/* ── Mobile Sidebar Drawer ── */}
+        <div className={`sc-sidebar-drawer${drawerOpen ? " open" : ""}`}>
+          <SidebarContent
+            initials={initials}
+            user={user}
+            onTopicClick={sendMessage}
+            onGoHome={goHome}
+          />
+        </div>
 
         {/* ── Main ── */}
         <div className="sc-main">
@@ -501,6 +623,11 @@ export default function StudentChatbot() {
           {/* Top bar */}
           <div className="sc-topbar">
             <div className="sc-topbar-l">
+              {/* Hamburger — mobile only */}
+              <button className="sc-menu-btn" onClick={() => setDrawerOpen(p => !p)}>
+                {drawerOpen ? I.Close : I.Menu}
+              </button>
+
               <div className="sc-topbar-badge">
                 {I.Bot}
                 Placement Assistant
@@ -513,18 +640,17 @@ export default function StudentChatbot() {
               </div>
             </div>
 
-            {/* ── Topbar right ── */}
+            {/* Topbar right */}
             <div className="sc-topbar-r">
-              {/* Back to Home pill — always visible */}
               <button className="sc-home-btn" onClick={goHome}>
                 {I.ChevLeft}
                 {I.Home}
-                Home
+                <span className="sc-home-label">Home</span>
               </button>
               {chat.length > 0 && (
                 <button className="sc-clear-btn" onClick={() => setChat([])}>
                   {I.Trash}
-                  Clear session
+                  <span className="sc-clear-label">Clear session</span>
                 </button>
               )}
             </div>
