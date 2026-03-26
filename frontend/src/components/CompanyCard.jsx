@@ -67,6 +67,24 @@ if (!document.getElementById("fcc-styles")) {
       to   { transform: translateX(0);    opacity: 1; }
     }
 
+    /* Responsive logo panel width */
+    .fcc-logo-panel {
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 400px) {
+      .fcc-logo-panel {
+        width: 72px !important;
+      }
+      .fcc-info-panel {
+        padding: 12px 10px !important;
+      }
+      .fcc-company-name {
+        font-size: 13px !important;
+      }
+    }
+
     /* Mobile: disable 3D tilt (can feel janky on touch) */
     @media (max-width: 600px) {
       .fcc-card { transform: none !important; }
@@ -120,6 +138,8 @@ function CompanyCard({ company }) {
         border: `1px solid ${hover ? "#93C5FD" : T.border}`,
         borderRadius: 12,
         width: "100%",
+        maxWidth: "100%",
+        boxSizing: "border-box",
         overflow: "hidden",
         display: "flex",
         flexDirection: "row",
@@ -133,7 +153,6 @@ function CompanyCard({ company }) {
         cursor: "pointer",
         transformStyle: "preserve-3d",
         willChange: "transform",
-        /* Ensure min height looks good on narrow screens */
         minHeight: 90,
       }}
     >
@@ -152,18 +171,19 @@ function CompanyCard({ company }) {
       }} />
 
       {/* ── LEFT: logo panel ── */}
-      <div style={{
-        width: 90,
-        flexShrink: 0,
-        background: hover ? "#F0F7FF" : "#F9FAFB",
-        borderRight: `1px solid ${hover ? "#DBEAFE" : "#F1F3F6"}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        position: "relative",
-        transition: "background 0.3s, border-color 0.3s",
-      }}>
+      <div
+        className="fcc-logo-panel"
+        style={{
+          background: hover ? "#F0F7FF" : "#F9FAFB",
+          borderRight: `1px solid ${hover ? "#DBEAFE" : "#F1F3F6"}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          position: "relative",
+          transition: "background 0.3s, border-color 0.3s",
+        }}
+      >
         {/* subtle glow behind logo on hover */}
         <div style={{
           position: "absolute", inset: 0,
@@ -219,23 +239,29 @@ function CompanyCard({ company }) {
       </div>
 
       {/* ── RIGHT: info ── */}
-      <div style={{
-        flex: 1,
-        padding: "14px 12px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        gap: 6,
-        minWidth: 0,
-      }}>
+      <div
+        className="fcc-info-panel"
+        style={{
+          flex: 1,
+          padding: "14px 12px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: 6,
+          minWidth: 0,
+        }}
+      >
         {/* company name */}
-        <div style={{
-          fontSize: 14, fontWeight: 700, color: hover ? "#1D4ED8" : T.ink,
-          lineHeight: 1.3,
-          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-          transition: "color 0.2s ease",
-          animation: "fcc-slide-right 0.3s ease both",
-        }}>
+        <div
+          className="fcc-company-name"
+          style={{
+            fontSize: 14, fontWeight: 700, color: hover ? "#1D4ED8" : T.ink,
+            lineHeight: 1.3,
+            whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+            transition: "color 0.2s ease",
+            animation: "fcc-slide-right 0.3s ease both",
+          }}
+        >
           {company.companyName}
         </div>
 

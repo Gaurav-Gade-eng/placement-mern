@@ -50,6 +50,16 @@ if (!document.getElementById("co-styles")) {
       to   { box-shadow: 0 0 0 3px rgba(27,58,107,0.1); }
     }
 
+    /* ── Responsive grid — mobile first ── */
+    .co-card-grid,
+    .co-skeleton-grid {
+      display: grid !important;
+      gap: 10px;
+      grid-template-columns: 1fr;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     /* ── Mobile responsive overrides ── */
     @media (max-width: 600px) {
       .co-header { padding: 20px 16px 0 !important; }
@@ -61,16 +71,24 @@ if (!document.getElementById("co-styles")) {
       .co-filter-row { overflow-x: auto !important; flex-wrap: nowrap !important; padding-bottom: 4px !important; -webkit-overflow-scrolling: touch !important; }
       .co-filter-row::-webkit-scrollbar { display: none; }
       .co-count-badge { margin-left: 0 !important; align-self: flex-start !important; }
-      .co-body { padding: 16px 16px 48px !important; }
-      .co-card-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
-      .co-skeleton-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .co-body { padding: 12px 12px 48px !important; }
     }
 
     @media (min-width: 601px) and (max-width: 900px) {
       .co-header { padding: 24px 24px 0 !important; }
       .co-body { padding: 20px 24px 48px !important; }
-      .co-card-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .co-skeleton-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .co-card-grid,
+      .co-skeleton-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+    }
+
+    @media (min-width: 901px) and (max-width: 1200px) {
+      .co-card-grid,
+      .co-skeleton-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+    }
+
+    @media (min-width: 1201px) {
+      .co-card-grid,
+      .co-skeleton-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 14px !important; }
     }
   `;
   document.head.appendChild(s);
@@ -214,6 +232,7 @@ function SearchInput({ value, onChange }) {
           fontFamily: T.ff,
           fontSize: 13, fontWeight: 400, color: T.ink,
           outline: "none",
+          boxSizing: "border-box",
           boxShadow: focused ? "0 0 0 3px rgba(27,58,107,0.08)" : "none",
           transition: "border-color 0.2s, background 0.2s, box-shadow 0.25s",
         }}
@@ -271,11 +290,7 @@ function GridLabel({ label }) {
 /* ── Animated grid ── */
 function CardGrid({ companies, user, gridKey }) {
   return (
-    <div className="co-card-grid" style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: 14,
-    }}>
+    <div className="co-card-grid">
       {companies.map((company, i) => (
         <div
           key={company._id}
@@ -332,6 +347,8 @@ function Companies() {
       <div style={{
         fontFamily: T.ff, minHeight: "100vh",
         background: T.bg, position: "relative",
+        overflowX: "hidden",
+        width: "100%",
       }}>
 
         {/* ── HEADER ── */}
@@ -402,7 +419,7 @@ function Companies() {
         {/* ── BODY ── */}
         <div className="co-body" style={{
           position: "relative", zIndex: 1,
-          padding: "28px 48px 64px",
+          padding: "28px 32px 64px",
           animation: "co-fade-up 0.5s 0.25s ease both",
         }}>
           {!loading && (
@@ -410,7 +427,7 @@ function Companies() {
           )}
 
           {loading ? (
-            <div className="co-skeleton-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+            <div className="co-skeleton-grid">
               {Array.from({ length: 9 }).map((_, i) => <Skeleton key={i} delay={i * 0.05} />)}
             </div>
           ) : filtered.length > 0 ? (
