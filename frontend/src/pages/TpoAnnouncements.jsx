@@ -20,7 +20,7 @@ if (!document.getElementById("tpoa-styles")) {
     @keyframes tpoaShim  { from{background-position:200% 0} to{background-position:-200% 0} }
 
     .tpoa-root { display:flex; min-height:100vh; background:#F4F6F9; font-family:'Plus Jakarta Sans',sans-serif; }
-    .tpoa-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .tpoa-main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
     .tpoa-body { flex:1; padding:30px 36px 60px; overflow-y:auto; }
 
     .tpoa-hd    { margin-bottom:22px; animation:tpoaUp 0.45s ease both; }
@@ -102,8 +102,8 @@ if (!document.getElementById("tpoa-styles")) {
     .tpoa-tab  { height:30px; padding:0 13px; border-radius:7px; border:none; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; font-size:11.5px; font-weight:600; background:transparent; color:#7A8599; transition:all 0.15s; }
     .tpoa-tab.act { background:#fff; color:#1B3A6B; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
 
-    .tpoa-overlay { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.45); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; animation:tpoaFade 0.2s ease both; }
-    .tpoa-modal   { background:#fff; border-radius:18px; width:600px; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 24px 64px rgba(0,0,0,0.18); font-family:'Plus Jakarta Sans',sans-serif; animation:tpoaPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both; overflow:hidden; }
+    .tpoa-overlay { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.45); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; animation:tpoaFade 0.2s ease both; padding:16px; }
+    .tpoa-modal   { background:#fff; border-radius:18px; width:600px; max-width:100%; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 24px 64px rgba(0,0,0,0.18); font-family:'Plus Jakarta Sans',sans-serif; animation:tpoaPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both; overflow:hidden; }
     .tpoa-mh { padding:20px 24px 16px; border-bottom:1px solid #F0F2F6; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
     .tpoa-mb { flex:1; overflow-y:auto; padding:20px 24px 24px; }
 
@@ -116,6 +116,98 @@ if (!document.getElementById("tpoa-styles")) {
 
     .tpoa-divider { height:1px; background:#F0F2F6; margin:18px 0; }
     .tpoa-section-lbl { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#B0BAC8; margin-bottom:10px; }
+
+
+    /* ══════════════════════════════════════════
+       MOBILE RESPONSIVE
+       ══════════════════════════════════════════ */
+
+    /* ── Tablet: ≤ 1024px ── */
+    @media (max-width: 1024px) {
+      .tpoa-body { padding:22px 24px 60px; }
+    }
+
+    /* ── Mobile landscape / small tablet: ≤ 768px ── */
+    @media (max-width: 768px) {
+      .tpoa-body { padding:16px 16px 72px; }
+
+      .tpoa-title { font-size:22px; }
+
+      /* Stats: 3-col stays but compact */
+      .tpoa-stats { gap:10px; }
+      .tpoa-stat  { padding:13px 14px; gap:10px; }
+      .tpoa-stat-ico { width:34px; height:34px; border-radius:9px; }
+      .tpoa-stat-val { font-size:18px; }
+
+      /* Card header: allow wrapping */
+      .tpoa-ch { flex-wrap:wrap; gap:10px; }
+
+      /* Tabs: smaller text */
+      .tpoa-tab { height:28px; padding:0 10px; font-size:11px; }
+
+      /* Form grid: 1-col */
+      .tpoa-fg { grid-template-columns:1fr; }
+      .tpoa-fw { grid-column:auto; }
+
+      /* Announcement item: stack buttons below content */
+      .tpoa-item { flex-wrap:wrap; gap:10px; padding:14px 16px; }
+      .tpoa-item-btns { margin-left:0; padding-left:0; flex-direction:row; align-items:center; width:100%; justify-content:flex-end; }
+
+      /* Form card body */
+      .tpoa-cb { padding:16px; }
+
+      /* Modal */
+      .tpoa-mh { padding:16px 18px 14px; }
+      .tpoa-mb { padding:16px 18px 18px; }
+
+      /* Toast */
+      .tpoa-toast { left:16px; right:16px; bottom:16px; max-width:none; }
+    }
+
+    /* ── Mobile portrait: ≤ 480px ── */
+    @media (max-width: 480px) {
+      .tpoa-body { padding:12px 12px 80px; }
+
+      .tpoa-title { font-size:20px; }
+      .tpoa-sub   { font-size:12px; }
+
+      /* Stats: 1-col */
+      .tpoa-stats { grid-template-columns:1fr; gap:8px; }
+      .tpoa-stat  { padding:12px 14px; }
+      .tpoa-stat-val { font-size:20px; }
+
+      /* Card header */
+      .tpoa-ch { padding:12px 14px; }
+      .tpoa-ct { font-size:13px; }
+      .tpoa-cb { padding:14px; }
+
+      /* Tabs: full-width row */
+      .tpoa-tabs { width:100%; justify-content:stretch; }
+      .tpoa-tab  { flex:1; height:30px; padding:0 6px; font-size:10.5px; text-align:center; }
+
+      /* Item */
+      .tpoa-item { padding:12px; }
+      .tpoa-item-num { width:28px; height:28px; font-size:10px; border-radius:7px; }
+      .tpoa-item-title { font-size:13px; }
+      .tpoa-item-desc  { font-size:12px; }
+      .tpoa-item-tags  { gap:5px; }
+      .tpoa-tag { font-size:10px; padding:2px 7px; }
+
+      /* Buttons */
+      .tpoa-btn-sm { height:30px; font-size:11px; padding:0 10px; }
+
+      /* Toggle row */
+      .tpoa-toggle-lbl { font-size:12.5px; }
+      .tpoa-toggle-sub { font-size:11px; }
+
+      /* Chips */
+      .tpoa-chip { font-size:11.5px; padding:4px 11px; }
+
+      /* Modal delete/edit */
+      .tpoa-modal { border-radius:14px; }
+      .tpoa-mh { padding:14px 16px 12px; }
+      .tpoa-mb { padding:14px 16px; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -125,18 +217,12 @@ const tk          = () => ({ headers: { Authorization: `Bearer ${localStorage.ge
 const SEMESTERS   = [1, 2, 3, 4, 5, 6, 7, 8];
 const DEPARTMENTS = ["IT", "CIVIL", "ENTC", "MECH", "Electrical"];
 
-/* ─────────────────────────────
-   Professional SVG Icon Library
-───────────────────────────── */
-
-// Megaphone — Total Announcements
 const IcoMegaphone = ({ size = 16, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 11l19-9-9 19-2-8-8-2z"/>
   </svg>
 );
 
-// Building — Placement Drives / Company
 const IcoBuilding = ({ size = 16, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -147,7 +233,6 @@ const IcoBuilding = ({ size = 16, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Clipboard — General Notices
 const IcoClipboard = ({ size = 16, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
@@ -157,7 +242,6 @@ const IcoClipboard = ({ size = 16, color = "currentColor", sw = 1.8 }) => (
   </svg>
 );
 
-// Bell — Posted Announcements header / empty state
 const IcoBell = ({ size = 14, color = "currentColor", sw = 2.2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -165,7 +249,6 @@ const IcoBell = ({ size = 14, color = "currentColor", sw = 2.2 }) => (
   </svg>
 );
 
-// Users — All Students tag
 const IcoUsers = ({ size = 11, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -175,7 +258,6 @@ const IcoUsers = ({ size = 11, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Calendar — Drive Date
 const IcoCalendar = ({ size = 13, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -185,7 +267,6 @@ const IcoCalendar = ({ size = 13, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Book/Semester — Semesters tag
 const IcoBook = ({ size = 10, color = "currentColor", sw = 2.2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -193,7 +274,6 @@ const IcoBook = ({ size = 10, color = "currentColor", sw = 2.2 }) => (
   </svg>
 );
 
-// Home/Department — Departments tag
 const IcoHome = ({ size = 10, color = "currentColor", sw = 2.2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -201,7 +281,6 @@ const IcoHome = ({ size = 10, color = "currentColor", sw = 2.2 }) => (
   </svg>
 );
 
-// Warning Triangle
 const IcoWarning = ({ size = 15, color = "#DC2626", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -210,7 +289,6 @@ const IcoWarning = ({ size = 15, color = "#DC2626", sw = 2 }) => (
   </svg>
 );
 
-// TYPE metadata — labels with no emojis
 const TYPE_META = {
   drive:   { bg:"#EBF2FD", color:"#1B3A6B", border:"#C2D6FA", label:"Placement Drive",  Icon: IcoBuilding },
   general: { bg:"#ECFDF5", color:"#065F46", border:"#A7F3D0", label:"General Notice",   Icon: IcoClipboard },
@@ -218,9 +296,6 @@ const TYPE_META = {
 
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }) : null;
 
-/* ══════════════════
-   Chip Toggle
-══════════════════ */
 function ChipGroup({ label, items, selected, onToggle, renderLabel }) {
   return (
     <div className="tpoa-field tpoa-fw">
@@ -241,9 +316,6 @@ function ChipGroup({ label, items, selected, onToggle, renderLabel }) {
   );
 }
 
-/* ══════════════════
-   Announcement Form
-══════════════════ */
 function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Announcement" }) {
   const def = { title:"", company:"", description:"", type:"general", driveDate:"", ...initial };
   const [form,        setForm]        = useState(def);
@@ -278,7 +350,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
       )}
 
       <div className="tpoa-fg">
-        {/* Title */}
         <div className="tpoa-field">
           <label className="tpoa-lbl">Title *</label>
           <div className="tpoa-iw">
@@ -289,7 +360,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
             <input className="tpoa-in" value={form.title} onChange={f("title")} placeholder="e.g. Amazon SDE Placement Drive"/>
           </div>
         </div>
-        {/* Company */}
         <div className="tpoa-field">
           <label className="tpoa-lbl">Company</label>
           <div className="tpoa-iw">
@@ -297,7 +367,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
             <input className="tpoa-in" value={form.company} onChange={f("company")} placeholder="e.g. Amazon"/>
           </div>
         </div>
-        {/* Type */}
         <div className="tpoa-field">
           <label className="tpoa-lbl">Type</label>
           <div className="tpoa-iw">
@@ -308,7 +377,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
             </select>
           </div>
         </div>
-        {/* Drive Date */}
         {form.type === "drive" ? (
           <div className="tpoa-field">
             <label className="tpoa-lbl">Drive Date</label>
@@ -318,7 +386,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
             </div>
           </div>
         ) : <div />}
-        {/* Description */}
         <div className="tpoa-field tpoa-fw">
           <label className="tpoa-lbl">Description *</label>
           <textarea className="tpoa-ta" value={form.description} onChange={f("description")} placeholder="Write the announcement details…" rows={3}/>
@@ -327,7 +394,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
 
       <div className="tpoa-divider"/>
 
-      {/* All Students Toggle */}
       <div className={`tpoa-toggle-row${allStudents ? " on" : ""}`} onClick={() => setAllStudents(p => !p)} style={{ marginBottom:16 }}>
         <div className={`tpoa-toggle${allStudents ? " on" : ""}`}><div className="tpoa-toggle-knob"/></div>
         <div>
@@ -345,7 +411,7 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
 
       <div className="tpoa-divider"/>
 
-      <div style={{ display:"flex", gap:10, justifyContent:"flex-end" }}>
+      <div style={{ display:"flex", gap:10, justifyContent:"flex-end", flexWrap:"wrap" }}>
         {onCancel && <button className="tpoa-btn tpoa-btn-outline" onClick={onCancel} disabled={loading}>Cancel</button>}
         <button className="tpoa-btn tpoa-btn-primary" style={{ height:44, paddingLeft:24, paddingRight:24, fontSize:13 }} onClick={handleSubmit} disabled={loading}>
           {loading
@@ -363,9 +429,6 @@ function AnnForm({ initial, onSubmit, onCancel, loading, submitLabel = "Post Ann
   );
 }
 
-/* ══════════════════
-   Edit Modal
-══════════════════ */
 function EditModal({ ann, onClose, onSaved }) {
   const [loading, setLoading] = useState(false);
   const save = async (data) => {
@@ -398,9 +461,6 @@ function EditModal({ ann, onClose, onSaved }) {
   );
 }
 
-/* ══════════════════
-   Delete Modal
-══════════════════ */
 function DeleteModal({ ann, onClose, onDeleted }) {
   const [loading, setLoading] = useState(false);
   const del = async () => {
@@ -410,8 +470,7 @@ function DeleteModal({ ann, onClose, onDeleted }) {
   };
   return (
     <div className="tpoa-overlay" onClick={onClose}>
-      <div style={{ background:"#fff", borderRadius:18, padding:32, width:400, boxShadow:"0 24px 64px rgba(0,0,0,0.18)", fontFamily:"'Plus Jakarta Sans',sans-serif", animation:"tpoaPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both" }} onClick={e => e.stopPropagation()}>
-        {/* Trash icon */}
+      <div style={{ background:"#fff", borderRadius:18, padding:28, width:400, maxWidth:"100%", boxShadow:"0 24px 64px rgba(0,0,0,0.18)", fontFamily:"'Plus Jakarta Sans',sans-serif", animation:"tpoaPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both" }} onClick={e => e.stopPropagation()}>
         <div style={{ width:48, height:48, borderRadius:12, background:"#FEF2F2", border:"1px solid #FECACA", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:18 }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="3 6 5 6 21 6"/>
@@ -433,7 +492,6 @@ function DeleteModal({ ann, onClose, onDeleted }) {
           )}
         </div>
 
-        {/* Warning row — SVG triangle replaces ⚠️ */}
         <div style={{ display:"flex", alignItems:"center", gap:8, fontSize:13, color:"#DC2626", fontWeight:600, marginBottom:24 }}>
           <IcoWarning size={15} />
           This is permanent and cannot be undone.
@@ -459,9 +517,6 @@ function DeleteModal({ ann, onClose, onDeleted }) {
   );
 }
 
-/* ══════════════════════════
-   Main Page
-══════════════════════════ */
 export default function TpoAnnouncements() {
   const [announcements, setAnnouncements] = useState([]);
   const [loading,       setLoading]       = useState(true);
@@ -511,14 +566,12 @@ export default function TpoAnnouncements() {
         <TpoNavbar />
         <div className="tpoa-body">
 
-          {/* Header */}
           <div className="tpoa-hd">
             <div className="tpoa-ey">TPO Office</div>
             <h1 className="tpoa-title">Announcements</h1>
             <p className="tpoa-sub">Create, edit and delete placement announcements for students.</p>
           </div>
 
-          {/* Stats — all SVG icons */}
           <div className="tpoa-stats">
             {[
               { icon:<IcoMegaphone size={20} color="#3B7DED" sw={1.8}/>, val:announcements.length, lbl:"Total",            bg:"#EBF2FD", bc:"#C2D6FA" },
@@ -535,7 +588,7 @@ export default function TpoAnnouncements() {
             ))}
           </div>
 
-          {/* ── Create form card ── */}
+          {/* Create form card */}
           <div className="tpoa-card" style={{ animation:"tpoaUp 0.45s 0.08s ease both" }}>
             <div className="tpoa-ch">
               <div className="tpoa-ct">
@@ -562,7 +615,7 @@ export default function TpoAnnouncements() {
             )}
           </div>
 
-          {/* ── List card ── */}
+          {/* List card */}
           <div className="tpoa-card" style={{ animation:"tpoaUp 0.45s 0.12s ease both" }}>
             <div className="tpoa-ch">
               <div className="tpoa-ct">
@@ -619,45 +672,34 @@ export default function TpoAnnouncements() {
                       )}
                       <div className="tpoa-item-desc">{ann.description}</div>
                       <div className="tpoa-item-tags">
-
-                        {/* Type tag */}
                         <span className="tpoa-tag" style={{ background:ts.bg, color:ts.color, border:`1px solid ${ts.border}` }}>
                           <TagIcon size={11} color={ts.color} sw={2.2} />
                           {ts.label}
                         </span>
-
-                        {/* All Students */}
                         {ann.allStudents && (
                           <span className="tpoa-tag" style={{ background:"#F0FDF4", color:"#16A34A", border:"1px solid #BBF7D0" }}>
                             <IcoUsers size={11} color="#16A34A" sw={2.2} />
                             All Students
                           </span>
                         )}
-
-                        {/* Departments */}
                         {!ann.allStudents && ann.departments?.map(d => (
                           <span key={d} className="tpoa-tag" style={{ background:"#F0F2F6", color:"#4A5568", border:"1px solid #E2E4E9" }}>
                             <IcoHome size={10} color="#4A5568" sw={2.2} />
                             {d}
                           </span>
                         ))}
-
-                        {/* Semesters */}
                         {!ann.allStudents && ann.semesters?.length > 0 && (
                           <span className="tpoa-tag" style={{ background:"#F5F3FF", color:"#7C3AED", border:"1px solid #DDD6FE" }}>
                             <IcoBook size={10} color="#7C3AED" sw={2.2} />
                             Sem: {ann.semesters.join(", ")}
                           </span>
                         )}
-
-                        {/* Drive Date */}
                         {ann.driveDate && (
                           <span className="tpoa-tag" style={{ background:"#FEF3C7", color:"#92400E", border:"1px solid #FDE68A" }}>
                             <IcoCalendar size={10} color="#92400E" sw={2.2} />
                             {fmtDate(ann.driveDate)}
                           </span>
                         )}
-
                         <span style={{ fontSize:11, color:"#C0C8D5", marginLeft:2 }}>Posted {fmtDate(ann.createdAt)}</span>
                       </div>
                     </div>

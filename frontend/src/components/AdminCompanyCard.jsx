@@ -48,7 +48,7 @@ const T = {
   blue:   "#2563EB",
 };
 
-/* inject font + keyframes once — same id as student card so no duplication */
+/* inject font + keyframes once */
 if (!document.getElementById("fcc-styles")) {
   const s = document.createElement("style");
   s.id = "fcc-styles";
@@ -73,60 +73,18 @@ if (!document.getElementById("fcc-styles")) {
       to   { transform: translateX(0);    opacity: 1; }
     }
 
-
+    /* ── Mobile: make card buttons full-width on very small screens ── */
+    @media (max-width: 400px) {
+      .fcc-actions {
+        flex-direction: column;
+      }
+      .fcc-actions button {
+        width: 100% !important;
+        justify-content: center !important;
+      }
+    }
   `;
   document.head.appendChild(s);
-}
-
-/**
- * AdminCompanyCard
- * Props:
- *   company  — same shape as student company object
- *   onDelete — called with company when trash icon clicked
- */
-/* ── Delete button component (matches View Details style) ── */
-function DeleteBtn({ onDelete }) {
-  const [hover, setHover] = useState(false);
-  return (
-    <button
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={e => { e.stopPropagation(); onDelete(); }}
-      style={{
-        display: "inline-flex", alignItems: "center",
-        gap: hover ? 8 : 5,
-        border: `1px solid ${hover ? "#DC2626" : "#E5E7EB"}`,
-        background: hover ? "linear-gradient(135deg,#DC2626,#EF4444)" : "#fff",
-        borderRadius: 6,
-        padding: "5px 12px",
-        fontFamily: T.ff,
-        fontSize: 12.5, fontWeight: 500,
-        color: hover ? "#fff" : "#9CA3AF",
-        cursor: "pointer",
-        boxShadow: hover
-          ? "0 4px 14px rgba(220,38,38,0.3)"
-          : "0 1px 2px rgba(0,0,0,0.05)",
-        transform: hover ? "translateY(-1px)" : "translateY(0)",
-        transition:
-          "background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, gap 0.15s",
-      }}
-    >
-      <svg
-        width="12" height="12" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" strokeWidth="2.2"
-        style={{
-          transform: hover ? "scale(1.1)" : "scale(1)",
-          transition: "transform 0.2s cubic-bezier(0.34,1.56,0.64,1)",
-          flexShrink: 0,
-        }}
-      >
-        <polyline points="3 6 5 6 21 6"/>
-        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-        <path d="M10 11v6"/><path d="M14 11v6"/>
-      </svg>
-      Delete
-    </button>
-  );
 }
 
 function AdminCompanyCard({ company, onDelete }) {
@@ -134,7 +92,6 @@ function AdminCompanyCard({ company, onDelete }) {
   const cardRef                   = useRef(null);
   const [hover, setHover]         = useState(false);
   const [btnHover, setBtnHover]   = useState(false);
-  const [delHover, setDelHover]   = useState(false);
   const [delBtnHover, setDelBtnHover] = useState(false);
   const [pressed, setPressed]     = useState(false);
   const [imgErr, setImgErr]       = useState(false);
@@ -144,7 +101,7 @@ function AdminCompanyCard({ company, onDelete }) {
   const color    = getInitColor(company.companyName);
   const initials = getInitials(company.companyName);
 
-  /* 3-D tilt — identical to student card */
+  /* 3-D tilt */
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -190,7 +147,7 @@ function AdminCompanyCard({ company, onDelete }) {
         willChange: "transform",
       }}
     >
-      {/* ── shimmer accent line — identical to student card ── */}
+      {/* ── shimmer accent line ── */}
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: 2,
         background: "linear-gradient(90deg,#1D4ED8,#3B82F6,#60A5FA)",
@@ -204,9 +161,9 @@ function AdminCompanyCard({ company, onDelete }) {
         animation: hover ? "fcc-shimmer-btn 2s linear infinite" : "none",
       }} />
 
-      {/* ── Logo panel — identical to student card ── */}
+      {/* ── Logo panel ── */}
       <div style={{
-        width: 110,
+        width: 100,
         flexShrink: 0,
         background: hover ? "#F0F7FF" : "#F9FAFB",
         borderRight: `1px solid ${hover ? "#DBEAFE" : "#F1F3F6"}`,
@@ -267,57 +224,57 @@ function AdminCompanyCard({ company, onDelete }) {
         )}
       </div>
 
-      {/* ── Info panel — identical to student card ── */}
+      {/* ── Info panel ── */}
       <div style={{
         flex: 1,
-        padding: "16px 14px",
+        padding: "14px 12px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        gap: 7,
+        gap: 6,
         minWidth: 0,
       }}>
         {/* company name */}
         <div style={{
-          fontSize: 15, fontWeight: 700,
+          fontSize: 14,
+          fontWeight: 700,
           color: hover ? "#1D4ED8" : T.ink,
           lineHeight: 1.3,
-          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
           transition: "color 0.2s ease",
           animation: "fcc-slide-right 0.3s ease both",
-          transition: "color 0.2s ease",
         }}>
           {company.companyName}
         </div>
 
         {/* salary */}
         <div style={{
-          fontSize: 13, fontWeight: 400, color: T.ink2,
+          fontSize: 12.5, fontWeight: 400, color: T.ink2,
           animation: "fcc-slide-right 0.3s 0.05s ease both",
         }}>
-          Package per LPA:{" "}
+          Package:{" "}
           <span style={{
             fontWeight: 600,
             color: hover ? T.blue : T.ink3,
             transition: "color 0.2s",
           }}>
-            {company.salary}
+            {company.salary} LPA
           </span>
         </div>
 
         {/* ── Action buttons row ── */}
-        <div style={{ display: "flex", gap: 6, marginTop: 2 }}>
+        <div className="fcc-actions" style={{ display: "flex", gap: 5, marginTop: 2, flexWrap: "wrap" }}>
 
-          {/* View Details — identical to student "Explore More" */}
+          {/* View Details */}
           <button
             onMouseEnter={() => setBtnHover(true)}
             onMouseLeave={() => setBtnHover(false)}
-                          onClick={(e)=>{
+            onClick={(e) => {
               e.stopPropagation();
               navigate(`/admin/companies/${company._id}`);
-              }}
-              
-
+            }}
             style={{
               display: "inline-flex", alignItems: "center",
               gap: btnHover ? 8 : 5,
@@ -326,9 +283,9 @@ function AdminCompanyCard({ company, onDelete }) {
                 ? "linear-gradient(135deg,#2563EB,#3B82F6)"
                 : "#fff",
               borderRadius: 6,
-              padding: "5px 12px",
+              padding: "5px 11px",
               fontFamily: T.ff,
-              fontSize: 12.5, fontWeight: 500,
+              fontSize: 12, fontWeight: 500,
               color: btnHover ? "#fff" : T.ink3,
               cursor: "pointer",
               boxShadow: btnHover
@@ -337,6 +294,9 @@ function AdminCompanyCard({ company, onDelete }) {
               transform: btnHover ? "translateY(-1px)" : "translateY(0)",
               transition: "background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, gap 0.15s",
               animation: btnHover ? "fcc-pulse-ring 0.6s ease" : "none",
+              flex: "1 1 auto",
+              justifyContent: "center",
+              minWidth: 0,
             }}
           >
             View Details
@@ -353,7 +313,7 @@ function AdminCompanyCard({ company, onDelete }) {
             </svg>
           </button>
 
-          {/* Delete button — same size/shape, red variant */}
+          {/* Delete button */}
           <button
             onMouseEnter={() => setDelBtnHover(true)}
             onMouseLeave={() => setDelBtnHover(false)}
@@ -366,9 +326,9 @@ function AdminCompanyCard({ company, onDelete }) {
                 ? "linear-gradient(135deg,#DC2626,#EF4444)"
                 : "#FEF2F2",
               borderRadius: 6,
-              padding: "5px 12px",
+              padding: "5px 11px",
               fontFamily: T.ff,
-              fontSize: 12.5, fontWeight: 500,
+              fontSize: 12, fontWeight: 500,
               color: delBtnHover ? "#fff" : "#DC2626",
               cursor: "pointer",
               boxShadow: delBtnHover
@@ -376,6 +336,9 @@ function AdminCompanyCard({ company, onDelete }) {
                 : "0 1px 2px rgba(0,0,0,0.04)",
               transform: delBtnHover ? "translateY(-1px)" : "translateY(0)",
               transition: "background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s, gap 0.15s",
+              flex: "1 1 auto",
+              justifyContent: "center",
+              minWidth: 0,
             }}
           >
             Delete
@@ -395,7 +358,7 @@ function AdminCompanyCard({ company, onDelete }) {
 
         </div>
       </div>
-      
+
     </div>
   );
 }

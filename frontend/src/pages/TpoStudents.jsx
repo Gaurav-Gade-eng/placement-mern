@@ -97,9 +97,76 @@ if (!document.getElementById("tpostu-styles")) {
     .stu-resume-body { flex:1; overflow:hidden; position:relative; }
     .stu-resume-iframe { width:100%; height:100%; border:none; display:block; }
     .stu-resume-loading { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:#94A3B8; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; }
-    .stu-resume-spinner { width:32px; height:32px; border-radius:50%; border:3px solid rgba(59,125,237,0.2); border-top-color:#3B7DED; animation:stuShim 0.8s linear infinite; }
+    .stu-resume-spinner { width:32px; height:32px; border-radius:50%; border:3px solid rgba(59,125,237,0.2); border-top-color:#3B7DED; }
     @keyframes stuSpin { to{transform:rotate(360deg)} }
     .stu-resume-spinner { animation:stuSpin 0.8s linear infinite; }
+
+    /* ── filter action row ── */
+    .stu-filter-row {
+      display:grid;
+      grid-template-columns:repeat(4,1fr) auto auto auto;
+      gap:10px;
+      align-items:end;
+      margin-bottom:12px;
+    }
+
+    /* ── Mobile Responsive ── */
+    @media (max-width: 768px) {
+      .stu-body { padding: 16px 14px 48px; }
+
+      .stu-title { font-size: 22px; }
+
+      /* stats: 2-col grid on mobile */
+      .stu-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stu-stat  { padding: 12px 14px; }
+      .stu-stat-val { font-size: 18px; }
+      .stu-stat-lbl { font-size: 10.5px; }
+
+      .stu-cb { padding: 14px; }
+
+      /* filter row: stack all fields + action buttons */
+      .stu-filter-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      /* action buttons inside filter row go full-width */
+      .stu-filter-row .stu-btn {
+        height: 38px;
+        justify-content: center;
+      }
+      /* Apply / Reset / Download each take full width on very small */
+      .stu-filter-row > .stu-btn {
+        grid-column: span 1;
+      }
+
+      /* CGPA range row */
+      .stu-cgpa-row {
+        grid-template-columns: 1fr 1fr !important;
+      }
+
+      /* hide skills column header/cells on mobile to keep table readable */
+      .stu-col-skills { display: none; }
+
+      /* table: allow horizontal scroll, tighten padding */
+      .stu-table th,
+      .stu-table td { padding: 10px 10px; font-size: 11.5px; }
+
+      /* resume modal */
+      .stu-resume-header { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 14px; }
+      .stu-resume-actions { width: 100%; justify-content: flex-end; }
+      .stu-resume-btn { font-size: 11px; padding: 0 10px; }
+
+      /* pagination bar */
+      .stu-pagination { flex-direction: column; align-items: flex-start !important; gap: 10px; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .stu-body { padding: 20px 20px 48px; }
+      .stu-stats { grid-template-columns: repeat(2, 1fr); }
+      .stu-filter-row {
+        grid-template-columns: 1fr 1fr auto auto auto;
+      }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -116,9 +183,6 @@ const deptColor = (d) => {
   return map[d] || { bg:"#F0F2F6", color:"#4A5568" };
 };
 
-/* ── Professional SVG Icon Components ── */
-
-// Total Students icon — group of people
 const IconUsers = ({ color, size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -127,37 +191,21 @@ const IconUsers = ({ color, size = 20 }) => (
     <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
   </svg>
 );
-
-// Filtered Results icon — funnel/filter
 const IconFilter = ({ color, size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
   </svg>
 );
-
-// Placed icon — briefcase
 const IconBriefcase = ({ color, size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
   </svg>
 );
-
-// CGPA / Academic icon — graduation cap
 const IconAcademic = ({ color, size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
     <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-  </svg>
-);
-
-// Indian Rupee icon — ₹
-const IconRupee = ({ color, size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M6 3h12"/>
-    <path d="M6 8h12"/>
-    <path d="M6 13l8.5 8"/>
-    <path d="M6 13h3a4 4 0 0 0 0-8"/>
   </svg>
 );
 
@@ -170,7 +218,6 @@ export default function TpoStudents() {
   const [page,      setPage]      = useState(1);
   const PAGE_SIZE = 50;
 
-  /* filters */
   const [fSem,    setFSem]    = useState("");
   const [fBranch, setFBranch] = useState("");
   const [fSkill,  setFSkill]  = useState("");
@@ -218,47 +265,16 @@ export default function TpoStudents() {
   const highCGPA= students.filter(s=>Number(s.cgpa)>=8).length;
 
   const viewResume = (student) => {
-  if (!student.resume) {
-    alert("No resume uploaded");
-    return;
-  }
+    if (!student.resume) { alert("No resume uploaded"); return; }
+    const base = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    setResumeModal({ name: student.name, url: `${base}${student.resume}` });
+  };
 
-  const base = process.env.REACT_APP_API_URL || "http://localhost:5000";
-  const url = `${base}${student.resume}`;
-
-  setResumeModal({ name: student.name, url });
-};
-
-  /* stat card definitions — SVG icons replacing emojis */
   const statCards = [
-    {
-      icon: <IconUsers color="#3B7DED" size={20} />,
-      val: students.length,
-      lbl: "Total Students",
-      bg: "#EBF2FD",
-      bc: "#C2D6FA",
-    },
-    {
-      icon: <IconFilter color="#7C3AED" size={20} />,
-      val: filtered.length,
-      lbl: "Filtered Results",
-      bg: "#F5F3FF",
-      bc: "#DDD6FE",
-    },
-    {
-      icon: <IconBriefcase color="#059669" size={20} />,
-      val: placed,
-      lbl: "Placed",
-      bg: "#F0FDF4",
-      bc: "#BBF7D0",
-    },
-    {
-      icon: <IconAcademic color="#92400E" size={20} />,
-      val: highCGPA,
-      lbl: "CGPA ≥ 8.0",
-      bg: "#FEF3C7",
-      bc: "#FDE68A",
-    },
+    { icon: <IconUsers color="#3B7DED" size={20} />,    val: students.length, lbl: "Total Students",   bg: "#EBF2FD", bc: "#C2D6FA" },
+    { icon: <IconFilter color="#7C3AED" size={20} />,   val: filtered.length, lbl: "Filtered Results", bg: "#F5F3FF", bc: "#DDD6FE" },
+    { icon: <IconBriefcase color="#059669" size={20} />,val: placed,          lbl: "Placed",           bg: "#F0FDF4", bc: "#BBF7D0" },
+    { icon: <IconAcademic color="#92400E" size={20} />, val: highCGPA,        lbl: "CGPA ≥ 8.0",       bg: "#FEF3C7", bc: "#FDE68A" },
   ];
 
   return (
@@ -276,14 +292,11 @@ export default function TpoStudents() {
             <p className="stu-sub">Filter, search and download student records.</p>
           </div>
 
-          {/* Stats — professional SVG icons */}
+          {/* Stats */}
           <div className="stu-stats">
             {statCards.map((st, i) => (
               <div className="stu-stat" key={i}>
-                <div
-                  className="stu-stat-ico"
-                  style={{ background: st.bg, border: `1px solid ${st.bc}` }}
-                >
+                <div className="stu-stat-ico" style={{ background: st.bg, border: `1px solid ${st.bc}` }}>
                   {st.icon}
                 </div>
                 <div>
@@ -304,7 +317,6 @@ export default function TpoStudents() {
                 Filter Students
               </div>
               <button className="stu-btn stu-btn-outline" style={{height:34,fontSize:12}} onClick={()=>setShowSkills(p=>!p)}>
-                {/* Eye icon for Show/Hide Skills */}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   {showSkills ? (
                     <>
@@ -324,8 +336,8 @@ export default function TpoStudents() {
             </div>
             <div className="stu-cb">
 
-              {/* Row 1 — Semester, Branch, Skills, Status + Buttons */}
-              <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr) auto auto auto",gap:10,alignItems:"end",marginBottom:12}}>
+              {/* Row 1 — filters + action buttons */}
+              <div className="stu-filter-row">
                 <div className="stu-field">
                   <label className="stu-lbl">Semester</label>
                   <select className="stu-sel" value={fSem} onChange={e=>setFSem(e.target.value)}>
@@ -352,14 +364,12 @@ export default function TpoStudents() {
                     <option value="placed">Placed</option>
                   </select>
                 </div>
-                {/* Apply Filters */}
                 <button className="stu-btn stu-btn-primary" onClick={applyFilters}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
                   </svg>
                   Apply Filters
                 </button>
-                {/* Reset */}
                 <button className="stu-btn stu-btn-outline" onClick={resetFilters}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="1 4 1 10 7 10"/>
@@ -367,7 +377,6 @@ export default function TpoStudents() {
                   </svg>
                   Reset
                 </button>
-                {/* Download — replaced dollar icon with Indian Rupee SVG */}
                 <button className="stu-btn stu-btn-green" onClick={downloadCSV}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -378,25 +387,19 @@ export default function TpoStudents() {
                 </button>
               </div>
 
-              {/* Row 2 — Min/Max CGPA with Rupee icon hint */}
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+              {/* Row 2 — Min/Max CGPA */}
+              <div className="stu-cgpa-row" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
                 <div className="stu-field">
-                  <label className="stu-lbl" style={{display:"flex",alignItems:"center",gap:5}}>
-                    
-                    Min CGPA
-                  </label>
+                  <label className="stu-lbl">Min CGPA</label>
                   <input className="stu-in" type="number" step="0.1" placeholder="e.g. 6.0" value={fMin} onChange={e=>setFMin(e.target.value)} />
                 </div>
                 <div className="stu-field">
-                  <label className="stu-lbl" style={{display:"flex",alignItems:"center",gap:5}}>
-                    
-                    Max CGPA
-                  </label>
+                  <label className="stu-lbl">Max CGPA</label>
                   <input className="stu-in" type="number" step="0.1" placeholder="e.g. 10.0" value={fMax} onChange={e=>setFMax(e.target.value)} />
                 </div>
               </div>
 
-              {/* results label + page info */}
+              {/* results label + table + pagination */}
               {(() => {
                 const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
                 const safePage   = Math.min(page, totalPages || 1);
@@ -418,7 +421,6 @@ export default function TpoStudents() {
                       <span style={{fontSize:11.5,color:"#B0BAC8",fontWeight:600}}>{filtered.length} result{filtered.length!==1?"s":""}</span>
                     </div>
 
-                    {/* table */}
                     {loading ? (
                       <div style={{display:"flex",flexDirection:"column",gap:10}}>
                         {[1,2,3,4].map(i=><div key={i} className="stu-sk" style={{height:42}}/>)}
@@ -441,7 +443,7 @@ export default function TpoStudents() {
                               <th>Semester</th>
                               <th>Branch</th>
                               <th>CGPA</th>
-                              {showSkills && <th>Skills</th>}
+                              {showSkills && <th className="stu-col-skills">Skills</th>}
                               <th>Resume</th>
                             </tr>
                           </thead>
@@ -461,7 +463,7 @@ export default function TpoStudents() {
                                   <td><span className="stu-tag" style={{background:dp.bg,color:dp.color}}>{s.department||s.branch||"—"}</span></td>
                                   <td><span className="stu-pill" style={{background:cp.bg,color:cp.color}}>{Number(s.cgpa||0).toFixed(2)}</span></td>
                                   {showSkills && (
-                                    <td>
+                                    <td className="stu-col-skills">
                                       <div style={{display:"flex",flexWrap:"wrap",gap:2,maxWidth:200}}>
                                         {(s.skills||[]).slice(0,3).map((sk,j)=><span key={j} className="stu-skill">{sk}</span>)}
                                         {(s.skills||[]).length>3 && <span className="stu-skill" style={{background:"#F0F2F6",color:"#9CA3AF"}}>+{(s.skills||[]).length-3}</span>}
@@ -476,9 +478,7 @@ export default function TpoStudents() {
                                         height:30, padding:"0 12px", borderRadius:7, border:"none", cursor:"pointer",
                                         fontFamily:"'Plus Jakarta Sans',sans-serif", fontSize:11.5, fontWeight:700,
                                         display:"inline-flex", alignItems:"center", gap:5,
-                                        background: s.resume
-                                          ? "linear-gradient(135deg,#1B3A6B,#2563EB)"
-                                          : "#F0F2F6",
+                                        background: s.resume ? "linear-gradient(135deg,#1B3A6B,#2563EB)" : "#F0F2F6",
                                         color: s.resume ? "#fff" : "#B0BAC8",
                                         boxShadow: s.resume ? "0 2px 6px rgba(27,58,107,0.2)" : "none",
                                         transition:"transform 0.15s, box-shadow 0.15s",
@@ -488,7 +488,6 @@ export default function TpoStudents() {
                                     >
                                       {s.resume ? (
                                         <>
-                                          {/* Eye icon — View */}
                                           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                             <circle cx="12" cy="12" r="3"/>
@@ -497,7 +496,6 @@ export default function TpoStudents() {
                                         </>
                                       ) : (
                                         <>
-                                          {/* X icon — None */}
                                           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
                                             <line x1="18" y1="6" x2="6" y2="18"/>
                                             <line x1="6" y1="6" x2="18" y2="18"/>
@@ -515,9 +513,9 @@ export default function TpoStudents() {
                       </div>
                     )}
 
-                    {/* ── Pagination bar ── */}
+                    {/* Pagination */}
                     {totalPages > 1 && (
-                      <div style={{
+                      <div className="stu-pagination" style={{
                         display:"flex", alignItems:"center", justifyContent:"space-between",
                         marginTop:16, paddingTop:14, borderTop:"1px solid #F0F2F6",
                         fontFamily:"'Plus Jakarta Sans',sans-serif",
@@ -529,7 +527,6 @@ export default function TpoStudents() {
                         </div>
 
                         <div style={{display:"flex", alignItems:"center", gap:4}}>
-                          {/* Prev */}
                           <button
                             onClick={() => { setPage(p => Math.max(1, p-1)); window.scrollTo({top:0,behavior:'smooth'}); }}
                             disabled={safePage === 1}
@@ -547,7 +544,6 @@ export default function TpoStudents() {
                             </svg>
                           </button>
 
-                          {/* Page number buttons */}
                           {Array.from({ length: totalPages }, (_, i) => i + 1).map(pg => {
                             const isActive = pg === safePage;
                             const show = pg === 1 || pg === totalPages || Math.abs(pg - safePage) <= 1;
@@ -576,7 +572,6 @@ export default function TpoStudents() {
                             );
                           })}
 
-                          {/* Next */}
                           <button
                             onClick={() => { setPage(p => Math.min(totalPages, p+1)); window.scrollTo({top:0,behavior:'smooth'}); }}
                             disabled={safePage === totalPages}
@@ -606,66 +601,49 @@ export default function TpoStudents() {
       </div>
     </div>
 
-      {/* ── Resume PDF Modal ── */}
-      {resumeModal && (
-        <div className="stu-overlay" onClick={() => setResumeModal(null)}>
-          <div className="stu-resume-modal" onClick={e => e.stopPropagation()}>
-
-            {/* header */}
-            <div className="stu-resume-header">
-              <div className="stu-resume-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
-                  <polyline points="10 9 9 9 8 9"/>
-                </svg>
-                {resumeModal.name}'s Resume
-                <span className="stu-resume-badge">PDF</span>
-              </div>
-              <div className="stu-resume-actions">
-                <button
-                  className="stu-resume-btn stu-resume-btn-open"
-                  onClick={() => window.open(resumeModal.url, "_blank")}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" y1="14" x2="21" y2="3"/>
-                  </svg>
-                  Open in New Tab
-                </button>
-                <button
-                  className="stu-resume-btn stu-resume-btn-close"
-                  onClick={() => setResumeModal(null)}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                  </svg>
-                  Close
-                </button>
-              </div>
+    {/* Resume PDF Modal */}
+    {resumeModal && (
+      <div className="stu-overlay" onClick={() => setResumeModal(null)}>
+        <div className="stu-resume-modal" onClick={e => e.stopPropagation()}>
+          <div className="stu-resume-header">
+            <div className="stu-resume-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              {resumeModal.name}'s Resume
+              <span className="stu-resume-badge">PDF</span>
             </div>
-
-            {/* PDF iframe */}
-            <div className="stu-resume-body">
-              <div className="stu-resume-loading">
-                <div className="stu-resume-spinner"/>
-                <span>Loading PDF…</span>
-              </div>
-              <iframe
-                src={resumeModal.url}
-                width="100%"
-                height="100%"
-                title="Student Resume"
-              />
+            <div className="stu-resume-actions">
+              <button className="stu-resume-btn stu-resume-btn-open" onClick={() => window.open(resumeModal.url, "_blank")}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Open in New Tab
+              </button>
+              <button className="stu-resume-btn stu-resume-btn-close" onClick={() => setResumeModal(null)}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                Close
+              </button>
             </div>
           </div>
+          <div className="stu-resume-body">
+            <div className="stu-resume-loading">
+              <div className="stu-resume-spinner"/>
+              <span>Loading PDF…</span>
+            </div>
+            <iframe src={resumeModal.url} width="100%" height="100%" title="Student Resume" />
+          </div>
         </div>
-      )}
-    
+      </div>
+    )}
     </>
   );
 }

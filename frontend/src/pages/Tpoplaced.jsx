@@ -94,7 +94,7 @@ if (!document.getElementById("tpop-styles")) {
     .p-act-unplace:hover:not(:disabled) { background:#FEE2E2; }
 
     /* confirm modal */
-    .p-overlay { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.45); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; animation:pFade 0.2s ease both; }
+    .p-overlay { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.45); backdrop-filter:blur(2px); display:flex; align-items:center; justify-content:center; animation:pFade 0.2s ease both; padding:16px; }
     .p-modal   { background:#fff; border-radius:18px; padding:28px; width:400px; box-shadow:0 24px 64px rgba(0,0,0,0.18); font-family:'Plus Jakarta Sans',sans-serif; animation:pPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
 
     /* skeleton */
@@ -106,6 +106,67 @@ if (!document.getElementById("tpop-styles")) {
 
     /* toast */
     .p-toast { position:fixed; bottom:28px; right:28px; z-index:999; display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #E2E4E9; border-radius:12px; padding:12px 16px; box-shadow:0 8px 28px rgba(0,0,0,0.1); animation:pToast 0.3s cubic-bezier(0.34,1.56,0.64,1) both; font-size:13px; font-weight:600; color:#0D1C33; max-width:300px; }
+
+    /* ── Mobile Responsive ── */
+    @media (max-width: 768px) {
+      .p-body { padding: 16px 14px 48px; }
+
+      .p-title { font-size: 22px; }
+
+      /* stats: 2-col */
+      .p-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .p-stat  { padding: 12px 14px; }
+      .p-stat-val { font-size: 18px; }
+      .p-stat-lbl { font-size: 10.5px; }
+
+      /* filter bar: stack into 2-col grid */
+      .p-filter-bar {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      /* search field spans full width */
+      .p-filter-bar > .p-field:first-child {
+        grid-column: 1 / -1;
+      }
+      /* reset button aligns end */
+      .p-filter-bar > .p-btn {
+        height: 40px;
+        justify-content: center;
+      }
+
+      /* table: tighten padding, allow scroll */
+      .p-table th,
+      .p-table td { padding: 10px 10px; font-size: 12px; }
+
+      /* hide adm no column on mobile */
+      .p-col-adm { display: none; }
+
+      /* action buttons: smaller */
+      .p-act { height: 30px; padding: 0 10px; font-size: 11px; }
+
+      /* modal */
+      .p-modal {
+        width: calc(100vw - 32px);
+        padding: 20px 16px;
+        border-radius: 14px;
+      }
+      .p-modal > div:last-child {
+        flex-direction: column-reverse;
+      }
+      .p-modal > div:last-child .p-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* toast */
+      .p-toast { right: 12px; bottom: 12px; left: 12px; max-width: none; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .p-body { padding: 20px 20px 48px; }
+      .p-stats { grid-template-columns: repeat(2, 1fr); }
+      .p-filter-bar { grid-template-columns: 1fr 1fr auto auto; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -124,11 +185,6 @@ const deptColor = (d) => {
   return map[d] || { bg:"#F0F2F6", color:"#4A5568" };
 };
 
-/* ─────────────────────────────
-   Professional SVG Icon Library
-───────────────────────────── */
-
-// Users group — Total Students
 const IcoUsers = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -137,16 +193,12 @@ const IcoUsers = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
     <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
   </svg>
 );
-
-// Briefcase — Placed (job/employment)
 const IcoBriefcase = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="2" y="7" width="20" height="14" rx="2"/>
     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
   </svg>
 );
-
-// User Search / Unplaced — person with magnifier
 const IcoUserSearch = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="10" cy="8" r="4"/>
@@ -155,8 +207,6 @@ const IcoUserSearch = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
     <line x1="20.5" y1="19.5" x2="22" y2="21"/>
   </svg>
 );
-
-// Trend / Percent — Placement Rate
 const IcoTrendUp = ({ size = 20, color = "currentColor", sw = 1.8 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
@@ -239,7 +289,6 @@ export default function TpoPlaced() {
   const unplaced = students.length - placed;
   const rate     = students.length ? Math.round((placed/students.length)*100) : 0;
 
-  /* stat card definitions — SVG icons replacing emojis */
   const statCards = [
     { icon:<IcoUsers      size={20} color="#3B7DED" sw={1.8}/>, val:students.length, lbl:"Total Students", bg:"#EBF2FD", bc:"#C2D6FA" },
     { icon:<IcoBriefcase  size={20} color="#16A34A" sw={1.8}/>, val:placed,          lbl:"Placed",         bg:"#F0FDF4", bc:"#BBF7D0" },
@@ -262,7 +311,7 @@ export default function TpoPlaced() {
             <p className="p-sub">Update student placement status. Changes reflect immediately across the portal.</p>
           </div>
 
-          {/* Stats — professional SVG icons */}
+          {/* Stats */}
           <div className="p-stats">
             {statCards.map((st, i) => (
               <div className="p-stat" key={i}>
@@ -311,7 +360,6 @@ export default function TpoPlaced() {
               </select>
             </div>
             <button className="p-btn p-btn-outline" onClick={resetFilters} style={{ alignSelf:"flex-end" }}>
-              {/* Refresh/reset icon */}
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="1 4 1 10 7 10"/>
                 <path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
@@ -369,7 +417,7 @@ export default function TpoPlaced() {
                     <tr>
                       <th>#</th>
                       <th>Student</th>
-                      <th>Adm No</th>
+                      <th className="p-col-adm">Adm No</th>
                       <th>Branch</th>
                       <th>CGPA</th>
                       <th>Current Status</th>
@@ -396,7 +444,7 @@ export default function TpoPlaced() {
                             </div>
                           </td>
 
-                          <td style={{ fontSize:12, color:"#7A8599", fontWeight:600 }}>{s.adm_no||"—"}</td>
+                          <td className="p-col-adm" style={{ fontSize:12, color:"#7A8599", fontWeight:600 }}>{s.adm_no||"—"}</td>
 
                           <td>
                             <span style={{ display:"inline-flex", alignItems:"center", padding:"2px 9px", borderRadius:5, fontSize:11, fontWeight:700, background:dp.bg, color:dp.color }}>
@@ -428,7 +476,6 @@ export default function TpoPlaced() {
                                 {isActing
                                   ? <div className="p-spinner" style={{ borderTopColor:"#DC2626", borderColor:"#FECACA" }}/>
                                   : (
-                                    /* Undo / rotate-back icon */
                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                       <polyline points="1 4 1 10 7 10"/>
                                       <path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
@@ -446,7 +493,6 @@ export default function TpoPlaced() {
                                 {isActing
                                   ? <div className="p-spinner"/>
                                   : (
-                                    /* Checkmark icon */
                                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                       <polyline points="20 6 9 17 4 12"/>
                                     </svg>
@@ -469,12 +515,10 @@ export default function TpoPlaced() {
       </div>
     </div>
 
-    {/* ── Confirm Modal ── */}
+    {/* Confirm Modal */}
     {confirm && (
       <div className="p-overlay" onClick={() => !acting && setConfirm(null)}>
         <div className="p-modal" onClick={e => e.stopPropagation()}>
-
-          {/* Icon */}
           <div style={{
             width:52, height:52, borderRadius:13, marginBottom:18,
             background: confirm.action==="place" ? "#F0FDF4" : "#FEF2F2",
@@ -483,13 +527,11 @@ export default function TpoPlaced() {
           }}>
             {confirm.action === "place"
               ? (
-                /* Briefcase icon — marking as employed/placed */
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="7" width="20" height="14" rx="2"/>
                   <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
                 </svg>
               ) : (
-                /* Undo arrow — reverting placement */
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="1 4 1 10 7 10"/>
                   <path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
@@ -502,7 +544,6 @@ export default function TpoPlaced() {
             {confirm.action==="place" ? "Mark as Placed?" : "Mark as Unplaced?"}
           </div>
 
-          {/* Student preview */}
           <div style={{ background:"#F8FAFC", border:"1px solid #E2E4E9", borderRadius:10, padding:"13px 16px", marginBottom:16 }}>
             <div style={{ display:"flex", alignItems:"center", gap:10 }}>
               <div className="p-av" style={{ width:34, height:34, fontSize:11 }}>{initials(confirm.student.name)}</div>
@@ -523,11 +564,7 @@ export default function TpoPlaced() {
           </div>
 
           <div style={{ display:"flex", gap:10, justifyContent:"flex-end" }}>
-            <button
-              className="p-btn p-btn-outline"
-              onClick={() => setConfirm(null)}
-              disabled={!!acting}
-            >
+            <button className="p-btn p-btn-outline" onClick={() => setConfirm(null)} disabled={!!acting}>
               Cancel
             </button>
             <button
@@ -539,16 +576,8 @@ export default function TpoPlaced() {
                 ? <><div className="p-spinner"/>Processing…</>
                 : <>
                     {confirm.action === "place"
-                      ? (
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                      ) : (
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="1 4 1 10 7 10"/>
-                          <path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
-                        </svg>
-                      )
+                      ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
                     }
                     {confirm.action === "place" ? "Yes, Mark Placed" : "Yes, Mark Unplaced"}
                   </>

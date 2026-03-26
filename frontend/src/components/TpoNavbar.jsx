@@ -16,6 +16,14 @@ if (!document.getElementById("tpo-nav-styles")) {
       from { opacity: 0; transform: translateY(-6px) scale(0.97); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
+    @keyframes tpoDrawerIn {
+      from { opacity: 0; transform: translateX(100%); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes tpoOverlayIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
 
     .tpo-nav {
       position: sticky; top: 0; z-index: 100;
@@ -31,10 +39,10 @@ if (!document.getElementById("tpo-nav-styles")) {
       animation: tpoNavIn 0.4s ease both;
     }
 
-    /* brand — width matches sidebar (64px) so text lines up perfectly */
+    /* brand */
     .tpo-nav-brand {
       display: flex; align-items: center;
-      width: 64px; /* same as .tpo-sidebar width */
+      width: 64px;
       cursor: pointer; text-decoration: none; flex-shrink: 0;
       padding-left: 0;
     }
@@ -90,7 +98,7 @@ if (!document.getElementById("tpo-nav-styles")) {
       display: flex; align-items: center; gap: 10px;
     }
 
-    /* logout popup */
+    /* user popup */
     .tpo-nav-user {
       position: relative; display: flex; align-items: center; gap: 8px;
       cursor: pointer; padding: 5px 10px 5px 7px;
@@ -142,20 +150,175 @@ if (!document.getElementById("tpo-nav-styles")) {
       transition: background 0.15s, color 0.15s; text-align: left;
     }
     .tpo-nav-dd-btn:hover { background: #FEF2F2; color: #DC2626; }
+
+    /* ── Burger button ── */
+    .tpo-nav-burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 1px solid #E2E4E9;
+      background: #fff;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .tpo-nav-burger:hover {
+      background: #F0F4FA;
+      border-color: #C7D9F5;
+    }
+    .tpo-nav-burger.open {
+      background: #EBF2FD;
+      border-color: #93B9F5;
+    }
+    .tpo-burger-line {
+      width: 16px; height: 2px;
+      background: #7A8599;
+      border-radius: 2px;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+      transform-origin: center;
+    }
+    .tpo-nav-burger.open .tpo-burger-line { background: #2563EB; }
+    .tpo-nav-burger.open .tpo-burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .tpo-nav-burger.open .tpo-burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .tpo-nav-burger.open .tpo-burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Mobile overlay ── */
+    .tpo-nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 98;
+      background: rgba(13,28,51,0.4);
+      backdrop-filter: blur(2px);
+      animation: tpoOverlayIn 0.2s ease;
+    }
+    .tpo-nav-overlay.visible { display: block; }
+
+    /* ── Mobile drawer ── */
+    .tpo-nav-drawer {
+      display: none;
+      position: fixed;
+      top: 60px; right: 0;
+      width: 260px;
+      background: #fff;
+      border-left: 1px solid #EFF1F5;
+      border-bottom-left-radius: 16px;
+      z-index: 99;
+      box-shadow: -4px 8px 32px rgba(0,0,0,0.12);
+      padding: 10px 0 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    .tpo-nav-drawer.open {
+      display: block;
+      transform: translateX(0);
+    }
+
+    .tpo-drawer-section-label {
+      font-size: 9.5px; font-weight: 700; color: #B0BAC8;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 0 20px; margin: 8px 0 4px;
+    }
+    .tpo-drawer-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      text-decoration: none;
+      font-size: 13px; font-weight: 600; color: #4A5568;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer; border: none; background: none;
+      width: 100%; text-align: left;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      border-radius: 0;
+    }
+    .tpo-drawer-link:hover { background: #F5F7FA; color: #0D1C33; }
+    .tpo-drawer-link.active { background: #EBF2FD; color: #1B3A6B; }
+    .tpo-drawer-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #F0F2F6;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s;
+    }
+    .tpo-drawer-link.active .tpo-drawer-icon { background: #D6E8FB; }
+
+    .tpo-drawer-divider {
+      height: 1px; background: #F0F2F6;
+      margin: 8px 16px;
+    }
+
+    .tpo-drawer-logout {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      font-size: 13px; font-weight: 600; color: #DC2626;
+      cursor: pointer; border: none; background: none;
+      width: 100%; text-align: left;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background 0.15s;
+    }
+    .tpo-drawer-logout:hover { background: #FEF2F2; }
+
+    /* ── Mobile responsive ── */
+    @media (max-width: 768px) {
+      .tpo-nav {
+        height: 54px;
+        padding: 0 16px;
+      }
+
+      /* Hide desktop nav links and badge on mobile */
+      .tpo-nav-links  { display: none; }
+      .tpo-nav-badge  { display: none; }
+
+      /* Hide user dropdown pill on mobile */
+      .tpo-nav-user   { display: none; }
+
+      /* Show burger */
+      .tpo-nav-burger { display: flex; }
+
+      /* Show drawer */
+      .tpo-nav-drawer { display: block; }
+
+      .tpo-nav-brand { width: auto; }
+      .tpo-nav-name  { font-size: 13px; }
+
+      .tpo-nav-drawer { top: 54px; }
+    }
   `;
   document.head.appendChild(s);
 }
 
 const NAV_LINKS = [
-  { label: "Dashboard", path: "/tpo-dashboard" },
-  { label: "Students",  path: "/admin/students" },
-  { label: "About",     path: "/admin/about" },
+  {
+    label: "Dashboard", path: "/tpo-dashboard",
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>,
+  },
+  {
+    label: "Students", path: "/admin/students",
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>,
+  },
+  {
+    label: "About", path: "/admin/about",
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>,
+  },
 ];
 
 function TpoNavbar() {
   const navigate  = useNavigate();
   const location  = useLocation();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen]         = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [logHover, setLogHover] = useState(false);
   const ref = useRef(null);
 
@@ -174,79 +337,154 @@ function TpoNavbar() {
     navigate("/login");
   };
 
-  return (
-    <nav className="tpo-nav">
-      {/* Brand — icon lives in sidebar; navbar shows only wordmark aligned to sidebar width */}
-      <div className="tpo-nav-brand" onClick={() => navigate("/tpo-dashboard")}>
-        <div className="tpo-nav-wordmark">
-          <span className="tpo-nav-name">PlacementHub</span>
-          <span className="tpo-nav-sub">Admin Portal</span>
-        </div>
-      </div>
+  const closeDrawer = () => setDrawerOpen(false);
 
-      {/* Nav links */}
-      <div className="tpo-nav-links">
+  return (
+    <>
+      {/* Mobile overlay */}
+      <div
+        className={`tpo-nav-overlay${drawerOpen ? " visible" : ""}`}
+        onClick={closeDrawer}
+      />
+
+      <nav className="tpo-nav">
+        {/* Brand */}
+        <div className="tpo-nav-brand" onClick={() => navigate("/tpo-dashboard")}>
+          <div className="tpo-nav-wordmark">
+            <span className="tpo-nav-name">PlacementHub</span>
+            <span className="tpo-nav-sub">Admin Portal</span>
+          </div>
+        </div>
+
+        {/* Nav links — desktop */}
+        <div className="tpo-nav-links">
+          {NAV_LINKS.map(l => (
+            <button
+              key={l.path}
+              className={`tpo-nav-link${location.pathname === l.path ? " active" : ""}`}
+              onClick={() => navigate(l.path)}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Right */}
+        <div className="tpo-nav-right">
+          {/* TPO badge — desktop */}
+          <div className="tpo-nav-badge">
+            <div className="tpo-nav-badge-dot" />
+            TPO Office
+          </div>
+
+          {/* User menu — desktop */}
+          <div
+            ref={ref}
+            className={`tpo-nav-user${open ? " open" : ""}`}
+            onClick={() => setOpen(p => !p)}
+          >
+            <div className="tpo-nav-avatar">{initials}</div>
+            <div>
+              <div className="tpo-nav-uname">{user.name || "Admin"}</div>
+              <div className="tpo-nav-urole">{user.role || "TPO"}</div>
+            </div>
+            <svg className="tpo-nav-chevron" width="14" height="14" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" strokeWidth="2.3">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+
+            {open && (
+              <div className="tpo-nav-dropdown" onClick={e => e.stopPropagation()}>
+                <div className="tpo-nav-dd-head">
+                  <div className="tpo-nav-dd-name">{user.name || "Admin"}</div>
+                  <div className="tpo-nav-dd-email">{user.email || user.role || "TPO"}</div>
+                </div>
+                <button
+                  className="tpo-nav-dd-btn"
+                  onMouseEnter={() => setLogHover(true)}
+                  onMouseLeave={() => setLogHover(false)}
+                  onClick={logout}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2"
+                    style={{ transform: logHover ? "translateX(2px)" : "translateX(0)", transition: "transform 0.18s" }}>
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                  </svg>
+                  Log Out
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Burger — mobile only */}
+          <button
+            className={`tpo-nav-burger${drawerOpen ? " open" : ""}`}
+            onClick={() => setDrawerOpen(p => !p)}
+            aria-label="Toggle menu"
+          >
+            <span className="tpo-burger-line" />
+            <span className="tpo-burger-line" />
+            <span className="tpo-burger-line" />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile drawer */}
+      <div className={`tpo-nav-drawer${drawerOpen ? " open" : ""}`}>
+        {/* User info header */}
+        <div style={{ padding: "12px 16px 10px", borderBottom: "1px solid #F0F2F6", display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 9,
+            background: "linear-gradient(135deg, #1B3A6B, #2563EB)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 11, fontWeight: 800, color: "#fff", flexShrink: 0,
+          }}>{initials}</div>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#0D1C33", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{user.name || "Admin"}</div>
+            <div style={{ fontSize: 10.5, color: "#7A8599", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{user.email || user.role || "TPO"}</div>
+          </div>
+          <div style={{ marginLeft: "auto" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 5,
+              background: "#FEF3C7", border: "1px solid #FDE68A",
+              borderRadius: 20, padding: "3px 8px 3px 6px",
+              fontSize: 10, fontWeight: 700, color: "#92400E",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+            }}>
+              <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#D97706" }} />
+              TPO
+            </div>
+          </div>
+        </div>
+
+        <div className="tpo-drawer-section-label" style={{ marginTop: 12 }}>Navigation</div>
+
         {NAV_LINKS.map(l => (
           <button
             key={l.path}
-            className={`tpo-nav-link${location.pathname === l.path ? " active" : ""}`}
-            onClick={() => navigate(l.path)}
+            className={`tpo-drawer-link${location.pathname === l.path ? " active" : ""}`}
+            onClick={() => { navigate(l.path); closeDrawer(); }}
           >
+            <span className="tpo-drawer-icon">{l.icon}</span>
             {l.label}
           </button>
         ))}
-      </div>
 
-      {/* Right */}
-      <div className="tpo-nav-right">
-        {/* TPO badge */}
-        <div className="tpo-nav-badge">
-          <div className="tpo-nav-badge-dot" />
-          TPO Office
-        </div>
+        <div className="tpo-drawer-divider" />
 
-        {/* User menu */}
-        <div
-          ref={ref}
-          className={`tpo-nav-user${open ? " open" : ""}`}
-          onClick={() => setOpen(p => !p)}
-        >
-          <div className="tpo-nav-avatar">{initials}</div>
-          <div>
-            <div className="tpo-nav-uname">{user.name || "Admin"}</div>
-            <div className="tpo-nav-urole">{user.role || "TPO"}</div>
-          </div>
-          <svg className="tpo-nav-chevron" width="14" height="14" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" strokeWidth="2.3">
-            <polyline points="6 9 12 15 18 9"/>
+        <button className="tpo-drawer-logout" onClick={logout}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
           </svg>
-
-          {open && (
-            <div className="tpo-nav-dropdown" onClick={e => e.stopPropagation()}>
-              <div className="tpo-nav-dd-head">
-                <div className="tpo-nav-dd-name">{user.name || "Admin"}</div>
-                <div className="tpo-nav-dd-email">{user.email || user.role || "TPO"}</div>
-              </div>
-              <button
-                className="tpo-nav-dd-btn"
-                onMouseEnter={() => setLogHover(true)}
-                onMouseLeave={() => setLogHover(false)}
-                onClick={logout}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2"
-                  style={{ transform: logHover ? "translateX(2px)" : "translateX(0)", transition: "transform 0.18s" }}>
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                  <polyline points="16 17 21 12 16 7"/>
-                  <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Log Out
-              </button>
-            </div>
-          )}
-        </div>
+          Log Out
+        </button>
       </div>
-    </nav>
+    </>
   );
 }
 

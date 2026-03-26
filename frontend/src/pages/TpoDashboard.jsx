@@ -24,7 +24,7 @@ if (!document.getElementById("tpod-pro-styles")) {
 
     /* ── Layout ── */
     .d-root { display:flex; min-height:100vh; background:#F0F2F7; font-family:'Plus Jakarta Sans',sans-serif; }
-    .d-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .d-main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
     .d-body { flex:1; padding:28px 40px 72px; overflow-y:auto; }
 
     /* ── Welcome banner ── */
@@ -154,6 +154,118 @@ if (!document.getElementById("tpod-pro-styles")) {
 
     /* ── Empty ── */
     .d-empty { padding:40px 20px; text-align:center; color:#B0BAC8; font-size:13px; }
+
+
+    /* ══════════════════════════════════════════
+       MOBILE RESPONSIVE — breakpoints
+       ══════════════════════════════════════════ */
+
+    /* ── Tablet: ≤ 1024px ── */
+    @media (max-width: 1024px) {
+      .d-body { padding:20px 24px 60px; }
+      .d-stats { grid-template-columns:repeat(2,1fr); }
+      .d-analytics { grid-template-columns:1fr; }
+      .d-co-head,
+      .d-co-row { grid-template-columns:28px 1fr 100px 80px; }
+      .d-co-head > .d-co-th:last-child,
+      .d-co-row  > div:last-child { display:none; }
+    }
+
+    /* ── Mobile landscape / small tablet: ≤ 768px ── */
+    @media (max-width: 768px) {
+      .d-body { padding:16px 16px 72px; }
+
+      /* Banner stacks vertically */
+      .d-banner { flex-direction:column; align-items:flex-start; gap:18px; padding:22px 20px; border-radius:14px; }
+      .d-banner-title { font-size:20px; }
+      .d-banner-right { width:100%; flex-wrap:wrap; }
+      .d-banner-btn { flex:1; justify-content:center; min-width:120px; height:40px; font-size:12px; }
+
+      /* 2-col stat cards */
+      .d-stats { grid-template-columns:repeat(2,1fr); gap:10px; }
+      .d-stat { padding:16px 16px; }
+      .d-stat-val { font-size:24px; }
+
+      /* Nav grid 1-col */
+      .d-nav-grid { grid-template-columns:1fr; gap:10px; }
+      .d-nav-card { padding:16px 18px; }
+
+      /* Chips 2-col */
+      .d-chips { grid-template-columns:repeat(2,1fr); }
+
+      /* Analytics always single col */
+      .d-analytics { grid-template-columns:1fr; }
+
+      /* Company table: hide Min CGPA col too */
+      .d-co-head,
+      .d-co-row { grid-template-columns:28px 1fr 90px; gap:10px; padding:11px 16px; }
+      .d-co-head > .d-co-th:nth-child(4),
+      .d-co-head > .d-co-th:nth-child(5),
+      .d-co-row  > div:nth-child(4),
+      .d-co-row  > div:nth-child(5) { display:none; }
+
+      .d-card-head { padding:14px 16px; flex-wrap:wrap; gap:8px; }
+      .d-card-body { padding:16px; }
+
+      /* Top companies header badges wrap */
+      .d-card-head > div:last-child { flex-wrap:wrap; gap:6px; }
+
+      /* Toast full width on mobile */
+      .d-toast { left:16px; right:16px; bottom:16px; }
+
+      .d-dept-name { width:52px; font-size:11px; }
+    }
+
+    /* ── Mobile portrait: ≤ 480px ── */
+    @media (max-width: 480px) {
+      .d-body { padding:12px 12px 80px; }
+
+      .d-banner { padding:18px 16px; border-radius:12px; }
+      .d-banner-title { font-size:18px; }
+      .d-banner-sub { font-size:12px; }
+      .d-banner-btn { font-size:11.5px; height:36px; padding:0 12px; }
+
+      /* Stat cards still 2-col but compact */
+      .d-stats { grid-template-columns:repeat(2,1fr); gap:8px; }
+      .d-stat { padding:14px 12px; border-radius:12px; }
+      .d-stat-val { font-size:22px; }
+      .d-stat-lbl { font-size:11px; }
+      .d-stat-ico { width:34px; height:34px; }
+      .d-stat-trend { font-size:9.5px; padding:2px 6px; }
+
+      /* Section label */
+      .d-section { font-size:10px; letter-spacing:2px; }
+
+      /* Nav cards compact */
+      .d-nav-card { padding:14px 14px; gap:12px; border-radius:12px; }
+      .d-nav-ico { width:40px; height:40px; border-radius:10px; }
+      .d-nav-title { font-size:13px; }
+      .d-nav-sub { font-size:11px; }
+
+      /* Chips 3-col still but tiny */
+      .d-chips { grid-template-columns:repeat(3,1fr); gap:6px; }
+      .d-chip { padding:9px 10px; border-radius:8px; }
+      .d-chip-val { font-size:15px; }
+      .d-chip-lbl { font-size:9px; }
+
+      /* Company table: only rank + company + package */
+      .d-co-head,
+      .d-co-row { grid-template-columns:26px 1fr 80px; gap:8px; padding:10px 12px; }
+      .d-co-name { font-size:12px; }
+      .d-co-pkg { font-size:12px; }
+      .d-co-rank { width:24px; height:24px; font-size:10px; border-radius:6px; }
+
+      .d-card-head { padding:12px 14px; }
+      .d-card-title { font-size:13px; }
+      .d-card-body { padding:12px 14px; }
+
+      .d-dept-row { gap:8px; padding:8px 0; }
+      .d-dept-name { width:46px; font-size:10.5px; }
+      .d-dept-val { font-size:11.5px; }
+      .d-dept-badge { font-size:9px; padding:2px 5px; }
+
+      .d-toast { font-size:12px; padding:10px 14px; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -494,7 +606,7 @@ export default function TpoDashboard() {
                 </div>
                 Top Paying Companies
               </div>
-              <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
                 <span style={{background:"#F0FDF4",border:"1px solid #BBF7D0",borderRadius:7,padding:"4px 10px",fontSize:12,fontWeight:700,color:"#16A34A"}}>
                    Max {maxPkg} LPA
                 </span>

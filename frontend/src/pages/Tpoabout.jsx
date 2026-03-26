@@ -16,7 +16,7 @@ if (!document.getElementById("tpo-about-styles")) {
     @keyframes abShim { from{background-position:200% 0} to{background-position:-200% 0} }
 
     .ab-root { display:flex; min-height:100vh; background:#F4F6F9; font-family:'Plus Jakarta Sans',sans-serif; }
-    .ab-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .ab-main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
     .ab-body { flex:1; padding:0 0 72px; overflow-y:auto; }
 
     /* ── Hero ── */
@@ -46,7 +46,7 @@ if (!document.getElementById("tpo-about-styles")) {
     .ab-hero-dot   { width:6px; height:6px; border-radius:50%; background:#34D399; animation:abPulse 2s ease infinite; }
     .ab-hero-title { font-size:28px; font-weight:800; color:#fff; letter-spacing:-0.6px; line-height:1.2; margin-bottom:6px; }
     .ab-hero-sub   { font-size:14px; color:rgba(255,255,255,0.65); font-weight:400; line-height:1.6; max-width:480px; }
-    .ab-hero-stats { display:flex; gap:32px; margin-top:28px; position:relative; z-index:1; }
+    .ab-hero-stats { display:flex; gap:32px; margin-top:28px; position:relative; z-index:1; flex-wrap:wrap; }
     .ab-hero-stat  { display:flex; flex-direction:column; }
     .ab-hero-stat-val { font-size:26px; font-weight:800; color:#fff; letter-spacing:-0.8px; line-height:1; }
     .ab-hero-stat-lbl { font-size:11px; color:rgba(255,255,255,0.6); margin-top:3px; font-weight:500; }
@@ -96,6 +96,91 @@ if (!document.getElementById("tpo-about-styles")) {
 
     /* ── skeleton ── */
     .ab-sk { background:linear-gradient(90deg,#EAECF0 25%,#F4F6F9 50%,#EAECF0 75%); background-size:200% 100%; animation:abShim 1.5s ease infinite; border-radius:4px; }
+
+
+    /* ══════════════════════════════════════════
+       MOBILE RESPONSIVE
+       ══════════════════════════════════════════ */
+
+    /* ── Tablet: ≤ 1024px ── */
+    @media (max-width: 1024px) {
+      .ab-hero { padding:36px 32px 40px; }
+      .ab-content { padding:24px 24px; grid-template-columns:1fr 1fr; gap:16px; }
+      .ab-hero-stats { gap:20px; }
+    }
+
+    /* ── Mobile landscape / small tablet: ≤ 768px ── */
+    @media (max-width: 768px) {
+      .ab-hero { padding:28px 20px 32px; }
+
+      /* Stack logo + text vertically */
+      .ab-hero-inner { flex-direction:column; align-items:flex-start; gap:16px; }
+      .ab-hero-logo  { width:60px; height:60px; border-radius:14px; }
+      .ab-hero-title { font-size:22px; }
+      .ab-hero-sub   { font-size:13px; }
+
+      /* Stats: wrap, hide dividers */
+      .ab-hero-stats   { gap:16px 24px; margin-top:20px; }
+      .ab-hero-divider { display:none; }
+      .ab-hero-stat-val{ font-size:20px; }
+      .ab-hero-stat-lbl{ font-size:10.5px; }
+
+      /* Content: 1-col */
+      .ab-content { padding:20px 16px; grid-template-columns:1fr; gap:14px; }
+      .ab-card-full { grid-column:auto; }
+
+      /* Features grid: 2-col */
+      .ab-feat-grid { grid-template-columns:1fr 1fr !important; gap:0 20px !important; }
+
+      .ab-card-head { padding:14px 16px; }
+      .ab-card-body { padding:16px; }
+
+      .ab-contact-val,
+      .ab-contact-link { font-size:13px; }
+    }
+
+    /* ── Mobile portrait: ≤ 480px ── */
+    @media (max-width: 480px) {
+      .ab-hero { padding:20px 14px 26px; }
+      .ab-hero-logo  { width:52px; height:52px; border-radius:12px; }
+      .ab-hero-title { font-size:19px; }
+      .ab-hero-sub   { font-size:12px; }
+      .ab-hero-tag   { font-size:9.5px; padding:3px 10px; }
+
+      /* Stats: 2-column grid */
+      .ab-hero-stats {
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+        margin-top:18px;
+      }
+      .ab-hero-divider { display:none; }
+      .ab-hero-stat-val{ font-size:18px; }
+
+      /* Content */
+      .ab-content { padding:14px 12px; gap:12px; }
+
+      .ab-card-head { padding:12px 14px; }
+      .ab-card-title{ font-size:13px; }
+      .ab-card-body { padding:14px; }
+
+      /* Features: single col on smallest screens */
+      .ab-feat-grid { grid-template-columns:1fr !important; gap:0 !important; }
+
+      .ab-contact-row { gap:10px; padding:11px 0; }
+      .ab-contact-ico { width:32px; height:32px; border-radius:8px; }
+      .ab-contact-val,
+      .ab-contact-link { font-size:12.5px; }
+      .ab-contact-lbl  { font-size:9.5px; }
+
+      .ab-team-av   { width:38px; height:38px; font-size:13px; border-radius:9px; }
+      .ab-team-name { font-size:13px; }
+      .ab-team-role { font-size:11px; }
+
+      .ab-feat-ico  { width:32px; height:32px; border-radius:8px; }
+      .ab-feat-title{ font-size:12.5px; }
+      .ab-feat-desc { font-size:11.5px; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -108,11 +193,6 @@ const TEAM = [
   { name:"Mr. Umesh D. Suryawanshi", role:"TPO Assistant",                color:"linear-gradient(135deg,#7C3AED,#A78BFA)" },
 ];
 
-/* ─────────────────────────────
-   Professional SVG Icon Components
-───────────────────────────── */
-
-// Email / At-sign
 const IcoMail = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -120,14 +200,12 @@ const IcoMail = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Phone
 const IcoPhone = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.91-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
   </svg>
 );
 
-// Office building / door
 const IcoOffice = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -138,7 +216,6 @@ const IcoOffice = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Clock — working hours
 const IcoClock = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
@@ -146,7 +223,6 @@ const IcoClock = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Map pin — address
 const IcoMapPin = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -154,14 +230,12 @@ const IcoMapPin = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Megaphone — Announcements
 const IcoMegaphone = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 11l19-9-9 19-2-8-8-2z"/>
   </svg>
 );
 
-// Briefcase — Company Management
 const IcoBriefcase = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <rect x="2" y="7" width="20" height="14" rx="2"/>
@@ -169,7 +243,6 @@ const IcoBriefcase = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Clipboard — Applications
 const IcoClipboard = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
@@ -179,7 +252,6 @@ const IcoClipboard = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Check circle — Placement Tracking
 const IcoCheckCircle = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
@@ -187,7 +259,6 @@ const IcoCheckCircle = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// File text — Resume Management
 const IcoFileText = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -198,7 +269,6 @@ const IcoFileText = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-// Users — Student Records
 const IcoUsers = ({ size = 16, color = "currentColor", sw = 2 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -208,62 +278,21 @@ const IcoUsers = ({ size = 16, color = "currentColor", sw = 2 }) => (
   </svg>
 );
 
-/* Contact rows — icon component + color config */
 const CONTACTS = [
-  {
-    Icon: IcoMail, bg:"#EBF2FD", ic:"#3B7DED",
-    lbl:"Email", val:"tpo@gcek.ac.in", isLink:true, href:"mailto:tpo@gcek.ac.in",
-  },
-  {
-    Icon: IcoPhone, bg:"#F0FDF4", ic:"#16A34A",
-    lbl:"Phone", val:"+91 8275706613", isLink:false,
-  },
-  {
-    Icon: IcoOffice, bg:"#FEF3C7", ic:"#D97706",
-    lbl:"Office", val:"TPO Block, Ground Floor", isLink:false,
-  },
-  {
-    Icon: IcoClock, bg:"#F5F3FF", ic:"#7C3AED",
-    lbl:"Working Hours", val:"Mon – Sat, 9:00 AM – 5:00 PM", isLink:false,
-  },
-  {
-    Icon: IcoMapPin, bg:"#ECFDF5", ic:"#065F46",
-    lbl:"Address", val:"Vidyanagar, Karad, Maharashtra – 415124", isLink:false,
-  },
+  { Icon: IcoMail,   bg:"#EBF2FD", ic:"#3B7DED", lbl:"Email",         val:"tpo@gcek.ac.in",                        isLink:true,  href:"mailto:tpo@gcek.ac.in" },
+  { Icon: IcoPhone,  bg:"#F0FDF4", ic:"#16A34A", lbl:"Phone",         val:"+91 8275706613",                        isLink:false },
+  { Icon: IcoOffice, bg:"#FEF3C7", ic:"#D97706", lbl:"Office",        val:"TPO Block, Ground Floor",               isLink:false },
+  { Icon: IcoClock,  bg:"#F5F3FF", ic:"#7C3AED", lbl:"Working Hours", val:"Mon – Sat, 9:00 AM – 5:00 PM",         isLink:false },
+  { Icon: IcoMapPin, bg:"#ECFDF5", ic:"#065F46", lbl:"Address",       val:"Vidyanagar, Karad, Maharashtra – 415124", isLink:false },
 ];
 
-/* Feature rows — SVG icon component + color config */
 const FEATURES = [
-  {
-    Icon: IcoMegaphone,  bg:"#EBF2FD", bc:"#C2D6FA", ic:"#3B7DED",
-    title:"Announcements",
-    desc:"TPO posts placement drives and general notices. Students receive real-time updates.",
-  },
-  {
-    Icon: IcoBriefcase,  bg:"#FEF3C7", bc:"#FDE68A", ic:"#D97706",
-    title:"Company Management",
-    desc:"Manage company profiles, salary packages, eligibility criteria and required skills.",
-  },
-  {
-    Icon: IcoClipboard,  bg:"#F5F3FF", bc:"#DDD6FE", ic:"#7C3AED",
-    title:"Applications",
-    desc:"Students apply to drives. TPO reviews, accepts or rejects with remarks.",
-  },
-  {
-    Icon: IcoCheckCircle, bg:"#F0FDF4", bc:"#BBF7D0", ic:"#16A34A",
-    title:"Placement Tracking",
-    desc:"Mark students as Placed or Unplaced. Live placement rate dashboard.",
-  },
-  {
-    Icon: IcoFileText,   bg:"#FEF2F2", bc:"#FECACA", ic:"#DC2626",
-    title:"Resume Management",
-    desc:"Students upload resumes. TPO views PDFs directly in the portal.",
-  },
-  {
-    Icon: IcoUsers,      bg:"#ECFDF5", bc:"#A7F3D0", ic:"#065F46",
-    title:"Student Records",
-    desc:"Filter by branch, semester, CGPA, skills. Download as CSV with one click.",
-  },
+  { Icon: IcoMegaphone,   bg:"#EBF2FD", bc:"#C2D6FA", ic:"#3B7DED", title:"Announcements",      desc:"TPO posts placement drives and general notices. Students receive real-time updates." },
+  { Icon: IcoBriefcase,   bg:"#FEF3C7", bc:"#FDE68A", ic:"#D97706", title:"Company Management", desc:"Manage company profiles, salary packages, eligibility criteria and required skills." },
+  { Icon: IcoClipboard,   bg:"#F5F3FF", bc:"#DDD6FE", ic:"#7C3AED", title:"Applications",       desc:"Students apply to drives. TPO reviews, accepts or rejects with remarks." },
+  { Icon: IcoCheckCircle, bg:"#F0FDF4", bc:"#BBF7D0", ic:"#16A34A", title:"Placement Tracking", desc:"Mark students as Placed or Unplaced. Live placement rate dashboard." },
+  { Icon: IcoFileText,    bg:"#FEF2F2", bc:"#FECACA", ic:"#DC2626", title:"Resume Management",  desc:"Students upload resumes. TPO views PDFs directly in the portal." },
+  { Icon: IcoUsers,       bg:"#ECFDF5", bc:"#A7F3D0", ic:"#065F46", title:"Student Records",    desc:"Filter by branch, semester, CGPA, skills. Download as CSV with one click." },
 ];
 
 export default function TpoAbout() {
@@ -360,7 +389,6 @@ export default function TpoAbout() {
               <div className="ab-card-body">
                 {CONTACTS.map((c, i) => (
                   <div className="ab-contact-row" key={i}>
-                    {/* SVG icon replacing emoji */}
                     <div className="ab-contact-ico" style={{ background:c.bg }}>
                       <c.Icon size={16} color={c.ic} sw={2} />
                     </div>
@@ -430,10 +458,9 @@ export default function TpoAbout() {
                 <div className="ab-card-title">Portal Features</div>
               </div>
               <div className="ab-card-body">
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"0 32px" }}>
+                <div className="ab-feat-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"0 32px" }}>
                   {FEATURES.map((f, i) => (
                     <div className="ab-feat" key={i}>
-                      {/* SVG icon replacing emoji */}
                       <div
                         className="ab-feat-ico"
                         style={{ background:f.bg, border:`1px solid ${f.bc}` }}

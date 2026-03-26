@@ -176,6 +176,74 @@ if (!document.getElementById("tcd-styles")) {
 
     /* toast */
     .tcd-toast { position:fixed; bottom:28px; right:28px; z-index:999; display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #E2E4E9; border-radius:12px; padding:12px 16px; box-shadow:0 8px 28px rgba(0,0,0,0.1); animation:tcdToastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; font-size:13px; font-weight:600; color:#0D1C33; font-family:'Plus Jakarta Sans',sans-serif; }
+
+    /* ── Mobile Responsive ── */
+    @media (max-width: 768px) {
+      .tcd-body { padding: 16px 16px 48px; }
+
+      /* top action bar */
+      .tcd-body > div:first-child {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+        margin-bottom: 16px !important;
+      }
+      .tcd-body > div:first-child > div {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      /* hero */
+      .tcd-hero-body {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 18px;
+      }
+      .tcd-logo-wrap { width: 72px; height: 72px; border-radius: 12px; }
+      .tcd-company-name { font-size: 22px; }
+      .tcd-eyebrow { font-size: 9px; }
+      .tcd-badge { font-size: 10px; }
+
+      /* stats */
+      .tcd-stats { grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px; }
+      .tcd-stat  { padding: 14px 16px; }
+      .tcd-stat-val { font-size: 16px; }
+
+      /* bottom panels */
+      .tcd-bottom { grid-template-columns: 1fr; gap: 10px; }
+      .tcd-panel  { padding: 18px 16px; }
+
+      /* edit modal */
+      .tcd-modal {
+        width: calc(100vw - 24px);
+        padding: 20px 16px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 14px;
+      }
+      .tcd-fg { grid-template-columns: 1fr; }
+      .tcd-mb-row { flex-direction: column-reverse; }
+      .tcd-mb-btn { width: 100%; justify-content: center; }
+
+      /* action buttons row */
+      .tcd-btn-edit, .tcd-btn-delete { height: 32px; font-size: 12px; padding: 0 12px; }
+
+      /* toast */
+      .tcd-toast { right: 12px; bottom: 12px; left: 12px; }
+
+      /* add skill row */
+      .tcd-add-skill-row { flex-wrap: wrap; }
+      .tcd-add-skill-btn { width: 100%; justify-content: center; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .tcd-body   { padding: 20px 24px 48px; }
+      .tcd-stats  { grid-template-columns: repeat(2, 1fr); }
+      .tcd-bottom { grid-template-columns: 1fr; }
+      .tcd-hero-body { padding: 24px; gap: 20px; }
+      .tcd-modal  { width: calc(100vw - 48px); max-width: 500px; }
+    }
   `;
   document.head.appendChild(s);
 }
@@ -423,7 +491,6 @@ export default function TpoCompanyDetails() {
                       👥 {company.offers} Offers Last Year
                     </span>
                   )}
-                  {/* TPO badge */}
                   <span className="tcd-badge" style={{ background:"#FEF3C7", color:"#92400E", border:"1px solid #FDE68A" }}>
                     <div style={{ width:6, height:6, borderRadius:"50%", background:"#D97706" }} />
                     TPO Admin Access
@@ -498,47 +565,44 @@ export default function TpoCompanyDetails() {
               {skills.length > 0 ? (
                 <div style={{ display:"flex", flexWrap:"wrap", gap:7, marginBottom:14 }}>
                   {skills.map((skill, i) => {
-  const c = SKILL_COLORS[i % SKILL_COLORS.length];
-
-  return (
-    <span
-      key={i}
-      className="tcd-skill-tag"
-      style={{
-        background: c.bg,
-        color: c.color,
-        border: `1px solid ${c.border}`,
-        animation: `tcdSkillIn 0.35s ease ${0.05 * i}s both`,
-      }}
-    >
-      <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
-        <circle cx="4" cy="4" r="3"/>
-      </svg>
-
-      {skill}
-
-      <button
-        onClick={() => removeSkill(skill)}
-        style={{
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          color: "currentColor",
-          padding: "0 0 0 3px",
-          lineHeight: 1,
-          display: "flex",
-          alignItems: "center",
-          opacity: 0.7
-        }}
-      >
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </span>
-  );
-})}
+                    const c = SKILL_COLORS[i % SKILL_COLORS.length];
+                    return (
+                      <span
+                        key={i}
+                        className="tcd-skill-tag"
+                        style={{
+                          background: c.bg,
+                          color: c.color,
+                          border: `1px solid ${c.border}`,
+                          animation: `tcdSkillIn 0.35s ease ${0.05 * i}s both`,
+                        }}
+                      >
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+                          <circle cx="4" cy="4" r="3"/>
+                        </svg>
+                        {skill}
+                        <button
+                          onClick={() => removeSkill(skill)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "currentColor",
+                            padding: "0 0 0 3px",
+                            lineHeight: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            opacity: 0.7
+                          }}
+                        >
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                          </svg>
+                        </button>
+                      </span>
+                    );
+                  })}
                 </div>
               ) : (
                 <p style={{ fontSize:13.5, color:"#7A8599", marginBottom:14, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>

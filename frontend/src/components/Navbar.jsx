@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
@@ -231,6 +232,143 @@ const styles = `
     80%     { transform: rotate(0deg);  }
   }
 
+  /* ── Burger button (mobile only) ── */
+  .burger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid #e8ecf4;
+    background: #fff;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .burger-btn:hover {
+    background: rgba(99,102,241,0.07);
+    border-color: rgba(99,102,241,0.25);
+    box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+  }
+
+  .burger-btn.open {
+    background: rgba(99,102,241,0.1);
+    border-color: rgba(99,102,241,0.35);
+  }
+
+  .burger-line {
+    width: 18px; height: 2px;
+    background: #64748b;
+    border-radius: 2px;
+    transition: transform 0.22s ease, opacity 0.22s ease, width 0.22s ease;
+    transform-origin: center;
+  }
+
+  .burger-btn.open .burger-line { background: #6366f1; }
+  .burger-btn.open .burger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger-btn.open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .burger-btn.open .burger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── Mobile drawer overlay ── */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 38;
+    background: rgba(15,23,42,0.35);
+    backdrop-filter: blur(2px);
+    animation: overlayFadeIn 0.2s ease;
+  }
+
+  @keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .mobile-menu-overlay.visible { display: block; }
+
+  /* ── Mobile drawer ── */
+  .mobile-drawer {
+    display: none;
+    position: fixed;
+    top: 56px;
+    right: 0;
+    width: 240px;
+    background: #fff;
+    border-left: 1px solid #e8ecf4;
+    border-bottom: 1px solid #e8ecf4;
+    border-bottom-left-radius: 16px;
+    z-index: 39;
+    box-shadow: -4px 8px 32px rgba(0,0,0,0.12);
+    padding: 10px 0 14px;
+    font-family: 'Sora', sans-serif;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-drawer.open {
+    display: block;
+    transform: translateX(0);
+  }
+
+  .mobile-drawer-section {
+    padding: 6px 12px 4px;
+  }
+
+  .mobile-drawer-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #475569;
+    transition: background 0.15s, color 0.15s;
+    margin: 1px 0;
+  }
+
+  .mobile-nav-link:hover  { background: #f1f5f9; color: #1e293b; }
+  .mobile-nav-link.active {
+    background: rgba(99,102,241,0.09);
+    color: #6366f1;
+    font-weight: 600;
+  }
+
+  .mobile-nav-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #f8fafc;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .mobile-nav-link.active .mobile-nav-icon {
+    background: rgba(99,102,241,0.12);
+  }
+
+  .mobile-drawer-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 8px 12px;
+  }
+
   /* ─────────────────────────────────────────────
      MOBILE RESPONSIVE  (≤ 768px)
   ───────────────────────────────────────────── */
@@ -238,19 +376,18 @@ const styles = `
     .navbar {
       height: 56px;
       padding: 0 16px;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* Hide center nav links on mobile — navigation is in bottom tab bar */
+    /* Hide desktop center nav on mobile */
     .navbar-links { display: none; }
 
     .navbar-left { min-width: 0; }
-
     .navbar-greeting { font-size: 10px; }
     .navbar-name     { font-size: 14px; }
 
-    /* Right side: show only AI btn + bell + avatar; hide dividers */
-    .nav-vdivider { display: none; }
+    /* Hide dividers on mobile */
+    .nav-vdivider  { display: none; }
 
     .navbar-right { gap: 8px; }
 
@@ -261,7 +398,7 @@ const styles = `
       gap: 5px;
     }
 
-    /* Hide text label on very small screens, keep icon */
+    /* Hide AI label on very small screens */
     .ai-btn-label { display: none; }
 
     .ai-btn {
@@ -278,9 +415,19 @@ const styles = `
       width: 34px; height: 34px;
       font-size: 12px;
     }
+
+    /* Hide AI Assistant button and bell on mobile */
+    .ai-btn    { display: none !important; }
+    .bell-btn  { display: none !important; }
+
+    /* Show burger button on mobile */
+    .burger-btn { display: flex; }
+
+    /* Show mobile drawer */
+    .mobile-drawer { display: block; }
   }
 
-  /* ── Slightly larger phones (411px+): show AI label again ── */
+  /* Show AI label again on slightly larger phones */
   @media (min-width: 411px) and (max-width: 768px) {
     .ai-btn {
       width: auto;
@@ -295,7 +442,7 @@ const navLinks = [
     to: "/dashboard",
     label: "Home",
     icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3"  y="3"  width="7" height="7" rx="1"/>
         <rect x="14" y="3"  width="7" height="7" rx="1"/>
         <rect x="3"  y="14" width="7" height="7" rx="1"/>
@@ -307,7 +454,7 @@ const navLinks = [
     to: "/companies",
     label: "Companies",
     icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         <polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
@@ -317,7 +464,7 @@ const navLinks = [
     to: "/resources",
     label: "Resources",
     icon: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
         <path d="M4 4v15.5A2.5 2.5 0 0 1 6.5 17H20V4z"/>
       </svg>
@@ -329,6 +476,7 @@ export default function Navbar() {
   const user     = JSON.parse(localStorage.getItem("user") || '{"name":"Student User"}');
   const location = useLocation();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const nameParts  = user?.name?.split(" ") || [];
   const firstName  = nameParts[0] || "Student";
@@ -338,9 +486,18 @@ export default function Navbar() {
   const onAnnPage = location.pathname === "/announcements";
   const onAiPage  = location.pathname === "/chatbot";
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <>
       <style>{styles}</style>
+
+      {/* Overlay */}
+      <div
+        className={`mobile-menu-overlay${menuOpen ? " visible" : ""}`}
+        onClick={closeMenu}
+      />
+
       <div className="navbar">
 
         {/* Left */}
@@ -390,9 +547,9 @@ export default function Navbar() {
 
           {/* Bell */}
           <button
-            className={`icon-btn${onAnnPage ? " ann-active" : ""}`}
+            className={`icon-btn bell-btn${onAnnPage ? " ann-active" : ""}`}
             title="View Announcements"
-            onClick={() => navigate("/announcements")}
+            onClick={() => { navigate("/announcements"); closeMenu(); }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -405,8 +562,72 @@ export default function Navbar() {
 
           {/* Avatar */}
           <div className="navbar-avatar" title={user.name}>{initials}</div>
+
+          {/* Burger — mobile only */}
+          <button
+            className={`burger-btn${menuOpen ? " open" : ""}`}
+            onClick={() => setMenuOpen(o => !o)}
+            title="Menu"
+            aria-label="Toggle navigation menu"
+          >
+            <span className="burger-line" />
+            <span className="burger-line" />
+            <span className="burger-line" />
+          </button>
+
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      <div className={`mobile-drawer${menuOpen ? " open" : ""}`}>
+        <div className="mobile-drawer-section">
+          <div className="mobile-drawer-label">Navigation</div>
+          {navLinks.map(link => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`mobile-nav-link${location.pathname === link.to ? " active" : ""}`}
+              onClick={closeMenu}
+            >
+              <span className="mobile-nav-icon">{link.icon}</span>
+              {link.label}
+            </Link>
+          ))}
         </div>
 
+        <div className="mobile-drawer-divider" />
+
+        <div className="mobile-drawer-section">
+          <div className="mobile-drawer-label">Quick Access</div>
+          <Link
+            to="/chatbot"
+            className={`mobile-nav-link${onAiPage ? " active" : ""}`}
+            onClick={closeMenu}
+          >
+            <span className="mobile-nav-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </span>
+            AI Assistant
+          </Link>
+          <Link
+            to="/announcements"
+            className={`mobile-nav-link${onAnnPage ? " active" : ""}`}
+            onClick={closeMenu}
+          >
+            <span className="mobile-nav-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </span>
+            Announcements
+          </Link>
+        </div>
       </div>
     </>
   );
