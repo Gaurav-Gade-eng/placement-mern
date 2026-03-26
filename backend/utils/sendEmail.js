@@ -4,10 +4,13 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 587,
-  secure: false,
+  secure: false, // VERY IMPORTANT
   auth: {
     user: process.env.BREVO_USER,
     pass: process.env.BREVO_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
