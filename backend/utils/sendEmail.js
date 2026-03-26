@@ -2,12 +2,13 @@ const nodemailer = require("nodemailer");
 
 /* ✅ TRANSPORTER */
 const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: "ec34053beebf35",
-    pass: "40d657bc1e39a0"
-  }
+    user: process.env.BREVO_USER,
+    pass: process.env.BREVO_PASS,
+  },
 });
 
 /* ✅ UNIVERSAL EMAIL FUNCTION */
