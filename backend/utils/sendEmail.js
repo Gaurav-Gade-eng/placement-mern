@@ -1,33 +1,31 @@
-const nodemailer = require("nodemailer");
-
-/* ✅ TRANSPORTER */
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false, // VERY IMPORTANT
-  auth: {
-    user: process.env.BREVO_USER,
-    pass: process.env.BREVO_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
+const axios = require("axios");
 
 /* ✅ UNIVERSAL EMAIL FUNCTION */
 const sendEmail = async ({ to, subject, text }) => {
   try {
-    await transporter.sendMail({
-      from: `"Placement Portal" <no-reply@placement.com>`,
-      to,
-      subject,
-      text
-    });
+    const res = await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "Placement Portal",
+          email: process.env.BREVO_USER,
+        },
+        to: [{ email: to }],
+        subject: subject,
+        textContent: text,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log("✅ Email sent to:", to);
+    console.log("✅ Email sent:", res.data);
 
   } catch (err) {
-    console.log("❌ FULL EMAIL ERROR:", err);
+    console.log("❌ EMAIL ERROR:", err.response?.data || err.message);
     throw err;
   }
 };
@@ -37,7 +35,7 @@ const sendOTP = async (email, otp) => {
   await sendEmail({
     to: email,
     subject: "Password Reset OTP",
-    text: `Your OTP for password reset is: ${otp}`
+    text: `Your OTP for password reset is: ${otp}`,
   });
 };
 
@@ -48,9 +46,8 @@ const sendApplicationEmail = async ({
   company,
   drive,
   status,
-  reason
+  reason,
 }) => {
-
   let message = "";
 
   if (status === "accepted") {
@@ -86,12 +83,12 @@ TPO
   await sendEmail({
     to: email,
     subject: "Placement Drive Update",
-    text: message
+    text: message,
   });
 };
 
 module.exports = {
   sendEmail,
   sendOTP,
-  sendApplicationEmail
+  sendApplicationEmail,
 };
